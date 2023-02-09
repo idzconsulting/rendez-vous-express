@@ -4,6 +4,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     padding: 5px;
     font-family: Lato, system-ui;
+    background-color: var(--primary-color-background);
 }
 
 code {

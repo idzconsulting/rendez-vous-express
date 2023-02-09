@@ -1,8 +1,7 @@
 import {Link, useNavigate} from 'react-router-dom';
 import styles from './Header.module.less';
 import {observer} from 'mobx-react';
-import React from 'react';
-import logo from '../../../assets/logo.png';
+import logo from '../../../assets/images/logo.png';
 import {Header as AntHeader} from 'antd/lib/layout/layout';
 import {PhoneOutlined} from '@ant-design/icons';
 
