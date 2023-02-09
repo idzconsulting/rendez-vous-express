@@ -2,10 +2,16 @@ body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    height: 100vh;
+    padding: 5px;
+    font-family: Lato, system-ui;
 }
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@font-face {
+    font-family: Lato;
+    src: url("./assets/fonts/Lato-Regular.ttf");
 }
