@@ -1,4 +1,4 @@
-import {makeAutoObservable, toJS} from 'mobx';
+import {makeAutoObservable} from 'mobx';
 import {BuildingYear, Engagement, Good, GoodSurface, IEngagementType, Project} from '../types/Engagement';
 
 export class CurrentEngagement {
@@ -25,10 +25,6 @@ export class CurrentEngagement {
     }
 
     setProperty(field: IEngagementType, value: any) {
-        console.warn(field);
-        console.warn(typeof Project);
-        console.warn(Object.is(field, Project));
-
         if (Object.is(field, Project)) {
             this.engagement = {...this.engagement, project: value as Project};
         } else if (Object.is(field, Good)) {
@@ -38,7 +34,13 @@ export class CurrentEngagement {
         } else if (Object.is(field, GoodSurface)) {
             this.engagement = {...this.engagement, goodSurface: value as GoodSurface};
         }
+    }
 
-        console.warn(toJS(this.engagement));
+    getAnnexes(): number | undefined {
+        return this.engagement.annexes;
+    }
+
+    setAnnexes(annexes: number = 0) {
+        this.engagement.annexes = annexes;
     }
 }

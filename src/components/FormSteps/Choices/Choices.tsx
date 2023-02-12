@@ -1,15 +1,15 @@
 import {IEngagementType} from '../../../types/Engagement';
-import {Button, Typography} from 'antd';
+import {Button} from 'antd';
 import {labelsMap} from '../../../types/Labels';
 import styles from './Choices.module.less';
 import {useEffect, useState} from 'react';
 import {currentEngagement} from '../../../stores';
-import StepCard from '../Card/StepCard';
+import StepCard from '../StepCard/StepCard';
+import {IOnSelection} from '../../../types/IOnSelection';
 
-interface IChoicesProps {
+interface IChoicesProps extends IOnSelection {
     title: string;
     type: IEngagementType;
-    onSelection: () => void;
 }
 
 const Choices = ({title, type, onSelection}: IChoicesProps) => {
@@ -27,10 +27,8 @@ const Choices = ({title, type, onSelection}: IChoicesProps) => {
     }
 
     return (
-        <StepCard>
+        <StepCard title={title}>
             <div className={styles.choices}>
-                <Typography.Title level={2}>{title}</Typography.Title>
-
                 <div className={styles.buttonsContainer}>
                     {Object.values(type).map((label) =>
                         <Button key={label} type={selectedOption === label ? 'primary' : 'default'}

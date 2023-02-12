@@ -3,9 +3,11 @@ export interface Engagement {
     good?: Good;
     buildingYear?: BuildingYear;
     goodSurface?: GoodSurface;
+    annexes?: number;
 }
 
-export type IEngagementType = typeof Project
+export type IEngagementType =
+      typeof Project
     | typeof Good
     | typeof BuildingYear
     | typeof GoodSurface

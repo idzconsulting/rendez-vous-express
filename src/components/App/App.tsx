@@ -7,6 +7,7 @@ import Footer from '../PageElements/Footer/Footer';
 import Choices from '../FormSteps/Choices/Choices';
 import {BuildingYear, Good, GoodSurface, Project} from '../../types/Engagement';
 import {Steps} from 'antd';
+import Annexes from '../FormSteps/Annexes/Annexes';
 
 const App = () => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -24,7 +25,10 @@ const App = () => {
     }, {
         title: 'Superficie',
         content: <Choices title='Superficie du bien' type={GoodSurface} onSelection={setNextStep}/>,
-    },
+    }, {
+        title: 'Annexes',
+        content: <Annexes onSelection={setNextStep}/>
+    }
     ];
 
     const items = steps.map((item) => ({key: item.title, title: item.title}));
@@ -43,7 +47,9 @@ const App = () => {
             <Header/>
             <Content>
                 <div className={styles.formContainer}>
-                    <Steps responsive={true} className={styles.stepper} size='small' current={currentStep} items={items}/>
+                    <Steps responsive={true} className={styles.stepper} size='default' current={currentStep}
+                           items={items}/>
+
                     {steps[currentStep].content}
 
                     <div>{<NavButtons hasPreviousButton={currentStep > 0} onClick={setPreviousStep}/>}</div>
