@@ -9,7 +9,7 @@ interface IStepCardProps {
 const StepCard = ({title, children}: IStepCardProps) => {
     return (
         <div className={styles.stepCard}>
-            <Typography.Title level={2}>{title}</Typography.Title>
+            <Typography.Title className={styles.title} level={2}>{title}</Typography.Title>
             {children}
         </div>
     );

@@ -1,8 +1,9 @@
 // @ts-nocheck
 
-import {BuildingYear, Good, IEngagementType, Project, GoodSurface} from './Engagement';
+import {BuildingYear, Good, GoodSurface, Project} from './Engagement';
+import {DiagnosticsTypes} from './DiagnosticsTypes';
 
-export const labelsMap = new Map<IEngagementType, string>();
+export const labelsMap = new Map<string, string>();
 initLabelsMap();
 
 function initLabelsMap() {
@@ -24,4 +25,16 @@ function initLabelsMap() {
     labelsMap.set(GoodSurface.ENTRE_70_110_M2, 'De 70 à 110 m²');
     labelsMap.set(GoodSurface.ENTRE_110_150_M2, 'De 110 à 150 m²');
     labelsMap.set(GoodSurface.ENTRE_150_220_M2, 'De 150 à 220 m²');
+
+    labelsMap.set(DiagnosticsTypes.DPE, 'DPE');
+    labelsMap.set(DiagnosticsTypes.CARREZ_BOUTIN, 'Carrez / Boutin');
+    labelsMap.set(DiagnosticsTypes.ELECTRICITE, 'Électricité');
+    labelsMap.set(DiagnosticsTypes.GAZ, 'Gaz');
+    labelsMap.set(DiagnosticsTypes.AMIANTE, 'Amiante');
+    labelsMap.set(DiagnosticsTypes.PLOMB, 'Plomb');
+    labelsMap.set(DiagnosticsTypes.TERMITE_ETAT_PARASITAIRE, 'Termite / État parasitaire');
+    labelsMap.set(DiagnosticsTypes.ERP, 'EPR');
+    labelsMap.set(DiagnosticsTypes.ASSAINISSEMENT, 'Assainissement');
+    labelsMap.set(DiagnosticsTypes.DTG, 'DTG');
+    labelsMap.set(DiagnosticsTypes.DPE_MENTION, 'DPE avec mention');
 }

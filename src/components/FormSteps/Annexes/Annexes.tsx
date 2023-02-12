@@ -19,9 +19,9 @@ const Annexes = ({onSelection}: IAnnexesProps) => {
     }, []);
 
     const onOptionChanged = (e: any) => {
-        const value = e.target.values;
+        const value = e.target.value;
         setHasAnnexes(e.target.value);
-        (!value) && (saveAnnexes());
+        (value === false) && (saveAnnexes());
     }
 
     const onChangeAnnexes = (e: any) => {

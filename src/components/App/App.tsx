@@ -8,6 +8,7 @@ import Choices from '../FormSteps/Choices/Choices';
 import {BuildingYear, Good, GoodSurface, Project} from '../../types/Engagement';
 import {Steps} from 'antd';
 import Annexes from '../FormSteps/Annexes/Annexes';
+import Diagnostics from '../FormSteps/DiagnosticsChoices/DiagnosticsChoices';
 
 const App = () => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -28,6 +29,9 @@ const App = () => {
     }, {
         title: 'Annexes',
         content: <Annexes onSelection={setNextStep}/>
+    }, {
+        title: 'Diagnostics',
+        content: <Diagnostics onSelection={setNextStep}/>
     }
     ];
 
@@ -47,12 +51,12 @@ const App = () => {
             <Header/>
             <Content>
                 <div className={styles.formContainer}>
+                    {steps[currentStep].content}
+                    <div className={styles.navButton}>{<NavButtons hasPreviousButton={currentStep > 0} onClick={setPreviousStep}/>}</div>
                     <Steps responsive={true} className={styles.stepper} size='default' current={currentStep}
                            items={items}/>
 
-                    {steps[currentStep].content}
 
-                    <div>{<NavButtons hasPreviousButton={currentStep > 0} onClick={setPreviousStep}/>}</div>
                 </div>
             </Content>
             <Footer/>

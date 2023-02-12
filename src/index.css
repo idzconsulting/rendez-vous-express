@@ -2,10 +2,10 @@ body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    padding: 5px;
     font-family: Lato, system-ui;
     background-color: var(--primary-color-background);
     user-select: none;
+    min-height: 100vh;
 }
 
 code {
