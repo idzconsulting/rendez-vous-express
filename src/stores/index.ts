@@ -1,3 +1,3 @@
-import {UserStore} from './UserStore';
+import {CurrentEngagement} from './CurrentEngagement';
 
-export const userStore = new UserStore();
+export const currentEngagement = new CurrentEngagement();

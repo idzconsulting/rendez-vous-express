@@ -1,13 +1,21 @@
 .header {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  font-size: 12px;
-  background-color: var(--primary-color-light);
-  padding: 10px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+
+  .headerSubContainer {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .contactContainer {
+    font-size: 25px;
+  }
 
   a {
-    color: inherit;
+    color: #2f54eb;
     text-decoration: inherit;
   }
 }

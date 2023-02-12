@@ -5,6 +5,7 @@ body {
     padding: 5px;
     font-family: Lato, system-ui;
     background-color: var(--primary-color-background);
+    user-select: none;
 }
 
 code {

@@ -1,22 +1,26 @@
-import {Link, useNavigate} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import styles from './Header.module.less';
 import {observer} from 'mobx-react';
 import logo from '../../../assets/images/logo.png';
 import {Header as AntHeader} from 'antd/lib/layout/layout';
-import {PhoneOutlined} from '@ant-design/icons';
+import {WhatsAppOutlined} from '@ant-design/icons';
+import React from 'react';
+import {Button} from 'antd';
+import clsx from 'clsx';
 
 const Header = observer(() => {
-    const navigate = useNavigate();
-
+    const whatsAppUrl = 'https://wa.me/33755532333?text=Bonjour+nous+souhaiterions+%C3%AAtre+contact%C3%A9s+pour+la+r%C3%A9alisation+de+diagnostics+immobiliers';
     return (
         <AntHeader className={styles.header}>
-            <Link to='/'><img src={logo} className={styles.logo} alt="Logo"/></Link>
-            {/*<span>Vos diagnostics immobiliers, tout simplement</span>*/}
-            <a href="tel:0755532333" className={styles.phoneNumber}>
-                <span>Contactez-nous</span>
-                <PhoneOutlined/>
-                <span>0755532333</span>
-            </a>
+            <div className={styles.headerSubContainer}>
+                <Link to='https://www.idzconsulting.fr/'><img src={logo} className={styles.logo} alt="Logo"/></Link>
+                <span>Vos diagnostics immobiliers, tout simplement</span>
+            </div>
+            <div className={clsx(styles.headerSubContainer, styles.contactContainer)}>
+                <Link to={whatsAppUrl}>
+                    <Button type='primary'>Être rappelé</Button></Link>
+                <Link to={whatsAppUrl}><WhatsAppOutlined/></Link>
+            </div>
         </AntHeader>
     );
 });

@@ -1,8 +1,7 @@
 import styles from './PostalCode.module.less';
 import {InputNumber} from 'antd';
 import postalCodesData from '../../../assets/data/postal-codes.json';
-import {useEffect, useState} from 'react';
-import Form from 'antd/es/form/Form';
+import {useState} from 'react';
 
 const PostalCode = () => {
     const [postalCode, setPostalCode] = useState<string | null>('');
@@ -36,7 +35,7 @@ const PostalCode = () => {
                 <span className={styles.localization}>{city}</span>
             </div>
 
-        </div>
+        </div>);
 
     //     <Form name="basic" labelCol={{ span: 8 }}
     // wrapperCol={{ span: 16 }}

@@ -1,31 +1,56 @@
-import React, { useState } from 'react';
-import Home from '../FormSteps/Home/Home';
+import React, {useState} from 'react';
 import styles from './App.module.less';
 import NavButtons from '../UI/NavButtons/NavButtons';
-import PostalCode from '../FormSteps/PostalCode/PostalCode';
-import { Content } from 'antd/es/layout/layout';
+import {Content} from 'antd/es/layout/layout';
 import Header from '../PageElements/Header/Header';
 import Footer from '../PageElements/Footer/Footer';
+import Choices from '../FormSteps/Choices/Choices';
+import {BuildingYear, Good, GoodSurface, Project} from '../../types/Engagement';
+import {Steps} from 'antd';
 
 const App = () => {
-    const [isClickedHome, setIsClickedHome] = useState(true);
-    const [step, setStep] = useState(0)
+    const [currentStep, setCurrentStep] = useState(0);
 
-    const steps = [<PostalCode />]
+    const steps = [{
+        title: 'Projet',
+        content: <Choices title='Votre projet' type={Project} onSelection={setNextStep}/>,
+    }, {
+        title: 'Bien',
+        content: <Choices title='Votre bien' type={Good} onSelection={setNextStep}/>,
+    }, {
+        title: 'Année de construction',
+        content: <Choices title='Année de construction' type={BuildingYear} onSelection={setNextStep}/>,
+
+    }, {
+        title: 'Superficie',
+        content: <Choices title='Superficie du bien' type={GoodSurface} onSelection={setNextStep}/>,
+    },
+    ];
+
+    const items = steps.map((item) => ({key: item.title, title: item.title}));
+
+    function setNextStep() {
+        (currentStep + 1 < steps.length) &&
+        setCurrentStep(currentStep + 1);
+    }
+
+    const setPreviousStep = () => {
+        setCurrentStep(currentStep - 1);
+    }
 
     return (
-    <>
-        <Header />
-        <Content>
-            <div className={styles.formContainer}>
-                {!isClickedHome && <Home onClickStart={() => setIsClickedHome(true)} />}
-                {isClickedHome && steps[step]}
+        <div className={styles.appContainer}>
+            <Header/>
+            <Content>
+                <div className={styles.formContainer}>
+                    <Steps responsive={true} className={styles.stepper} size='small' current={currentStep} items={items}/>
+                    {steps[currentStep].content}
 
-                <div>{isClickedHome && <NavButtons />}</div>
-            </div>
-        </Content>
-        <Footer />
-    </>);
+                    <div>{<NavButtons hasPreviousButton={currentStep > 0} onClick={setPreviousStep}/>}</div>
+                </div>
+            </Content>
+            <Footer/>
+        </div>);
 }
 
 export default App;

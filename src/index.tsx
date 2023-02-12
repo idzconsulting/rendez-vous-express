@@ -10,12 +10,7 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    <ConfigProvider
-        theme={{
-            token: {
-                colorPrimary: '#52c41a',
-            },
-        }}>
+    <ConfigProvider>
         <AppRouter/>
     </ConfigProvider>
 );
