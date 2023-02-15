@@ -3,16 +3,17 @@ import {Button} from 'antd';
 import {labelsMap} from '../../../types/Labels';
 import styles from './Choices.module.less';
 import {useEffect, useState} from 'react';
-import {currentEngagement} from '../../../stores';
+import {currentEngagement, screenStore} from '../../../stores';
 import StepCard from '../StepCard/StepCard';
 import {IOnSelection} from '../../../types/IOnSelection';
+import {observer} from 'mobx-react';
 
 interface IChoicesProps extends IOnSelection {
     title: string;
     type: IEngagementType;
 }
 
-const Choices = ({title, type, onSelection}: IChoicesProps) => {
+const Choices = observer(({title, type, onSelection}: IChoicesProps) => {
     const [selectedOption, setSelectedOption] = useState<string>('');
 
     useEffect(() => {
@@ -23,7 +24,7 @@ const Choices = ({title, type, onSelection}: IChoicesProps) => {
     const onButtonClick = (choice: string) => {
         setSelectedOption(choice);
         currentEngagement.setProperty(type, choice);
-        setTimeout(onSelection, 200);
+        onSelection();
     }
 
     return (
@@ -32,12 +33,12 @@ const Choices = ({title, type, onSelection}: IChoicesProps) => {
                 <div className={styles.buttonsContainer}>
                     {Object.values(type).map((label) =>
                         <Button key={label} type={selectedOption === label ? 'primary' : 'default'}
-                                size='large'
+                                size={screenStore.getSize()}
                                 onClick={() => onButtonClick(label)}>{labelsMap.get(label)}</Button>)}
                 </div>
             </div>
         </StepCard>
     );
-}
+});
 
 export default Choices;

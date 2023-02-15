@@ -1,7 +1,7 @@
 import {makeAutoObservable} from 'mobx';
 import {BuildingYear, Engagement, Good, GoodSurface, IEngagementType, Project} from '../types/Engagement';
 
-export class CurrentEngagement {
+export class CurrentEngagementStore {
     private engagement: Engagement = {};
 
     constructor() {

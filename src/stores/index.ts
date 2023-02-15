@@ -1,3 +1,5 @@
-import {CurrentEngagement} from './CurrentEngagement';
+import {CurrentEngagementStore} from './CurrentEngagementStore';
+import {ScreenStore} from './ScreenStore';
 
-export const currentEngagement = new CurrentEngagement();
+export const currentEngagement = new CurrentEngagementStore();
+export const screenStore = new ScreenStore();

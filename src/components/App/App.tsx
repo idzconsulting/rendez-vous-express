@@ -9,9 +9,13 @@ import {BuildingYear, Good, GoodSurface, Project} from '../../types/Engagement';
 import {Steps} from 'antd';
 import Annexes from '../FormSteps/Annexes/Annexes';
 import Diagnostics from '../FormSteps/DiagnosticsChoices/DiagnosticsChoices';
+import {screenStore} from '../../stores';
+import {observer} from 'mobx-react';
 
-const App = () => {
+const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);
+    const isMobile = screenStore.getIsMobile();
+    const TIME_BEFORE_SKIPPING_NEXT_PAGE: number = 300;
 
     const steps = [{
         title: 'Projet',
@@ -38,29 +42,35 @@ const App = () => {
     const items = steps.map((item) => ({key: item.title, title: item.title}));
 
     function setNextStep() {
-        (currentStep + 1 < steps.length) &&
-        setCurrentStep(currentStep + 1);
+        setTimeout(() => {
+            (currentStep + 1 < steps.length) &&
+            setCurrentStep(currentStep + 1);
+        }, TIME_BEFORE_SKIPPING_NEXT_PAGE);
     }
 
     const setPreviousStep = () => {
         setCurrentStep(currentStep - 1);
     }
 
+    const getStepsComponent = () => <Steps responsive={true} className={styles.stepper} size='default'
+                                           current={currentStep} items={items}/>;
+
     return (
         <div className={styles.appContainer}>
             <Header/>
             <Content>
                 <div className={styles.formContainer}>
+                    {!isMobile && getStepsComponent()}
+
                     {steps[currentStep].content}
-                    <div className={styles.navButton}>{<NavButtons hasPreviousButton={currentStep > 0} onClick={setPreviousStep}/>}</div>
-                    <Steps responsive={true} className={styles.stepper} size='default' current={currentStep}
-                           items={items}/>
+                    <div className={styles.navButton}>{<NavButtons hasPreviousButton={currentStep > 0}
+                                                                   onClick={setPreviousStep}/>}</div>
 
-
+                    {isMobile && getStepsComponent()}
                 </div>
             </Content>
             <Footer/>
         </div>);
-}
+});
 
 export default App;

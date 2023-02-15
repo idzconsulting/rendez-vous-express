@@ -2,7 +2,7 @@ import {Button, InputNumber, Radio, Space} from 'antd';
 import StepCard from '../StepCard/StepCard';
 import {useEffect, useState} from 'react';
 import styles from './Annexes.module.less';
-import {currentEngagement} from '../../../stores';
+import {currentEngagement, screenStore} from '../../../stores';
 import {IOnSelection} from '../../../types/IOnSelection';
 
 interface IAnnexesProps extends IOnSelection {
@@ -36,7 +36,8 @@ const Annexes = ({onSelection}: IAnnexesProps) => {
     return (
         <StepCard title='Avez-vous des annexes ?'>
             <div className={styles.annexesContainer}>
-                <Radio.Group defaultValue={hasAnnexes} buttonStyle='solid' onChange={onOptionChanged} size='large'>
+                <Radio.Group defaultValue={hasAnnexes} buttonStyle='solid' onChange={onOptionChanged}
+                             size={screenStore.getSize()}>
                     <Radio.Button value={false}>Non, je n'ai pas d'annexes</Radio.Button>
                     <Radio.Button value={true}>Oui</Radio.Button>
                 </Radio.Group>
@@ -46,8 +47,9 @@ const Annexes = ({onSelection}: IAnnexesProps) => {
                         <InputNumber className={styles.annexesNumber} addonAfter={<span>m²</span>}
                                      value={annexes} onChange={onChangeAnnexes}
                                      size='large' min={1} placeholder='Surface totale de vos annexes'></InputNumber>
-                        <Space size='large'/>
-                        <Button type='primary' size='large' disabled={!annexes} onClick={saveAnnexes}>OK</Button>
+                        <Space size={screenStore.getSize()}/>
+                        <Button type='primary' size={screenStore.getSize()} disabled={!annexes}
+                                onClick={saveAnnexes}>OK</Button>
                     </div>
                     : <></>
                 }
