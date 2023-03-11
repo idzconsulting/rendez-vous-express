@@ -1,6 +1,7 @@
 {
   "name": "final-project-nurses-client",
   "version": "0.1.0",
+  "homepage": "https://idzconsulting.github.io/rendez-vous-express",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -29,7 +30,9 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -52,6 +55,7 @@
   "devDependencies": {
     "@craco/craco": "^7.0.0",
     "craco-less": "^2.0.0",
+    "gh-pages": "^5.0.0",
     "react-error-overlay": "^6.0.9"
   }
 }
