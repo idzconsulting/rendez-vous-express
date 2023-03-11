@@ -1,5 +1,14 @@
-import {makeAutoObservable} from 'mobx';
-import {BuildingYear, Engagement, Good, GoodSurface, IEngagementType, Project} from '../types/Engagement';
+import {makeAutoObservable, toJS} from 'mobx';
+import {
+    BuildingYear,
+    Engagement,
+    Good,
+    GoodSurface,
+    IEngagementType,
+    IInfos,
+    Project
+} from '../types/Engagement';
+import {DiagnosticsTypes} from '../types/DiagnosticsTypes';
 
 export class CurrentEngagementStore {
     private engagement: Engagement = {};
@@ -9,7 +18,7 @@ export class CurrentEngagementStore {
     }
 
     getCurrentEngagement() {
-        return this.engagement;
+        return toJS(this.engagement);
     }
 
     getProperty(field: IEngagementType) {
@@ -42,5 +51,25 @@ export class CurrentEngagementStore {
 
     setAnnexes(annexes: number = 0) {
         this.engagement.annexes = annexes;
+    }
+
+    getDiagnostics() {
+        return this.engagement.diagnostics;
+    }
+
+    setDiagnostics(diagnostics: DiagnosticsTypes[]) {
+        this.engagement.diagnostics = [...diagnostics];
+    }
+
+    getInfos() {
+        return this.engagement.infos;
+    }
+
+    setInfos(infos: IInfos) {
+        this.engagement.infos = {...infos};
+    }
+
+    setRDV(date: Date, hour: string) {
+        this.engagement.infos = {...this.engagement.infos, date, hour}
     }
 }

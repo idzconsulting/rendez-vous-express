@@ -3,6 +3,7 @@ import {SizeType} from 'antd/es/config-provider/SizeContext';
 
 export class ScreenStore {
     private isMobile: boolean = false;
+    private currentWidth: number = 1000;
 
     constructor() {
         makeAutoObservable(this);
@@ -13,15 +14,24 @@ export class ScreenStore {
         return this.isMobile;
     }
 
+    getCurrentWidth() {
+        return this.currentWidth;
+    }
+
     getSize = (): SizeType => this.isMobile ? 'middle' : 'large';
 
-    setIsMobile(isMobile: boolean) {
+    private setIsMobile(isMobile: boolean) {
         this.isMobile = isMobile;
+    }
+
+    private setCurrentWidth(currentWidth: number) {
+        this.currentWidth = currentWidth;
     }
 
     private initApp = () => {
         window.addEventListener('resize', (_) => {
-            const isMobile: boolean = (window.innerWidth < 768) ?? false;
+            this.setCurrentWidth(window.innerWidth);
+            const isMobile: boolean = (this.currentWidth < 768) ?? false;
             this.setIsMobile(isMobile);
         })
     }

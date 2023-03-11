@@ -7,14 +7,16 @@ import {WhatsAppOutlined} from '@ant-design/icons';
 import React from 'react';
 import {Button} from 'antd';
 import clsx from 'clsx';
+import {screenStore} from '../../../stores';
 
 const Header = observer(() => {
     const whatsAppUrl = 'https://wa.me/33755532333?text=Bonjour+nous+souhaiterions+%C3%AAtre+contact%C3%A9s+pour+la+r%C3%A9alisation+de+diagnostics+immobiliers';
+
     return (
         <AntHeader className={styles.header}>
             <div className={styles.headerSubContainer}>
                 <Link to='https://www.idzconsulting.fr/'><img src={logo} className={styles.logo} alt="Logo"/></Link>
-                <span>Vos diagnostics immobiliers, tout simplement</span>
+                {screenStore.getCurrentWidth() > 1030 && <span>Vos diagnostics immobiliers, tout simplement</span>}
             </div>
             <div className={clsx(styles.headerSubContainer, styles.contactContainer)}>
                 <Link to={whatsAppUrl}>

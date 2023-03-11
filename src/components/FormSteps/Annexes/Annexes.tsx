@@ -9,19 +9,21 @@ interface IAnnexesProps extends IOnSelection {
 }
 
 const Annexes = ({onSelection}: IAnnexesProps) => {
-    const [hasAnnexes, setHasAnnexes] = useState<number | undefined>(0);
+    const [hasAnnexes, setHasAnnexes] = useState<boolean | undefined>();
     const [annexes, setAnnexes] = useState<number | undefined>();
 
     useEffect(() => {
         const savedAnnexes: number | undefined = currentEngagement.getAnnexes();
-        setHasAnnexes(savedAnnexes);
+        console.log(savedAnnexes)
+        setHasAnnexes(!!savedAnnexes ?? undefined);
         setAnnexes(savedAnnexes);
     }, []);
 
     const onOptionChanged = (e: any) => {
         const value = e.target.value;
+        console.log(value)
         setHasAnnexes(e.target.value);
-        (value === false) && (saveAnnexes());
+        (value == false || value === undefined) && (saveAnnexes());
     }
 
     const onChangeAnnexes = (e: any) => {
@@ -36,7 +38,7 @@ const Annexes = ({onSelection}: IAnnexesProps) => {
     return (
         <StepCard title='Avez-vous des annexes ?'>
             <div className={styles.annexesContainer}>
-                <Radio.Group defaultValue={hasAnnexes} buttonStyle='solid' onChange={onOptionChanged}
+                <Radio.Group buttonStyle='solid' onChange={onOptionChanged}
                              size={screenStore.getSize()}>
                     <Radio.Button value={false}>Non, je n'ai pas d'annexes</Radio.Button>
                     <Radio.Button value={true}>Oui</Radio.Button>
@@ -49,7 +51,7 @@ const Annexes = ({onSelection}: IAnnexesProps) => {
                                      size='large' min={1} placeholder='Surface totale de vos annexes'></InputNumber>
                         <Space size={screenStore.getSize()}/>
                         <Button type='primary' size={screenStore.getSize()} disabled={!annexes}
-                                onClick={saveAnnexes}>OK</Button>
+                                onClick={saveAnnexes}>Valider</Button>
                     </div>
                     : <></>
                 }

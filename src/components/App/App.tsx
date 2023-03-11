@@ -11,6 +11,9 @@ import Annexes from '../FormSteps/Annexes/Annexes';
 import Diagnostics from '../FormSteps/DiagnosticsChoices/DiagnosticsChoices';
 import {screenStore} from '../../stores';
 import {observer} from 'mobx-react';
+import WeekCalendar from '../FormSteps/WeekCalendar/WeekCalendar';
+import Infos from '../FormSteps/Infos/Infos';
+import Summary from '../FormSteps/Summary/Summary';
 
 const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -36,6 +39,15 @@ const App = observer(() => {
     }, {
         title: 'Diagnostics',
         content: <Diagnostics onSelection={setNextStep}/>
+    }, {
+        title: 'Infos',
+        content: <Infos onSelection={setNextStep} />
+    }, {
+        title: 'Rendez-vous',
+        content: <WeekCalendar onSelection={setNextStep}/>
+    }, {
+        title: 'Merci',
+        content: <Summary />
     }
     ];
 

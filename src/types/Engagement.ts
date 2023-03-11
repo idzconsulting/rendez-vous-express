@@ -1,9 +1,13 @@
+import {DiagnosticsTypes} from './DiagnosticsTypes';
+
 export interface Engagement {
     project?: Project;
     good?: Good;
     buildingYear?: BuildingYear;
     goodSurface?: GoodSurface;
     annexes?: number;
+    diagnostics?: DiagnosticsTypes[];
+    infos?: IInfos;
 }
 
 export type IEngagementType =
@@ -33,9 +37,19 @@ export enum BuildingYear {
 }
 
 export enum GoodSurface {
-    ENTRE_10_40_M2 = 'ENTRE_10_40_M2',
+    ENTRE_10_40_M2 = '12',
     ENTRE_40_70_M2 = 'ENTRE_40_70_M2',
     ENTRE_70_110_M2 = 'ENTRE_70_110_M2',
     ENTRE_110_150_M2 = 'ENTRE_110_150_M2',
     ENTRE_150_220_M2 = 'ENTRE_150_220_M2',
+}
+
+export interface IInfos {
+    name?: string;
+    address?: string;
+    phoneNumber?: string;
+    email?: string;
+    agence?: string;
+    date?: Date;
+    hour?: string;
 }
