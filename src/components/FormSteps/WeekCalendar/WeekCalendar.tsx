@@ -37,10 +37,10 @@ const Calendar = ({onSelection}: IWeekCalendarProps) => {
         let dates: ILabeledDate[] = [];
 
         for (let i = 0; i < 7; i++) {
-            let c = new Date(date.getFullYear(), date.getMonth(), date.getDate(), i * 24);
+            let currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), i * 24);
             dates.push({
-                date: c,
-                label: c.toLocaleDateString('fr-FR', options)
+                date: currentDate,
+                label: currentDate.toLocaleDateString('fr-FR', options)
             });
         }
 
@@ -57,7 +57,6 @@ const Calendar = ({onSelection}: IWeekCalendarProps) => {
 
     return (
         <div className={styles.calendar}>
-
             {dates?.map((label: ILabeledDate, index: number) =>
                 <div key={label.label} className={styles.column}>
                     <span key={label.label} className={styles.header}>{label.label}</span>
@@ -69,7 +68,7 @@ const Calendar = ({onSelection}: IWeekCalendarProps) => {
 
 export const WeekCalendar = ({onSelection}: IWeekCalendarProps) => {
     return (
-        <StepCard title='Calendar'>
+        <StepCard title='Rendez-vous'>
             <Calendar onSelection={onSelection} />
         </StepCard>
     );

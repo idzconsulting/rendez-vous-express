@@ -3,7 +3,6 @@ import styles from './App.module.less';
 import NavButtons from '../UI/NavButtons/NavButtons';
 import {Content} from 'antd/es/layout/layout';
 import Header from '../PageElements/Header/Header';
-import Footer from '../PageElements/Footer/Footer';
 import Choices from '../FormSteps/Choices/Choices';
 import {BuildingYear, Good, GoodSurface, Project} from '../../types/Engagement';
 import {Steps} from 'antd';
@@ -19,6 +18,10 @@ const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);
     const isMobile = screenStore.getIsMobile();
     const TIME_BEFORE_SKIPPING_NEXT_PAGE: number = 300;
+
+    const setNextStep = () => {
+        (currentStep + 1 < steps.length) && setStep(currentStep + 1, undefined);
+    }
 
     const steps = [{
         title: 'Projet',
@@ -41,47 +44,47 @@ const App = observer(() => {
         content: <Diagnostics onSelection={setNextStep}/>
     }, {
         title: 'Infos',
-        content: <Infos onSelection={setNextStep} />
+        content: <Infos onSelection={setNextStep}/>
     }, {
         title: 'Rendez-vous',
         content: <WeekCalendar onSelection={setNextStep}/>
     }, {
         title: 'Merci',
-        content: <Summary />
+        content: <Summary/>
     }
     ];
 
     const items = steps.map((item) => ({key: item.title, title: item.title}));
 
-    function setNextStep() {
-        setTimeout(() => {
-            (currentStep + 1 < steps.length) &&
-            setCurrentStep(currentStep + 1);
-        }, TIME_BEFORE_SKIPPING_NEXT_PAGE);
+    const setPreviousStep = () => setStep(currentStep - 1, 0);
+
+    const setStep = (step: number, timeout: number = TIME_BEFORE_SKIPPING_NEXT_PAGE) => {
+        setTimeout(() => setCurrentStep(step), timeout);
     }
 
-    const setPreviousStep = () => {
-        setCurrentStep(currentStep - 1);
-    }
+    const onChangeStep = (step: number) => (step < currentStep) && setStep(step, 0);
 
-    const getStepsComponent = () => <Steps responsive={true} className={styles.stepper} size='default'
-                                           current={currentStep} items={items}/>;
+    const getStepsComponent = () =>
+        <Steps responsive={true} className={styles.stepper} size='small'
+               current={currentStep} items={items} labelPlacement={'vertical'}
+               onChange={onChangeStep}/>;
 
     return (
         <div className={styles.appContainer}>
             <Header/>
             <Content>
                 <div className={styles.formContainer}>
+                    <div className={styles.navButton}>{<NavButtons hasPreviousButton={currentStep > 0}
+                                                                   onClick={setPreviousStep}/>}</div>
+
                     {!isMobile && getStepsComponent()}
 
                     {steps[currentStep].content}
-                    <div className={styles.navButton}>{<NavButtons hasPreviousButton={currentStep > 0}
-                                                                   onClick={setPreviousStep}/>}</div>
 
                     {isMobile && getStepsComponent()}
                 </div>
             </Content>
-            <Footer/>
+            {/*<Footer/>*/}
         </div>);
 });
 

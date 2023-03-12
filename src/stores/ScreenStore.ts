@@ -33,6 +33,7 @@ export class ScreenStore {
             this.setCurrentWidth(window.innerWidth);
             const isMobile: boolean = (this.currentWidth < 768) ?? false;
             this.setIsMobile(isMobile);
-        })
+        });
+        window.dispatchEvent(new Event('resize'));
     }
 }

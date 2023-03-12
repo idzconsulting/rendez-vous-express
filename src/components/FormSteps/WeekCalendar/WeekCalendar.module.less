@@ -1,9 +1,10 @@
 .calendar {
   display: grid;
-  grid-template-columns: repeat(7, 1fr) 60px;
-  justify-content: center;
+  grid-template-columns: repeat(auto-fit, 120px);
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
+  overflow-x: auto;
 }
 
 .header {
@@ -14,6 +15,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 15px;
   white-space: nowrap;
 }

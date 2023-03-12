@@ -3,10 +3,8 @@ import {IOnSelection} from '../../../types/IOnSelection';
 import Form from 'antd/es/form';
 import {Button, Input} from 'antd';
 import {MaskedInput} from 'antd-mask-input';
-import {LocationSearchInput} from '../../UI/LocationSearch/LocationSearch';
 import {useEffect} from 'react';
 import {currentEngagement} from '../../../stores';
-import {inspect} from 'util';
 import styles from './Infos.module.less';
 
 interface IInfosProps extends IOnSelection {
@@ -42,15 +40,16 @@ const Infos = ({onSelection}: IInfosProps) => {
                     name="name"
                     rules={[{ required: true, message: 'Veuillez entrez votre nom et prénom' }]}
                 >
-                    <Input />
+                    <Input style={{textTransform: 'capitalize'}} />
                 </Form.Item>
 
                 <Form.Item
                     label="Addresse du bien"
                     name="address"
-                    rules={[{ required: true, message: 'Veuillez entrez une addresse' }]}>
+                    rules={[{ required: true, message: 'Veuillez entrez une addresse' }]}
+                >
                     {/*<LocationSearchInput address={'Rue du lt'} clearAddress={''} onChange={(e:any) => {console.log(e)}} onAddressSelect={(e:any) => {console.log(e)}} />*/}
-                    <Input />
+                    <Input style={{textTransform: 'capitalize'}} />
                 </Form.Item>
 
                 <Form.Item
@@ -64,7 +63,7 @@ const Infos = ({onSelection}: IInfosProps) => {
                 <Form.Item
                     label="Addresse email"
                     name="email"
-                    rules={[{ required: true, type: 'email', message: 'Veuillez entrez votre addresse email' }]}
+                    rules={[{ type: 'email', message: 'Veuillez entrez votre addresse email' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -73,10 +72,10 @@ const Infos = ({onSelection}: IInfosProps) => {
                     label="Mon agence"
                     name="agence"
                 >
-                    <Input />
+                    <Input style={{textTransform: 'capitalize'}} />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{ offset: 8, span: 16 }} className={styles.formButtons}>
+                <Form.Item wrapperCol={{ offset: 8 }} className={styles.formButtons}>
                     <Button type="primary" htmlType="submit">
                         Valider
                     </Button>
