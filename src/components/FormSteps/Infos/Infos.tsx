@@ -1,17 +1,40 @@
 import StepCard from '../StepCard/StepCard';
 import {IOnSelection} from '../../../types/IOnSelection';
 import Form from 'antd/es/form';
-import {Button, Input} from 'antd';
-import {MaskedInput} from 'antd-mask-input';
-import {useEffect} from 'react';
+import {AutoComplete, Button, Input} from 'antd';
+import {useEffect, useState} from 'react';
 import {currentEngagement} from '../../../stores';
 import styles from './Infos.module.less';
+import {AddressesFetcher, AddressesResponses} from '../../../fetchers/role-fetchers/AddressesFetcher';
 
 interface IInfosProps extends IOnSelection {
 }
 
 const Infos = ({onSelection}: IInfosProps) => {
     const [form] = Form.useForm();
+    const [options, setOptions] = useState<{ value: string, code: number }[]>([]);
+
+    const onSelect = (data: any) => {
+        console.log('onSelect', data);
+    };
+
+    const onChange = (data: any) => {
+        console.log(data);
+    };
+
+    const getOptions = async (text: string) => {
+        const response: { data: AddressesResponses; status: number } = await AddressesFetcher.searchAddress(text);
+
+        setOptions([]);
+        if (response.status === 200) {
+            const options: {value: string, code: number}[] = [];
+            response.data.adresses.forEach((adresse) => {
+                options.push({value: adresse.adresse, code: adresse.code_postal})
+            });
+
+            setOptions(options);
+        }
+    }
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();
@@ -48,16 +71,12 @@ const Infos = ({onSelection}: IInfosProps) => {
                     name="address"
                     rules={[{ required: true, message: 'Veuillez entrez une addresse' }]}
                 >
-                    {/*<LocationSearchInput address={'Rue du lt'} clearAddress={''} onChange={(e:any) => {console.log(e)}} onAddressSelect={(e:any) => {console.log(e)}} />*/}
-                    <Input style={{textTransform: 'capitalize'}} />
-                </Form.Item>
-
-                <Form.Item
-                    label="Numéro de téléphone"
-                    name="phoneNumber"
-                    rules={[{ required: true, message: 'Veuillez entrez votre numéro de téléphone' }]}
-                >
-                    <MaskedInput mask='00 00 00 00 00'/>
+                    <AutoComplete
+                        options={options}
+                        onSelect={onSelect}
+                        onSearch={(text: string) => getOptions(text)}
+                        onChange={onChange}
+                        style={{textTransform: 'capitalize'}} />
                 </Form.Item>
 
                 <Form.Item

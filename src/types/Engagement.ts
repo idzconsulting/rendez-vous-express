@@ -47,6 +47,7 @@ export enum GoodSurface {
 export interface IInfos {
     name?: string;
     address?: string;
+    postalCode?: string;
     phoneNumber?: string;
     email?: string;
     agence?: string;

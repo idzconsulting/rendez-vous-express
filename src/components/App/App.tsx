@@ -4,7 +4,7 @@ import NavButtons from '../UI/NavButtons/NavButtons';
 import {Content} from 'antd/es/layout/layout';
 import Header from '../PageElements/Header/Header';
 import Choices from '../FormSteps/Choices/Choices';
-import {BuildingYear, Good, GoodSurface, Project} from '../../types/Engagement';
+import {BuildingYear, Good, GoodSurface} from '../../types/Engagement';
 import {Steps} from 'antd';
 import Annexes from '../FormSteps/Annexes/Annexes';
 import Diagnostics from '../FormSteps/DiagnosticsChoices/DiagnosticsChoices';
@@ -13,6 +13,7 @@ import {observer} from 'mobx-react';
 import WeekCalendar from '../FormSteps/WeekCalendar/WeekCalendar';
 import Infos from '../FormSteps/Infos/Infos';
 import Summary from '../FormSteps/Summary/Summary';
+import Projects from '../FormSteps/Projects/Projects';
 
 const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -25,7 +26,7 @@ const App = observer(() => {
 
     const steps = [{
         title: 'Projet',
-        content: <Choices title='Votre projet' type={Project} onSelection={setNextStep}/>,
+        content: <Projects onSelection={setNextStep} />,
     }, {
         title: 'Bien',
         content: <Choices title='Votre bien' type={Good} onSelection={setNextStep}/>,
@@ -43,7 +44,7 @@ const App = observer(() => {
         title: 'Diagnostics',
         content: <Diagnostics onSelection={setNextStep}/>
     }, {
-        title: 'Infos',
+        title: 'Informations',
         content: <Infos onSelection={setNextStep}/>
     }, {
         title: 'Rendez-vous',

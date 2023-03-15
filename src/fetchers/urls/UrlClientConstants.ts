@@ -1,7 +1,12 @@
+import axios from 'axios';
+
 export class UrlClientConstants {
-    static readonly home = '/';
-    static readonly login = '/login';
-    static readonly student = '/student';
-    static readonly tutor = '/tutor';
-    static readonly secretary = '/secretary';
+    private static readonly _baseURL: string = 'https://api.rdvexpress.idzconsulting.fr/';
+
+    static readonly rappelerURL = 'rendez-vous/rappeler';
+    static readonly adresseRechercheURL = 'adresse/recherche';
+
+    static axiosBase = axios.create({
+        baseURL: this._baseURL,
+    })
 }

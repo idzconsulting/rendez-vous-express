@@ -18,7 +18,7 @@ export class ScreenStore {
         return this.currentWidth;
     }
 
-    getSize = (): SizeType => this.isMobile ? 'middle' : 'large';
+    getSize = (): SizeType => this.isMobile ? 'large' : 'large';
 
     private setIsMobile(isMobile: boolean) {
         this.isMobile = isMobile;
