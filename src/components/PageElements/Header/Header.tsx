@@ -75,9 +75,17 @@ const Header = observer(() => {
                         <MaskedInput mask='00 00 00 00 00'/>
                     </Form.Item>
 
+                    <Form.Item
+                        label="Code postal"
+                        name="cp"
+                        rules={[{required: true, message: 'Veuillez entrez votre code postal'}]}
+                    >
+                        <MaskedInput mask='00000'/>
+                    </Form.Item>
+
                     <Form.Item wrapperCol={{offset: 8}}>
                         <Button type="primary" htmlType="submit" onClick={saveForm}>
-                            Valider
+                            Être rappelé
                         </Button>
                     </Form.Item>
                 </Form>
