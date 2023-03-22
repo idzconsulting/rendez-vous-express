@@ -66,7 +66,7 @@ export class CurrentEngagementStore {
     }
 
     setInfos(infos: IInfos) {
-        this.engagement.infos = {...infos};
+        this.engagement.infos = {...this.engagement.infos, ...infos};
     }
 
     setRDV(date: Date, hour: string) {

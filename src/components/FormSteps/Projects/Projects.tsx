@@ -18,17 +18,17 @@ const Projects = ({onSelection}: IProjectProps) => {
                 <Form
                     form={form}
                     name="basic"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 16 }}
-                    style={{ maxWidth: 600 }}
-                    initialValues={{ remember: true }}
+                    labelCol={{span: 8}}
+                    wrapperCol={{span: 16}}
+                    style={{maxWidth: 600}}
+                    initialValues={{remember: true}}
                     autoComplete="off"
                     // onFinish={saveForm}
                 >
                     <Form.Item
                         label="Code postal"
                         name="postalCode"
-                        rules={[{ required: true, message: 'Veuillez entrez votre code postal' }]}
+                        rules={[{required: true, message: 'Veuillez entrez votre code postal'}]}
                     >
                         <MaskedInput mask='00000'/>
                     </Form.Item>
@@ -36,14 +36,14 @@ const Projects = ({onSelection}: IProjectProps) => {
                     <Form.Item
                         label="Numéro de téléphone"
                         name="phoneNumber"
-                        rules={[{ required: true, message: 'Veuillez entrez votre numéro de téléphone' }]}
+                        rules={[{required: true, message: 'Veuillez entrez votre numéro de téléphone'}]}
                     >
                         <MaskedInput mask='00 00 00 00 00'/>
                     </Form.Item>
                 </Form>
 
-            <Choices type={Project} title='' onSelection={onSelection}/>
-            </StepCard>
+                <Choices type={Project} title='' onSelection={onSelection}/>
+                </StepCard>
         </div>
     );
 }
