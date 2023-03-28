@@ -1,4 +1,4 @@
-export interface Rappel {
+export interface RappelDTO {
     tel: string;
     proprietaire: string;
     cp: string;

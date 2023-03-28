@@ -37,11 +37,11 @@ export enum BuildingYear {
 }
 
 export enum GoodSurface {
-    ENTRE_10_40_M2 = '12',
+    ENTRE_10_40_M2 = 'ENTRE_10_40_M2',
     ENTRE_40_70_M2 = 'ENTRE_40_70_M2',
     ENTRE_70_110_M2 = 'ENTRE_70_110_M2',
-    ENTRE_110_150_M2 = 'ENTRE_110_150_M2',
-    ENTRE_150_220_M2 = 'ENTRE_150_220_M2',
+    ENTRE_110_130_M2 = 'ENTRE_110_130_M2',
+    PLUS_DE_130 = 'PLUS_DE_130',
 }
 
 export interface IInfos {

@@ -23,8 +23,8 @@ function initLabelsMap() {
     labelsMap.set(GoodSurface.ENTRE_10_40_M2, 'De 10 à 40 m²');
     labelsMap.set(GoodSurface.ENTRE_40_70_M2, 'De 40 à 70 m²');
     labelsMap.set(GoodSurface.ENTRE_70_110_M2, 'De 70 à 110 m²');
-    labelsMap.set(GoodSurface.ENTRE_110_150_M2, 'De 110 à 150 m²');
-    labelsMap.set(GoodSurface.ENTRE_150_220_M2, 'De 150 à 220 m²');
+    labelsMap.set(GoodSurface.ENTRE_110_130_M2, 'De 110 à 130 m²');
+    labelsMap.set(GoodSurface.PLUS_DE_130, 'Plus de 130 m²');
 
     labelsMap.set(DiagnosticsTypes.DPE, 'DPE');
     labelsMap.set(DiagnosticsTypes.CARREZ_BOUTIN, 'Carrez / Boutin');

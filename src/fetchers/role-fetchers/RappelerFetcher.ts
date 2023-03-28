@@ -1,8 +1,8 @@
 import {UrlClientConstants} from '../urls/UrlClientConstants';
-import {Rappel} from '../../types/fetcher-types/Rappel';
+import {RappelDTO} from '../../types/dto/RappelDTO';
 
 export class RappelerFetcher {
-    static async rappeler(rappel: Rappel) {
+    static async rappeler(rappel: RappelDTO) {
         try {
             const response = await UrlClientConstants.axiosBase.post(UrlClientConstants.rappelerURL, rappel);
             return {
@@ -12,9 +12,5 @@ export class RappelerFetcher {
         } catch (e) {
             throw e;
         }
-    }
-
-    async logout() {
-        // await UrlServerConstants.axiosBase.get(UrlServerConstants.logoutURL);
     }
 }

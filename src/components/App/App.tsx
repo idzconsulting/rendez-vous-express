@@ -24,6 +24,14 @@ const App = observer(() => {
         (currentStep + 1 < steps.length) && setStep(currentStep + 1, undefined);
     }
 
+    const setPreviousStep = () => setStep(currentStep - 1, 0);
+
+    const setStep = (step: number, timeout: number = TIME_BEFORE_SKIPPING_NEXT_PAGE) => {
+        setTimeout(() => setCurrentStep(step), timeout);
+    }
+
+    const onChangeStep = (step: number) => (step < currentStep) && setStep(step, 0);
+
     const steps = [{
         title: 'Projet',
         content: <Projects onSelection={setNextStep} />,
@@ -56,14 +64,6 @@ const App = observer(() => {
     ];
 
     const items = steps.map((item) => ({key: item.title, title: item.title}));
-
-    const setPreviousStep = () => setStep(currentStep - 1, 0);
-
-    const setStep = (step: number, timeout: number = TIME_BEFORE_SKIPPING_NEXT_PAGE) => {
-        setTimeout(() => setCurrentStep(step), timeout);
-    }
-
-    const onChangeStep = (step: number) => (step < currentStep) && setStep(step, 0);
 
     const getStepsComponent = () =>
         <Steps responsive={true} className={styles.stepper} size='small'

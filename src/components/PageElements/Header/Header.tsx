@@ -12,7 +12,7 @@ import Form from 'antd/es/form';
 import {MaskedInput} from 'antd-mask-input';
 import {CheckCircleOutlined} from '@ant-design/icons';
 import {RappelerFetcher} from '../../../fetchers/role-fetchers/RappelerFetcher';
-import {Rappel} from '../../../types/fetcher-types/Rappel';
+import {RappelDTO} from '../../../types/dto/RappelDTO';
 
 const Header = observer(() => {
     const whatsAppUrl = 'https://wa.me/33755532333?text=Bonjour+nous+souhaiterions+%C3%AAtre+contact%C3%A9s+pour+la+r%C3%A9alisation+de+diagnostics+immobiliers';
@@ -28,8 +28,7 @@ const Header = observer(() => {
     const hideConfirmationModal = () => setShowConfirmationModal(false);
 
     const saveForm = (values: any) => {
-        console.warn(values);
-         RappelerFetcher.rappeler(values as Rappel).then(_ => {
+         RappelerFetcher.rappeler(values as RappelDTO).then(_ => {
              hideModal();
              showConfirmationModal();
          });
