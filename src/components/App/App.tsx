@@ -67,7 +67,7 @@ const App = observer(() => {
 
     const getStepsComponent = () =>
         <Steps responsive={true} className={styles.stepper} size='small'
-               current={currentStep} items={items} labelPlacement={'vertical'}
+               current={8} items={items} labelPlacement={'vertical'}
                onChange={onChangeStep}/>;
 
     return (
@@ -80,7 +80,7 @@ const App = observer(() => {
 
                     {!isMobile && getStepsComponent()}
 
-                    {steps[currentStep].content}
+                    {steps[7].content}
 
                     {isMobile && getStepsComponent()}
                 </div>

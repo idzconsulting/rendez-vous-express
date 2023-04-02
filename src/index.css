@@ -17,3 +17,8 @@ code {
     font-family: Lato;
     src: url("./assets/fonts/Lato-Regular.ttf");
 }
+
+.fc .fc-timegrid-slot{
+    height: 8em;
+    cursor: pointer;
+}

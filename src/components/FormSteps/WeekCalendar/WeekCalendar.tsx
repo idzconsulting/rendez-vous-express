@@ -4,6 +4,11 @@ import React, {useEffect, useState} from 'react';
 import styles from './WeekCalendar.module.less';
 import {Button} from 'antd';
 import {currentEngagement} from '../../../stores';
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import allLocales from '@fullcalendar/core/locales-all' 
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from "@fullcalendar/interaction" 
 
 interface IWeekCalendarProps extends IOnSelection {
 }
@@ -47,22 +52,30 @@ const Calendar = ({onSelection}: IWeekCalendarProps) => {
         setDates(dates);
     }
 
-    const onSelectHour = (hour: IHours, index: number) => {
-        if (dates) {
-            console.log(hour, dates[index]);
-            currentEngagement.setRDV(dates[index].date, hour);
-            onSelection();
-        }
+    const onSelectHour = (date:any) => {
+        alert('selected ' + date.startStr + ' to ' + date.endStr);
     }
 
     return (
-        <div className={styles.calendar}>
-            {dates?.map((label: ILabeledDate, index: number) =>
-                <div key={label.label} className={styles.column}>
-                    <span key={label.label} className={styles.header}>{label.label}</span>
-                    {Object.values(IHours).map((hour) => <Button type='primary' onClick={() => onSelectHour(hour, index)}>{hour}</Button>)}
-                </div>)}
-        </div>
+        <div style={{backgroundColor:'white',padding:'50px',height: '55em',overflowY: 'hidden'}}>
+        <FullCalendar
+          plugins={[timeGridPlugin,interactionPlugin]}
+          
+          headerToolbar={{
+            right: "today next",
+          }}
+          slotDuration={'02:00'}
+          slotMinTime={'07:00'}
+          slotMaxTime={'17:00'}
+          slotMinWidth={200}
+          weekends={false}
+          locale={'fr'}
+          locales={allLocales}
+          editable={true}
+          selectable={true}
+          select={onSelectHour}
+        />
+      </div>
     );
 }
 
