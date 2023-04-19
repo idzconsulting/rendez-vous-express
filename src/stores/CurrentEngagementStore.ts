@@ -2,11 +2,10 @@ import {makeAutoObservable, toJS} from 'mobx';
 import {
     BuildingYear,
     Engagement,
-    Good,
-    GoodSurface,
-    IEngagementType,
-    IInfos,
-    Project
+   IInfos,
+   Bien,
+   Refs,
+   Surface
 } from '../types/Engagement';
 import {DiagnosticsTypes} from '../types/DiagnosticsTypes';
 
@@ -21,27 +20,30 @@ export class CurrentEngagementStore {
         return toJS(this.engagement);
     }
 
-    getProperty(field: IEngagementType) {
-        if (Object.is(field, Project)) {
+    getProperty(field: Refs) {
+        if (Object.is(field, Refs.TRANSACTION)) {
             return this.engagement.project;
-        } else if (Object.is(field, Good)) {
-            return this.engagement.good;
-        } else if (Object.is(field, BuildingYear)) {
+        }
+        else if (Object.is(field, Refs.BIEN)) {
+            return this.engagement.bien;
+        } else if (Object.is(field,Refs.ANNEE_CONSTRUCTION)) {
             return this.engagement.buildingYear;
-        } else if (Object.is(field, GoodSurface)) {
-            return this.engagement.goodSurface;
+        } else if (Object.is(field, Refs.SURFACE)) {
+            return this.engagement.surface;
         }
     }
 
-    setProperty(field: IEngagementType, value: any) {
-        if (Object.is(field, Project)) {
-            this.engagement = {...this.engagement, project: value as Project};
-        } else if (Object.is(field, Good)) {
-            this.engagement = {...this.engagement, good: value as Good};
-        } else if (Object.is(field, BuildingYear)) {
+    setProperty(field: Refs, value: any) {
+        if (Object.is(field, Refs.TRANSACTION)) {
+            console.log('hi')
+            this.engagement = {...this.engagement, project: value};
+        }
+        else if (Object.is(field, Refs.BIEN)) {
+            this.engagement = {...this.engagement, bien: value as Bien};
+        } else if (Object.is(field, Refs.ANNEE_CONSTRUCTION)) {
             this.engagement = {...this.engagement, buildingYear: value as BuildingYear};
-        } else if (Object.is(field, GoodSurface)) {
-            this.engagement = {...this.engagement, goodSurface: value as GoodSurface};
+        } else if (Object.is(field, Refs.SURFACE)) {
+            this.engagement = {...this.engagement, surface: value as Surface};
         }
     }
 

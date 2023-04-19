@@ -2,9 +2,9 @@ import {DiagnosticsTypes} from './DiagnosticsTypes';
 
 export interface Engagement {
     project?: Project;
-    good?: Good;
+    bien?: Bien;
     buildingYear?: BuildingYear;
-    goodSurface?: GoodSurface;
+    surface?: Surface;
     annexes?: number;
     diagnostics?: DiagnosticsTypes[];
     infos?: IInfos;
@@ -12,9 +12,9 @@ export interface Engagement {
 
 export type IEngagementType =
       typeof Project
-    | typeof Good
+    | typeof Bien
     | typeof BuildingYear
-    | typeof GoodSurface
+    | typeof Surface
     ;
 
 export enum Project {
@@ -22,7 +22,16 @@ export enum Project {
     VENTE = "VENTE",
 }
 
-export enum Good {
+
+export enum Refs {
+    TRANSACTION = 'TRANSACTION',
+    BIEN='BIEN',
+    ANNEE_CONSTRUCTION='ANNEE_CONSTRUCTION',
+    SURFACE='SURFACE'
+
+}
+
+export enum Bien {
     APPARTEMENT = 'APPARTEMENT',
     IMMEUBLE = 'IMMEUBLE',
     MAISON = 'MAISON',
@@ -36,7 +45,7 @@ export enum BuildingYear {
     MOINS_15_ANS = 'MOINS_15_ANS',
 }
 
-export enum GoodSurface {
+export enum Surface {
     ENTRE_10_40_M2 = 'ENTRE_10_40_M2',
     ENTRE_40_70_M2 = 'ENTRE_40_70_M2',
     ENTRE_70_110_M2 = 'ENTRE_70_110_M2',
@@ -53,4 +62,6 @@ export interface IInfos {
     agence?: string;
     date?: Date;
     hour?: string;
+    cp?:string;
+    phone?:string;
 }

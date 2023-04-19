@@ -9,12 +9,14 @@ import { red, green } from '@ant-design/colors';
 import {currentEngagement} from '../../../stores';
 
 interface IDiagnosticsProps extends IOnSelection {
+    diagnostics:[any]
 }
 
-const DiagnosticsChoices = ({onSelection}: IDiagnosticsProps) => {
+const DiagnosticsChoices = ({onSelection,diagnostics}: IDiagnosticsProps) => {
     const [selectedDiagnostics, setSelectedDiagnostics] = useState<string[]>([]);
 
     useEffect(() => {
+        console.log(diagnostics)
         const savedDiagnostics = currentEngagement.getDiagnostics();
         setSelectedDiagnostics(savedDiagnostics || []);
     }, []);
@@ -31,10 +33,10 @@ const DiagnosticsChoices = ({onSelection}: IDiagnosticsProps) => {
     return <StepCard title='Diagnostics'>
         <div className={styles.diagnosticsChoicesContainer}>
             <div className={styles.choices}>
-                {Object.values(DiagnosticsTypes).map((label) =>
-                    <Button key={label} type='primary' onClick={() => toggleDiagnostic(label)}
-                            style={{backgroundColor: selectedDiagnostics.includes(label) ? green.primary: red.primary}}>
-                        {labelsMap.get(label)}
+                {diagnostics?.map((diagnostic) =>
+                    <Button key={diagnostic.id} type='primary' onClick={() => toggleDiagnostic(diagnostic.id)}
+                            style={{backgroundColor: selectedDiagnostics.includes(diagnostic.id) ? green.primary: red.primary}}>
+                        {diagnostic.name}
                     </Button>)
                 }
             </div>

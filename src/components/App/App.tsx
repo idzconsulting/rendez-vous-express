@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './App.module.less';
 import NavButtons from '../UI/NavButtons/NavButtons';
 import {Content} from 'antd/es/layout/layout';
 import Header from '../PageElements/Header/Header';
 import Choices from '../FormSteps/Choices/Choices';
-import {BuildingYear, Good, GoodSurface} from '../../types/Engagement';
+import {Refs} from '../../types/Engagement';
 import {Steps} from 'antd';
 import Annexes from '../FormSteps/Annexes/Annexes';
 import Diagnostics from '../FormSteps/DiagnosticsChoices/DiagnosticsChoices';
@@ -14,12 +14,26 @@ import WeekCalendar from '../FormSteps/WeekCalendar/WeekCalendar';
 import Infos from '../FormSteps/Infos/Infos';
 import Summary from '../FormSteps/Summary/Summary';
 import Projects from '../FormSteps/Projects/Projects';
+import { RefsFetcher } from '../../fetchers/role-fetchers/RefFetcher';
+import { log } from 'console';
 
 const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);
     const isMobile = screenStore.getIsMobile();
     const TIME_BEFORE_SKIPPING_NEXT_PAGE: number = 300;
+    const [refs,setRefs] = useState<any>({})
 
+    useEffect(() => {
+        const getRefs = async () => {
+            const allRefs = await RefsFetcher.getRefs();
+            console.log('234',allRefs.data)
+            setRefs(allRefs.data)
+        }
+
+        getRefs();
+       
+     },[])
+     
     const setNextStep = () => {
         (currentStep + 1 < steps.length) && setStep(currentStep + 1, undefined);
     }
@@ -34,23 +48,23 @@ const App = observer(() => {
 
     const steps = [{
         title: 'Projet',
-        content: <Projects onSelection={setNextStep} />,
+        content: <Projects  refs={refs.type_transaction} onSelection={setNextStep} />,
     }, {
         title: 'Bien',
-        content: <Choices title='Votre bien' type={Good} onSelection={setNextStep}/>,
+        content: <Choices title='Votre bien' refs={refs.type_bien} type={Refs.BIEN} onSelection={setNextStep}/>,
     }, {
         title: 'Année de construction',
-        content: <Choices title='Année de construction' type={BuildingYear} onSelection={setNextStep}/>,
+        content: <Choices title='Année de construction'  refs={refs.date_construction} type={Refs.ANNEE_CONSTRUCTION} onSelection={setNextStep}/>,
 
     }, {
         title: 'Superficie',
-        content: <Choices title='Superficie du bien' type={GoodSurface} onSelection={setNextStep}/>,
+        content: <Choices title='Superficie du bien'  refs={refs.type_surface} type={Refs.SURFACE} onSelection={setNextStep}/>,
     }, {
         title: 'Annexes',
         content: <Annexes onSelection={setNextStep}/>
     }, {
         title: 'Diagnostics',
-        content: <Diagnostics onSelection={setNextStep}/>
+        content: <Diagnostics  diagnostics={refs.diagnostiques} onSelection={setNextStep}/>
     }, {
         title: 'Informations',
         content: <Infos onSelection={setNextStep}/>

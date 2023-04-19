@@ -39,7 +39,7 @@ const Summary = () => {
 
                 <div className={styles.row}>
                     <span className={styles.title}>Bien</span>
-                    <span>{getLabel(engagement?.good)}</span>
+                    <span>{}</span>
                 </div>
 
                 <div className={styles.row}>
@@ -49,7 +49,7 @@ const Summary = () => {
 
                 <div className={styles.row}>
                     <span className={styles.title}>Superficie du bien</span>
-                    <span>{getLabel(engagement?.goodSurface)}</span>
+                    <span>{}</span>
                 </div>
 
                 <div className={styles.row}>
