@@ -1,10 +1,10 @@
 import {RappelDTO} from '../../types/dto/RappelDTO';
 import {UrlClientConstants} from '../urls/UrlClientConstants';
 
-export class InsererFetcher {
-    static async inserer(mission: any) {
+export class EnregistrerFetcher {
+    static async enregistrer(mission: any) {
         try {
-            const response = await UrlClientConstants.axiosBase.post(UrlClientConstants.insererURL, mission);
+            const response = await UrlClientConstants.axiosBase.post(UrlClientConstants.enregistrerURL, mission);
             console.log(response);
             return {
                 status: response.status,

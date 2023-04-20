@@ -20,6 +20,7 @@ const Summary = () => {
     const [engagement, setEngagement] = useState<Engagement>();
 
     useEffect(() => {
+        console.log('dii',currentEngagement.getDiagnostics())
         setEngagement(currentEngagement.getCurrentEngagement());
     }, []);
 
@@ -34,22 +35,22 @@ const Summary = () => {
             <div className={styles.resume}>
                 <div className={styles.row}>
                     <span className={styles.title}>Project</span>
-                    <span>{getLabel(engagement?.project)}</span>
+                    <span>{engagement?.project?.nom}</span>
                 </div>
 
                 <div className={styles.row}>
                     <span className={styles.title}>Bien</span>
-                    <span>{}</span>
+                    <span>{engagement?.bien?.nom}</span>
                 </div>
 
                 <div className={styles.row}>
                     <span className={styles.title}>Année de construction</span>
-                    <span>{getLabel(engagement?.buildingYear)}</span>
+                    <span>{engagement?.buildingYear?.nom}</span>
                 </div>
 
                 <div className={styles.row}>
                     <span className={styles.title}>Superficie du bien</span>
-                    <span>{}</span>
+                    <span>{engagement?.surface?.nom}</span>
                 </div>
 
                 <div className={styles.row}>
@@ -60,7 +61,7 @@ const Summary = () => {
                 <div className={styles.row}>
                     <span className={styles.title}>Diagnostics</span>
                     <div>{engagement?.diagnostics?.map((diag) =>
-                        <span key={diag}>{getLabel(diag)}, </span>)}</div>
+                        <span key={diag?.id}>{diag?.name}, </span>)}</div>
                 </div>
 
                 <div className={styles.row}>
@@ -69,32 +70,32 @@ const Summary = () => {
                     <div className={clsx(styles.infos, styles.row)}>
                         <div className={styles.row}>
                             <span className={styles.title}>Nom et prénom</span>
-                            <span>{engagement?.infos?.name}</span>
+                            <span>{engagement?.infos?.proprietaire_nom}</span>
                         </div>
 
                         <div className={styles.row}>
                             <span className={styles.title}>Adresse du bien</span>
-                            <span>{engagement?.infos?.address}</span>
+                            <span>{engagement?.infos?.bien_adresse}</span>
                         </div>
 
                         <div className={styles.row}>
                             <span className={styles.title}>Email</span>
-                            <span>{engagement?.infos?.email}</span>
+                            <span>{engagement?.infos?.proprietaire_email}</span>
                         </div>
 
                         <div className={styles.row}>
                             <span className={styles.title}>Téléphone</span>
-                            <span>{engagement?.infos?.phoneNumber}</span>
+                            <span>{engagement?.infos?.proprietaire_telephone}</span>
                         </div>
 
                         <div className={styles.row}>
                             <span className={styles.title}>Date de rendez-vous</span>
-                            <span>{engagement?.infos?.date?.toLocaleDateString()}</span>
+                            <span>{engagement?.infos?.rdv_jour?.toLocaleDateString()}</span>
                         </div>
 
                         <div className={styles.row}>
                             <span className={styles.title}>Heure de rendez-vous</span>
-                            <span>{engagement?.infos?.hour}</span>
+                            <span>{engagement?.infos?.rdv_jour?.toLocaleDateString()}</span>
                         </div>
                     </div>
                 </div>

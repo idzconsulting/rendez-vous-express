@@ -1,28 +1,5 @@
 import {DiagnosticsTypes} from './DiagnosticsTypes';
 
-export interface Engagement {
-    project?: Project;
-    bien?: Bien;
-    buildingYear?: BuildingYear;
-    surface?: Surface;
-    annexes?: number;
-    diagnostics?: DiagnosticsTypes[];
-    infos?: IInfos;
-}
-
-export type IEngagementType =
-      typeof Project
-    | typeof Bien
-    | typeof BuildingYear
-    | typeof Surface
-    ;
-
-export enum Project {
-    LOCATION = "LOCATION",
-    VENTE = "VENTE",
-}
-
-
 export enum Refs {
     TRANSACTION = 'TRANSACTION',
     BIEN='BIEN',
@@ -31,37 +8,68 @@ export enum Refs {
 
 }
 
-export enum Bien {
-    APPARTEMENT = 'APPARTEMENT',
-    IMMEUBLE = 'IMMEUBLE',
-    MAISON = 'MAISON',
-    LOCAL = 'LOCAL'
+export interface Engagement {
+    project?: Transaction;
+    bien?: Bien;
+    buildingYear?: ConstructionDate;
+    surface?: Surface;
+    annexes?: number;
+    diagnostics?: Diagnostiques[];
+    infos?: IInfos;
 }
 
-export enum BuildingYear {
-    AVANT_1948 = 'AVANT_1948',
-    ENTRE_1948_1997 = '1948_1997',
-    APRES_1997 = 'APRES_1997',
-    MOINS_15_ANS = 'MOINS_15_ANS',
+export interface ConstructionDate {
+    id: string;
+    nom: string;
 }
 
-export enum Surface {
-    ENTRE_10_40_M2 = 'ENTRE_10_40_M2',
-    ENTRE_40_70_M2 = 'ENTRE_40_70_M2',
-    ENTRE_70_110_M2 = 'ENTRE_70_110_M2',
-    ENTRE_110_130_M2 = 'ENTRE_110_130_M2',
-    PLUS_DE_130 = 'PLUS_DE_130',
+export interface Diagnostiques {
+    id: string;
+    name: string;
 }
+
+export interface SurfaceAnnexePrix {
+    prix: string;
+    surface_min: string;
+    surface_max: string;
+    zone_id: string
+}
+
+export type Bien = {
+    id: string;
+    nom: string;
+}
+
+export type Partenaire = {
+    id: string;
+    nom: string;
+}
+
+export type Surface = {
+    id: string;
+    nom: string;
+}
+
+export type Transaction = {
+    id: string;
+    nom: string;
+    label: string;
+}
+
+
+export type IEngagementType =
+    Bien
+    | ConstructionDate
+    | Transaction
+    | Surface
+    ;
 
 export interface IInfos {
-    name?: string;
-    address?: string;
-    postalCode?: string;
-    phoneNumber?: string;
-    email?: string;
+    proprietaire_nom?: string;
+    bien_adresse?: string;
+    proprietaire_email?: string;
     agence?: string;
-    date?: Date;
-    hour?: string;
-    cp?:string;
-    phone?:string;
+    rdv_jour?: Date;
+    bien_code_postal?:string;
+    proprietaire_telephone?:string;
 }

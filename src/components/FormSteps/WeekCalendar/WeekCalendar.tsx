@@ -1,9 +1,14 @@
-import {IOnSelection} from '../../../types/IOnSelection';
+import { IOnSelection } from '../../../types/IOnSelection';
 import StepCard from '../StepCard/StepCard';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './WeekCalendar.module.less';
-import {Button} from 'antd';
-import {currentEngagement} from '../../../stores';
+import { Button } from 'antd';
+import { currentEngagement } from '../../../stores';
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import allLocales from '@fullcalendar/core/locales-all'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from "@fullcalendar/interaction"
 
 interface IWeekCalendarProps extends IOnSelection {
 }
@@ -20,7 +25,7 @@ enum IHours {
     '15-17' = '15h - 17h'
 }
 
-const Calendar = ({onSelection}: IWeekCalendarProps) => {
+const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     const [numWeek, setNumWeek] = useState(0);
     const [date, setDate] = useState<Date>();
     const [dates, setDates] = useState<ILabeledDate[]>();
@@ -47,26 +52,38 @@ const Calendar = ({onSelection}: IWeekCalendarProps) => {
         setDates(dates);
     }
 
-    const onSelectHour = (hour: IHours, index: number) => {
-        if (dates) {
-            console.log(hour, dates[index]);
-            currentEngagement.setRDV(dates[index].date, hour);
+    const onSelectHour = (date: any) => {
+        alert('selected ' + date.startStr.split('+')[0] + ' to ' + date.endStr);
+        if (date) {
+            currentEngagement.setRDV(date.startStr.split('+')[0]);
             onSelection();
         }
     }
 
     return (
-        <div className={styles.calendar}>
-            {dates?.map((label: ILabeledDate, index: number) =>
-                <div key={label.label} className={styles.column}>
-                    <span key={label.label} className={styles.header}>{label.label}</span>
-                    {Object.values(IHours).map((hour) => <Button type='primary' onClick={() => onSelectHour(hour, index)}>{hour}</Button>)}
-                </div>)}
+        <div style={{ backgroundColor: 'white', padding: '50px', height: 'min-content', overflowY: 'hidden' }}>
+            <FullCalendar
+                plugins={[timeGridPlugin, interactionPlugin]}
+
+                headerToolbar={{
+                    right: "today next",
+                }}
+                slotDuration={'02:00'}
+                slotMinTime={'07:00'}
+                slotMaxTime={'17:00'}
+                slotMinWidth={200}
+                weekends={false}
+                locale={'fr'}
+                locales={allLocales}
+                editable={true}
+                selectable={true}
+                select={onSelectHour}
+            />
         </div>
     );
 }
 
-export const WeekCalendar = ({onSelection}: IWeekCalendarProps) => {
+export const WeekCalendar = ({ onSelection }: IWeekCalendarProps) => {
     return (
         <StepCard title='Rendez-vous'>
             <Calendar onSelection={onSelection} />

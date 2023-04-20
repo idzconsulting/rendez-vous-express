@@ -16,15 +16,15 @@ interface IChoicesProps extends IOnSelection {
 }
 
 const Choices = observer(({title, type, onSelection,refs}: IChoicesProps) => {
-    const [selectedOption, setSelectedOption] = useState<string>('');
+    const [selectedOption, setSelectedOption] = useState<any>();
 
     useEffect(() => {
         const selectedOption: any = currentEngagement.getProperty(type);
+
         setSelectedOption(selectedOption);
-        console.log({refs})
     }, [title, type,refs]);
 
-    const onButtonClick = (choice: string) => {
+    const onButtonClick = (choice: any) => {
         setSelectedOption(choice);
         currentEngagement.setProperty(type, choice);
         onSelection();
@@ -35,9 +35,9 @@ const Choices = observer(({title, type, onSelection,refs}: IChoicesProps) => {
             <div className={styles.choices}>
                 <div className={styles.buttonsContainer}>
                     {refs?.map((ref) =>
-                        <Button key={ref.id} type={selectedOption === ref.id ? 'primary' : 'default'}
+                        <Button key={ref.id} type={selectedOption?.id === ref.id ? 'primary' : 'default'}
                                 size={screenStore.getSize()}
-                                onClick={() => onButtonClick(ref.id)}>{ref.nom}</Button>)}
+                                onClick={() => onButtonClick(ref)}>{ref.nom}</Button>)}
                 </div>
             </div>
         </StepCard>

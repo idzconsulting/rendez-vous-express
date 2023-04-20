@@ -1,41 +1,54 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './App.module.less';
 import NavButtons from '../UI/NavButtons/NavButtons';
-import {Content} from 'antd/es/layout/layout';
+import { Content } from 'antd/es/layout/layout';
 import Header from '../PageElements/Header/Header';
 import Choices from '../FormSteps/Choices/Choices';
-import {Refs} from '../../types/Engagement';
-import {Steps} from 'antd';
+import { Refs } from '../../types/Engagement';
+import { Steps } from 'antd';
 import Annexes from '../FormSteps/Annexes/Annexes';
 import Diagnostics from '../FormSteps/DiagnosticsChoices/DiagnosticsChoices';
-import {screenStore} from '../../stores';
-import {observer} from 'mobx-react';
+import { screenStore } from '../../stores';
+import { observer } from 'mobx-react';
 import WeekCalendar from '../FormSteps/WeekCalendar/WeekCalendar';
 import Infos from '../FormSteps/Infos/Infos';
 import Summary from '../FormSteps/Summary/Summary';
 import Projects from '../FormSteps/Projects/Projects';
 import { RefsFetcher } from '../../fetchers/role-fetchers/RefFetcher';
 import { log } from 'console';
+import { InsererFetcher } from '../../fetchers/role-fetchers/InsererFetcher';
+import { currentEngagement } from '../../stores';
+import { EnregistrerFetcher } from '../../fetchers/role-fetchers/EnregistrerFetcher';
 
 const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);
     const isMobile = screenStore.getIsMobile();
     const TIME_BEFORE_SKIPPING_NEXT_PAGE: number = 300;
-    const [refs,setRefs] = useState<any>({})
+    const [refs, setRefs] = useState<any>({})
 
     useEffect(() => {
+        console.log(currentEngagement)
         const getRefs = async () => {
             const allRefs = await RefsFetcher.getRefs();
-            console.log('234',allRefs.data)
             setRefs(allRefs.data)
         }
-
         getRefs();
-       
-     },[])
-     
-    const setNextStep = () => {
+
+    }, [])
+
+    const setNextStep = async () => {
+
         (currentStep + 1 < steps.length) && setStep(currentStep + 1, undefined);
+        if (currentStep === 7) {
+            await EnregistrerFetcher.enregistrer(currentEngagement.getCurrentMission());  
+        }
+        else{
+            const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
+            if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
+        }
+
+       
+        
     }
 
     const setPreviousStep = () => setStep(currentStep - 1, 0);
@@ -48,49 +61,49 @@ const App = observer(() => {
 
     const steps = [{
         title: 'Projet',
-        content: <Projects  refs={refs.type_transaction} onSelection={setNextStep} />,
+        content: <Projects refs={refs.type_transaction} onSelection={setNextStep} />,
     }, {
         title: 'Bien',
-        content: <Choices title='Votre bien' refs={refs.type_bien} type={Refs.BIEN} onSelection={setNextStep}/>,
+        content: <Choices title='Votre bien' refs={refs.type_bien} type={Refs.BIEN} onSelection={setNextStep} />,
     }, {
         title: 'Année de construction',
-        content: <Choices title='Année de construction'  refs={refs.date_construction} type={Refs.ANNEE_CONSTRUCTION} onSelection={setNextStep}/>,
+        content: <Choices title='Année de construction' refs={refs.date_construction} type={Refs.ANNEE_CONSTRUCTION} onSelection={setNextStep} />,
 
     }, {
         title: 'Superficie',
-        content: <Choices title='Superficie du bien'  refs={refs.type_surface} type={Refs.SURFACE} onSelection={setNextStep}/>,
+        content: <Choices title='Superficie du bien' refs={refs.type_surface} type={Refs.SURFACE} onSelection={setNextStep} />,
     }, {
         title: 'Annexes',
-        content: <Annexes onSelection={setNextStep}/>
+        content: <Annexes onSelection={setNextStep} />
     }, {
         title: 'Diagnostics',
-        content: <Diagnostics  diagnostics={refs.diagnostiques} onSelection={setNextStep}/>
+        content: <Diagnostics diagnostics={refs.diagnostiques} onSelection={setNextStep} />
     }, {
         title: 'Informations',
-        content: <Infos onSelection={setNextStep}/>
+        content: <Infos onSelection={setNextStep} />
     }, {
         title: 'Rendez-vous',
-        content: <WeekCalendar onSelection={setNextStep}/>
+        content: <WeekCalendar onSelection={setNextStep} />
     }, {
         title: 'Merci',
-        content: <Summary/>
+        content: <Summary />
     }
     ];
 
-    const items = steps.map((item) => ({key: item.title, title: item.title}));
+    const items = steps.map((item) => ({ key: item.title, title: item.title }));
 
     const getStepsComponent = () =>
         <Steps responsive={true} className={styles.stepper} size='small'
-               current={currentStep} items={items} labelPlacement={'vertical'}
-               onChange={onChangeStep}/>;
+            current={currentStep} items={items} labelPlacement={'vertical'}
+            onChange={onChangeStep} />;
 
     return (
         <div className={styles.appContainer}>
-            <Header/>
+            <Header />
             <Content>
                 <div className={styles.formContainer}>
                     <div className={styles.navButton}>{<NavButtons hasPreviousButton={currentStep > 0}
-                                                                   onClick={setPreviousStep}/>}</div>
+                        onClick={setPreviousStep} />}</div>
 
                     {!isMobile && getStepsComponent()}
 

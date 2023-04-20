@@ -60,7 +60,7 @@ const Infos = ({onSelection}: IInfosProps) => {
             >
                 <Form.Item
                     label="Nom et prénom"
-                    name="name"
+                    name="proprietaire_nom"
                     rules={[{ required: true, message: 'Veuillez entrez votre nom et prénom' }]}
                 >
                     <Input style={{textTransform: 'capitalize'}} />
@@ -68,7 +68,7 @@ const Infos = ({onSelection}: IInfosProps) => {
 
                 <Form.Item
                     label="Addresse du bien"
-                    name="address"
+                    name="bien_adresse"
                     rules={[{ required: true, message: 'Veuillez entrez une addresse' }]}
                 >
                     <AutoComplete
@@ -81,18 +81,18 @@ const Infos = ({onSelection}: IInfosProps) => {
 
                 <Form.Item
                     label="Addresse email"
-                    name="email"
+                    name="proprietaire_email"
                     rules={[{ type: 'email', message: 'Veuillez entrez votre addresse email' }]}
                 >
                     <Input />
                 </Form.Item>
 
-                <Form.Item
+                {/* <Form.Item
                     label="Mon agence"
                     name="agence"
                 >
                     <Input style={{textTransform: 'capitalize'}} />
-                </Form.Item>
+                </Form.Item> */}
 
                 <Form.Item wrapperCol={{ offset: 8 }} className={styles.formButtons}>
                     <Button type="primary" htmlType="submit">
