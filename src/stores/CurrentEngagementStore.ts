@@ -8,6 +8,7 @@ import {
     Surface,
     Diagnostiques
 } from '../types/Engagement';
+import { log } from 'console';
 
 export class CurrentEngagementStore {
     private engagement: Engagement = {};
@@ -88,9 +89,10 @@ export class CurrentEngagementStore {
 
     }
 
-    setRDV(rdv_jour: Date) {
-        this.engagement.infos = { ...this.engagement.infos, ...rdv_jour }
-        console.log('date',this.engagement.infos)
+    setRDV(rdv_jour: string) {
+        console.log({rdv_jour})
+        this.engagement.infos = { ...this.engagement.infos, rdv_jour }
+        console.log('date',this.engagement.infos.rdv_jour)
         this.mission.rdv_jour = rdv_jour 
 
     }

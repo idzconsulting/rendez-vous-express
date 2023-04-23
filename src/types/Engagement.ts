@@ -69,7 +69,7 @@ export interface IInfos {
     bien_adresse?: string;
     proprietaire_email?: string;
     agence?: string;
-    rdv_jour?: Date;
+    rdv_jour?: string;
     bien_code_postal?:string;
     proprietaire_telephone?:string;
 }

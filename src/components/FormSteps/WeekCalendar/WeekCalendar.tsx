@@ -61,13 +61,14 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     }
 
     return (
-        <div style={{ backgroundColor: 'white', padding: '50px', height: 'min-content', overflowY: 'hidden' }}>
+        <div style={{ backgroundColor: 'white',height:'min-content',padding:'5px',overflowY:'hidden'}}>
             <FullCalendar
-                plugins={[timeGridPlugin, interactionPlugin]}
+                plugins={[timeGridPlugin,interactionPlugin,dayGridPlugin]}
 
                 headerToolbar={{
                     right: "today next",
                 }}
+
                 slotDuration={'02:00'}
                 slotMinTime={'07:00'}
                 slotMaxTime={'17:00'}

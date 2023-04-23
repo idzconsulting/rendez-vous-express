@@ -90,12 +90,12 @@ const Summary = () => {
 
                         <div className={styles.row}>
                             <span className={styles.title}>Date de rendez-vous</span>
-                            <span>{engagement?.infos?.rdv_jour?.toLocaleDateString()}</span>
+                            <span>{engagement?.infos?.rdv_jour?.split('T')[0]}</span>
                         </div>
 
                         <div className={styles.row}>
                             <span className={styles.title}>Heure de rendez-vous</span>
-                            <span>{engagement?.infos?.rdv_jour?.toLocaleDateString()}</span>
+                            <span>{engagement?.infos?.rdv_jour?.split('T')[1]}</span>
                         </div>
                     </div>
                 </div>
