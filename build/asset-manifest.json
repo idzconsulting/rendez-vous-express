@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/rendez-vous-express/static/css/main.ba35d635.css",
-    "main.js": "/rendez-vous-express/static/js/main.0db41e9f.js",
+    "main.css": "/rendez-vous-express/static/css/main.99585d75.css",
+    "main.js": "/rendez-vous-express/static/js/main.aebe55c2.js",
     "static/media/Lato-Regular.ttf": "/rendez-vous-express/static/media/Lato-Regular.9d883d540ee2b4de8024.ttf",
     "static/media/logo.png": "/rendez-vous-express/static/media/logo.78290ea0e147cdd61f30.png",
     "index.html": "/rendez-vous-express/index.html",
-    "main.ba35d635.css.map": "/rendez-vous-express/static/css/main.ba35d635.css.map",
-    "main.0db41e9f.js.map": "/rendez-vous-express/static/js/main.0db41e9f.js.map"
+    "main.99585d75.css.map": "/rendez-vous-express/static/css/main.99585d75.css.map",
+    "main.aebe55c2.js.map": "/rendez-vous-express/static/js/main.aebe55c2.js.map"
   },
   "entrypoints": [
-    "static/css/main.ba35d635.css",
-    "static/js/main.0db41e9f.js"
+    "static/css/main.99585d75.css",
+    "static/js/main.aebe55c2.js"
   ]
 }
