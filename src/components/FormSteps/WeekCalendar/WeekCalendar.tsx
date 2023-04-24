@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './WeekCalendar.module.less';
 import { Button } from 'antd';
 import { currentEngagement } from '../../../stores';
+import { screenStore } from '../../../stores';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import allLocales from '@fullcalendar/core/locales-all'
@@ -61,17 +62,18 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     }
 
     return (
-        <div style={{ backgroundColor: 'white',height:'min-content',padding:'5px',overflowY:'hidden'}}>
+        <div className={screenStore.getIsMobile() ? styles.calendarMobile : styles.calendar}>
             <FullCalendar
-                plugins={[timeGridPlugin,interactionPlugin,dayGridPlugin]}
+                plugins={[timeGridPlugin,interactionPlugin]}
 
                 headerToolbar={{
                     right: "today next",
                 }}
-
+                allDaySlot={true}
+                height='100%'
                 slotDuration={'02:00'}
                 slotMinTime={'07:00'}
-                slotMaxTime={'17:00'}
+                slotMaxTime={'19:00'}
                 slotMinWidth={200}
                 weekends={false}
                 locale={'fr'}

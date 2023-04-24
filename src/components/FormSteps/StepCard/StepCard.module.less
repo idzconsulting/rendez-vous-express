@@ -1,11 +1,24 @@
-.stepCard {
-  padding: 10px;
-  margin: 0 20px;
-  border-radius: 10px;
-  background-color: var(--choices-card-background);
-  box-shadow: var(--box-shadow-1);
-}
+
 
 .title {
   word-break: keep-all;
+}
+
+@media screen and (max-width: 768px) {
+  .stepCard {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--choices-card-background);
+    box-shadow: var(--box-shadow-1);
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .stepCard {
+    padding: 10px;
+    margin: 0 20px;
+    border-radius: 10px;
+    background-color: var(--choices-card-background);
+    box-shadow: var(--box-shadow-1);
+  }
 }
