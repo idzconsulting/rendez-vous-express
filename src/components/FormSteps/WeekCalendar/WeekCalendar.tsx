@@ -54,9 +54,9 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     }
 
     const onSelectHour = (date: any) => {
-        alert('selected ' + date.startStr.split('+')[0] + ' to ' + date.endStr);
+        console.log({date})
         if (date) {
-            currentEngagement.setRDV(date.startStr.split('+')[0]);
+            currentEngagement.setRDV(date.dateStr.split('+')[0]);
             onSelection();
         }
     }
@@ -64,7 +64,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     return (
         <div className={screenStore.getIsMobile() ? styles.calendarMobile : styles.calendar}>
             <FullCalendar
-                plugins={[timeGridPlugin,interactionPlugin]}
+                plugins={[timeGridPlugin,interactionPlugin,dayGridPlugin]}
 
                 headerToolbar={{
                     right: "today next",
@@ -79,8 +79,12 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                 locale={'fr'}
                 locales={allLocales}
                 editable={true}
-                selectable={true}
-                select={onSelectHour}
+                dateClick={onSelectHour}
+                //selectable={true}
+                eventClick={onSelectHour}
+                //select={onSelectHour}
+                //selectLongPressDelay={500}
+                longPressDelay={0}
             />
         </div>
     );
