@@ -1,26 +1,42 @@
 import StepCard from '../StepCard/StepCard';
-import {IOnSelection} from '../../../types/IOnSelection';
-import {Button} from 'antd';
-import {DiagnosticsTypes} from '../../../types/DiagnosticsTypes';
-import {labelsMap} from '../../../types/Labels';
+import { IOnSelection } from '../../../types/IOnSelection';
+import { Button } from 'antd';
+import { DiagnosticsTypes } from '../../../types/DiagnosticsTypes';
+import { labelsMap } from '../../../types/Labels';
 import styles from './DiagnosticsChoices.module.less';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { red, green } from '@ant-design/colors';
-import {currentEngagement} from '../../../stores';
+import { currentEngagement } from '../../../stores';
 import { Diagnostiques } from '../../../types/Engagement';
+import { DiagnoscticsFetcher } from '../../../fetchers/role-fetchers/DiagnosticsFetcher';
 
 interface IDiagnosticsProps extends IOnSelection {
-    diagnostics:[any]
+    diagnostics: [any]
 }
 
-const DiagnosticsChoices = ({onSelection,diagnostics}: IDiagnosticsProps) => {
+const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => {
     const [selectedDiagnostics, setSelectedDiagnostics] = useState<Diagnostiques[]>([]);
 
+    const getDiagsObligatoires = async () => {
+        const { data: diags } = await DiagnoscticsFetcher.obligatoires(currentEngagement.getCurrentMission());
+        return diags?.map((diag: Diagnostiques) => {
+            return {
+                id: diag.id,
+                name: diag.name
+            }
+        })
+    }
+
     useEffect(() => {
-        console.log(diagnostics)
-        const savedDiagnostics = currentEngagement.getDiagnostics();
-        console.log('dooo',savedDiagnostics)
-        setSelectedDiagnostics(savedDiagnostics || []);
+    
+        const fetchData = async () => {
+            const diagsObliagtoires = await getDiagsObligatoires();
+            currentEngagement.setDiagnostics([...diagsObliagtoires] as Diagnostiques[]);
+            const savedDiagnostics = currentEngagement.getDiagnostics();
+            setSelectedDiagnostics(savedDiagnostics || []);
+          };
+      
+          fetchData();
     }, []);
 
     const toggleDiagnostic = (diagnostic: Diagnostiques) => {
@@ -37,13 +53,13 @@ const DiagnosticsChoices = ({onSelection,diagnostics}: IDiagnosticsProps) => {
             <div className={styles.choices}>
                 {diagnostics?.map((diagnostic) =>
                     <Button key={diagnostic.id} type='primary' onClick={() => toggleDiagnostic(diagnostic)}
-                            style={{backgroundColor: selectedDiagnostics.find(diag => diag.name == diagnostic.name) ? green.primary: red.primary}}>
+                        style={{ backgroundColor: selectedDiagnostics.find(diag => diag.name == diagnostic.name) ? green.primary : red.primary }}>
                         {diagnostic.name}
                     </Button>)
                 }
             </div>
 
-            <Button disabled={!selectedDiagnostics.length} type='primary' style={{width: 'fit-content'}} onClick={onSelection}>Valider</Button>
+            <Button disabled={!selectedDiagnostics.length} type='primary' style={{ width: 'fit-content' }} onClick={onSelection}>Valider</Button>
         </div>
     </StepCard>;
 }

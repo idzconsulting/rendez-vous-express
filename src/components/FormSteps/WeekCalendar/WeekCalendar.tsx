@@ -54,7 +54,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     }
 
     const onSelectHour = (date: any) => {
-        console.log({date})
+        
         if (date) {
             currentEngagement.setRDV(date.dateStr.split('+')[0]);
             onSelection();

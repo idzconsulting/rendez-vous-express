@@ -20,7 +20,6 @@ const Summary = () => {
     const [engagement, setEngagement] = useState<Engagement>();
 
     useEffect(() => {
-        console.log('dii',currentEngagement.getDiagnostics())
         setEngagement(currentEngagement.getCurrentEngagement());
     }, []);
 

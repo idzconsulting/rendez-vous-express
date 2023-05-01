@@ -72,4 +72,5 @@ export interface IInfos {
     rdv_jour?: string;
     bien_code_postal?:string;
     proprietaire_telephone?:string;
+    surface?:number;
 }

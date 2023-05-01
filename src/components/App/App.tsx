@@ -27,7 +27,6 @@ const App = observer(() => {
     const [refs, setRefs] = useState<any>({})
 
     useEffect(() => {
-        console.log(currentEngagement)
         const getRefs = async () => {
             const allRefs = await RefsFetcher.getRefs();
             setRefs(allRefs.data)
@@ -45,9 +44,7 @@ const App = observer(() => {
         else{
             const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
             if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
-        }
-
-       
+        }   
         
     }
 

@@ -7,6 +7,7 @@ export class UrlClientConstants {
     static readonly insererURL = 'rendez-vous/inserer';
     static readonly enregistrerURL = 'rendez-vous/nouveau';
     static readonly adresseRechercheURL = 'adresse/recherche';
+    static readonly diagnostics = 'diagnostics/'
     static readonly refsUrl = 'refs'
 
     static axiosBase = axios.create({

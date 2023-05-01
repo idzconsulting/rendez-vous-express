@@ -1,16 +1,16 @@
 import StepCard from '../StepCard/StepCard';
-import {IOnSelection} from '../../../types/IOnSelection';
+import { IOnSelection } from '../../../types/IOnSelection';
 import Form from 'antd/es/form';
-import {AutoComplete, Button, Input} from 'antd';
-import {useEffect, useState} from 'react';
-import {currentEngagement} from '../../../stores';
+import { AutoComplete, Button, Input } from 'antd';
+import { useEffect, useState } from 'react';
+import { currentEngagement } from '../../../stores';
 import styles from './Infos.module.less';
-import {AddressesFetcher, AddressesResponses} from '../../../fetchers/role-fetchers/AddressesFetcher';
+import { AddressesFetcher, AddressesResponses } from '../../../fetchers/role-fetchers/AddressesFetcher';
 
 interface IInfosProps extends IOnSelection {
 }
 
-const Infos = ({onSelection}: IInfosProps) => {
+const Infos = ({ onSelection }: IInfosProps) => {
     const [form] = Form.useForm();
     const [options, setOptions] = useState<{ value: string, code: number }[]>([]);
 
@@ -27,9 +27,9 @@ const Infos = ({onSelection}: IInfosProps) => {
 
         setOptions([]);
         if (response.status === 200) {
-            const options: {value: string, code: number}[] = [];
+            const options: { value: string, code: number }[] = [];
             response.data.adresses.forEach((adresse) => {
-                options.push({value: adresse.adresse, code: adresse.code_postal})
+                options.push({ value: adresse.adresse, code: adresse.code_postal })
             });
 
             setOptions(options);
@@ -63,7 +63,7 @@ const Infos = ({onSelection}: IInfosProps) => {
                     name="proprietaire_nom"
                     rules={[{ required: true, message: 'Veuillez entrez votre nom et prénom' }]}
                 >
-                    <Input style={{textTransform: 'capitalize'}} />
+                    <Input style={{ textTransform: 'capitalize' }} />
                 </Form.Item>
 
                 <Form.Item
@@ -76,7 +76,7 @@ const Infos = ({onSelection}: IInfosProps) => {
                         onSelect={onSelect}
                         onSearch={(text: string) => getOptions(text)}
                         onChange={onChange}
-                        style={{textTransform: 'capitalize'}} />
+                        style={{ textTransform: 'capitalize' }} />
                 </Form.Item>
 
                 <Form.Item
@@ -86,6 +86,8 @@ const Infos = ({onSelection}: IInfosProps) => {
                 >
                     <Input />
                 </Form.Item>
+
+            
 
                 {/* <Form.Item
                     label="Mon agence"
@@ -98,7 +100,7 @@ const Infos = ({onSelection}: IInfosProps) => {
                     <Button type="primary" htmlType="submit">
                         Valider
                     </Button>
-                    <Button type="primary" htmlType="reset" style={{marginLeft: 10}}>
+                    <Button type="primary" htmlType="reset" style={{ marginLeft: 10 }}>
                         Réinitialiser
                     </Button>
                 </Form.Item>
