@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { currentEngagement } from '../../../stores';
 import styles from './Infos.module.less';
 import { AddressesFetcher, AddressesResponses } from '../../../fetchers/role-fetchers/AddressesFetcher';
+import TextArea from 'antd/es/input/TextArea';
 
 interface IInfosProps extends IOnSelection {
 }
@@ -87,6 +88,12 @@ const Infos = ({ onSelection }: IInfosProps) => {
                     <Input />
                 </Form.Item>
 
+                <Form.Item
+                    label="Notes"
+                    name="note"
+                >
+                    <TextArea />
+                </Form.Item>
             
 
                 {/* <Form.Item

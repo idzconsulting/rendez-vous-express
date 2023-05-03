@@ -73,4 +73,5 @@ export interface IInfos {
     bien_code_postal?:string;
     proprietaire_telephone?:string;
     surface?:number;
+    note?:string;
 }
