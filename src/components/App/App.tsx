@@ -19,6 +19,7 @@ import { log } from 'console';
 import { InsererFetcher } from '../../fetchers/role-fetchers/InsererFetcher';
 import { currentEngagement } from '../../stores';
 import { EnregistrerFetcher } from '../../fetchers/role-fetchers/EnregistrerFetcher';
+import Biens from '../FormSteps/Biens/Biens';
 
 const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -61,7 +62,7 @@ const App = observer(() => {
         content: <Projects refs={refs.type_transaction} onSelection={setNextStep} />,
     }, {
         title: 'Bien',
-        content: <Choices title='Votre bien' refs={refs.type_bien} type={Refs.BIEN} onSelection={setNextStep} />,
+        content: <Biens  refs={refs.type_bien} onSelection={setNextStep} />,
     }, {
         title: 'Année de construction',
         content: <Choices title='Année de construction' refs={refs.date_construction} type={Refs.ANNEE_CONSTRUCTION} onSelection={setNextStep} />,

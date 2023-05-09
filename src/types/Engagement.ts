@@ -74,4 +74,5 @@ export interface IInfos {
     proprietaire_telephone?:string;
     surface?:number;
     note?:string;
+    chauffage_collectif?:boolean;
 }
