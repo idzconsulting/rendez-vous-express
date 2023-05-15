@@ -54,7 +54,7 @@ const Infos = ({ onSelection }: IInfosProps) => {
                 name="basic"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
-                style={{ maxWidth: 600 }}
+                style={{ maxWidth: 700 }}
                 initialValues={{ remember: true }}
                 autoComplete="off"
                 onFinish={saveForm}
@@ -64,7 +64,7 @@ const Infos = ({ onSelection }: IInfosProps) => {
                     name="proprietaire_nom"
                     rules={[{ required: true, message: 'Veuillez entrez votre nom et prénom' }]}
                 >
-                    <Input style={{ textTransform: 'capitalize' }} />
+                    <Input   size='large' style={{ textTransform: 'capitalize' }} />
                 </Form.Item>
 
                 <Form.Item
@@ -73,6 +73,7 @@ const Infos = ({ onSelection }: IInfosProps) => {
                     rules={[{ required: true, message: 'Veuillez entrez une addresse' }]}
                 >
                     <AutoComplete
+                        size='large'
                         options={options}
                         onSelect={onSelect}
                         onSearch={(text: string) => getOptions(text)}
@@ -85,16 +86,16 @@ const Infos = ({ onSelection }: IInfosProps) => {
                     name="proprietaire_email"
                     rules={[{ type: 'email', message: 'Veuillez entrez votre addresse email' }]}
                 >
-                    <Input />
+                    <Input size='large' />
                 </Form.Item>
 
                 <Form.Item
                     label="Notes"
                     name="note"
                 >
-                    <TextArea />
+                    <TextArea  size='large' />
                 </Form.Item>
-            
+
 
                 {/* <Form.Item
                     label="Mon agence"

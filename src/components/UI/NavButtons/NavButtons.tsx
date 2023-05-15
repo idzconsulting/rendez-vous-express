@@ -10,7 +10,7 @@ interface INavButton {
 
 const NavButtons = ({hasPreviousButton = true, onClick}: INavButton) => {
     return <div className={styles.navigationButtons}>
-        <Button type='primary' className={styles.navButton} onClick={onClick} disabled={!hasPreviousButton}>
+        <Button type='primary' size='large' className={styles.navButton} onClick={onClick} disabled={!hasPreviousButton}>
             <LeftOutlined/>
             <span>Précédent</span>
         </Button>

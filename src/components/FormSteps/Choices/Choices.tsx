@@ -37,6 +37,7 @@ const Choices = observer(({title, type, onSelection,refs}: IChoicesProps) => {
                     {refs?.map((ref) =>
                         <Button key={ref.id} type={selectedOption?.id === ref.id ? 'primary' : 'default'}
                                 size={screenStore.getSize()}
+                                className='button-select'
                                 onClick={() => onButtonClick(ref)}>{ref.nom}</Button>)}
                 </div>
             </div>

@@ -22,6 +22,15 @@
     font-size: 30px;
 }
 
+.ant-form-item-required { 
+  font-size: 1.5em !important;
+}
+
+.button-select{
+   font-size: 1.7em !important;
+   height: max-content !important;
+}
+
 @media screen and (max-width: 768px) {
     .fc-toolbar-title {
       font-size: 18px;

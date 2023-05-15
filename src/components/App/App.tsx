@@ -91,7 +91,7 @@ const App = observer(() => {
     const items = steps.map((item) => ({ key: item.title, title: item.title }));
 
     const getStepsComponent = () =>
-        <Steps responsive={true} className={styles.stepper} size='small'
+        <Steps responsive={true} className={styles.stepper} size={isMobile ? 'default' : 'small'}
             current={currentStep} items={items} labelPlacement={'vertical'}
             onChange={onChangeStep} />;
 

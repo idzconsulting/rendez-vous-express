@@ -12,7 +12,7 @@ interface IStepCardProps {
 const StepCard = observer(({title, children}: IStepCardProps) => {
     const isMobile = screenStore.getIsMobile();
 
-    const getTitleLevel = () => isMobile ? 4 : 2;
+    const getTitleLevel = () => isMobile ? 1 : 2;
 
     return (
         <div className={styles.stepCard}>

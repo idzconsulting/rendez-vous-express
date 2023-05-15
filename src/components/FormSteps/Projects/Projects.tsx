@@ -33,18 +33,22 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                     form={form}
                     name="basic"
                     labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 16 }}
-                    style={{ maxWidth: 600 }}
+                    wrapperCol={{ span: 17 }}
+                    style={{ maxWidth: 700 }}
                     initialValues={{ remember: true }}
                     autoComplete="off"
                     onValuesChange={saveForm}
+                    size='large'
+                    
                 >
                     <Form.Item
                         label="Code postal"
                         name="bien_code_postal"
+                        className='label'
                         rules={[{ required: true, message: 'Veuillez entrez votre code postal' }]}
+                        
                     >
-                        <MaskedInput mask='00000' />
+                        <MaskedInput size='large' mask='00000' />
                     </Form.Item>
 
                     <Form.Item
@@ -52,7 +56,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                         name="proprietaire_telephone"
                         rules={[{ required: true, message: 'Veuillez entrez votre numéro de téléphone' }]}
                     >
-                        <MaskedInput mask='00 00 00 00 00' />
+                        <MaskedInput size='large' mask='00 00 00 00 00' />
                     </Form.Item>
 
                     <Form.Item
@@ -60,7 +64,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                         name="surface"
                         rules={[{ required: true, message: 'Veuillez entrez la surface du bien ' }]}
                     >
-                        <Input />
+                        <Input size='large' />
                     </Form.Item>
                 </Form>
 
