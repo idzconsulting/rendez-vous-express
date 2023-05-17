@@ -12,4 +12,15 @@ export class DiagnoscticsFetcher {
             throw e;
         }
     }
+    static async price(mission: any) {
+        try {
+            const response = await UrlClientConstants.axiosBase.post(UrlClientConstants.diagnostics + 'prix', mission);
+            return {
+                status: response.status,
+                data: response?.data
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
 }

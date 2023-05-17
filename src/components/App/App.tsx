@@ -20,6 +20,7 @@ import { InsererFetcher } from '../../fetchers/role-fetchers/InsererFetcher';
 import { currentEngagement } from '../../stores';
 import { EnregistrerFetcher } from '../../fetchers/role-fetchers/EnregistrerFetcher';
 import Biens from '../FormSteps/Biens/Biens';
+import Price from '../FormSteps/Price/Price';
 
 const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -79,8 +80,13 @@ const App = observer(() => {
     }, {
         title: 'Informations',
         content: <Infos onSelection={setNextStep} />
-    }, {
-        title: 'Rendez-vous',
+    },
+    {
+        title: 'Price',
+        content: <Price onSelection={setNextStep} />
+    },
+    {
+        title: 'Rdv',
         content: <WeekCalendar onSelection={setNextStep} />
     }, {
         title: 'Merci',

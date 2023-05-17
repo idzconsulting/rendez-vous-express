@@ -1,35 +1,43 @@
 import StepCard from '../StepCard/StepCard';
-import {currentEngagement} from '../../../stores';
-import {Divider} from 'antd';
-import {useEffect, useState} from 'react';
-import styles from './Summary.module.less';
-import {Engagement} from '../../../types/Engagement';
+import { currentEngagement } from '../../../stores';
+import { Button, Divider } from 'antd';
+import { useEffect, useState } from 'react';
+import styles from './Price.module.less';
+import { Engagement } from '../../../types/Engagement';
 import clsx from 'clsx';
-import {labelsMap} from '../../../types/Labels';
+import { labelsMap } from '../../../types/Labels';
+import { IOnSelection } from '../../../types/IOnSelection';
+import { DiagnoscticsFetcher } from '../../../fetchers/role-fetchers/DiagnosticsFetcher';
 
-const Infos = ({key, value}: any) => {
-    return (
-        <div>
-            <span className={styles.title}>{key}</span>
-            <span>{value}</span>
-        </div>
-    );
+interface IPrice extends IOnSelection {
 }
 
-const Summary = () => {
+const Price = ({ onSelection }: IPrice) => {
     const [engagement, setEngagement] = useState<Engagement>();
+    const [price, setPrice] = useState<any>()
+
+    const getPrice = async () => {
+        const { data } = await DiagnoscticsFetcher.price(currentEngagement.getCurrentMission());
+        const { prix } = data
+        currentEngagement.setInfos({ prix });
+        return prix
+    }
 
     useEffect(() => {
-        setEngagement(currentEngagement.getCurrentEngagement());
+        const fetchData = async () => {
+            setEngagement(currentEngagement.getCurrentEngagement());
+            const priceOfMission = await getPrice();
+            setPrice(priceOfMission)
+        };
+
+        fetchData();
     }, []);
 
-    const getLabel = (label?: string) => labelsMap.get(label ?? '');
-
     return (
-        <StepCard title='Merci'>
-            <h3><strong>Félicitations</strong> Votre rendez-vous le {engagement?.infos?.rdv_jour?.split('T')[0]} a {engagement?.infos?.rdv_jour?.split('T')[1]} est confirmé</h3>
+        <StepCard title='Récapitulatif'>
+            <h3>Price: {price}€</h3>
 
-            <Divider/>
+            <Divider />
 
             <div className={styles.resume}>
                 <div className={styles.row}>
@@ -86,21 +94,13 @@ const Summary = () => {
                             <span className={styles.title}>Téléphone</span>
                             <span>{engagement?.infos?.proprietaire_telephone}</span>
                         </div>
-
-                        <div className={styles.row}>
-                            <span className={styles.title}>Date de rendez-vous</span>
-                            <span>{engagement?.infos?.rdv_jour?.split('T')[0]}</span>
-                        </div>
-
-                        <div className={styles.row}>
-                            <span className={styles.title}>Heure de rendez-vous</span>
-                            <span>{engagement?.infos?.rdv_jour?.split('T')[1]}</span>
-                        </div>
                     </div>
                 </div>
             </div>
+            <br />
+            <Button type='primary' style={{ width: 'fit-content' }} onClick={onSelection}>Fixer un rendez-vous</Button>
         </StepCard>
     );
 }
 
-export default Summary;
+export default Price;

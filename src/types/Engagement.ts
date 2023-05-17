@@ -75,4 +75,5 @@ export interface IInfos {
     surface?:number;
     note?:string;
     chauffage_collectif?:boolean;
+    prix?:string;
 }
