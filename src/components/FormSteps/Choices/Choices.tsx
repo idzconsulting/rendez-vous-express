@@ -3,7 +3,7 @@ import {Refs} from '../../../types/Engagement';
 import {Button} from 'antd';
 import {labelsMap} from '../../../types/Labels';
 import styles from './Choices.module.less';
-import {useEffect, useState} from 'react';
+import {useEffect, useLayoutEffect, useState} from 'react';
 import {currentEngagement, screenStore} from '../../../stores';
 import StepCard from '../StepCard/StepCard';
 import {IOnSelection} from '../../../types/IOnSelection';
@@ -12,19 +12,17 @@ import {observer} from 'mobx-react';
 interface IChoicesProps extends IOnSelection {
     title: string;
     type: Refs;
-    refs?:[any]
+    refs?:any[] 
 }
 
-const Choices = observer(({title, type, onSelection,refs = [{id:'',name:''}]}: IChoicesProps) => {
+const Choices = observer(({title, type, onSelection,refs = []}: IChoicesProps) => {
     const [selectedOption, setSelectedOption] = useState<any>();
-
+    if(type === Refs.ANNEE_CONSTRUCTION) refs[4] = {id:'',nom:'je ne sais pas'}
     useEffect(() => {
-        console.log({type})
-        if(type === Refs.ANNEE_CONSTRUCTION) refs[refs?.length - 1] = {id:'',nom:'je ne sais pas'}
-        console.log({refs})
         const selectedOption: any = currentEngagement.getProperty(type);
         setSelectedOption(selectedOption);
     }, [title, type,refs]);
+
 
     const onButtonClick = (choice: any) => {
         setSelectedOption(choice);
