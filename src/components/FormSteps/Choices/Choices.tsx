@@ -11,16 +11,18 @@ import {observer} from 'mobx-react';
 
 interface IChoicesProps extends IOnSelection {
     title: string;
-    type: any;
+    type: Refs;
     refs?:[any]
 }
 
-const Choices = observer(({title, type, onSelection,refs}: IChoicesProps) => {
+const Choices = observer(({title, type, onSelection,refs = [{id:'',name:''}]}: IChoicesProps) => {
     const [selectedOption, setSelectedOption] = useState<any>();
 
     useEffect(() => {
+        console.log({type})
+        if(type === Refs.ANNEE_CONSTRUCTION) refs[refs?.length - 1] = {id:'',nom:'je ne sais pas'}
+        console.log({refs})
         const selectedOption: any = currentEngagement.getProperty(type);
-
         setSelectedOption(selectedOption);
     }, [title, type,refs]);
 

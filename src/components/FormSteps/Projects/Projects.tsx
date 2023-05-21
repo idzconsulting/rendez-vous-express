@@ -45,6 +45,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                         label="Code postal"
                         name="bien_code_postal"
                         className='label'
+                       
                         rules={[{ required: true, message: 'Veuillez entrez votre code postal' }]}
                         
                     >

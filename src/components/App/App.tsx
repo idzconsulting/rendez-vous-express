@@ -40,7 +40,7 @@ const App = observer(() => {
     const setNextStep = async () => {
 
         (currentStep + 1 < steps.length) && setStep(currentStep + 1, undefined);
-        if (currentStep === 7) {
+        if (currentStep === 8) {
             await EnregistrerFetcher.enregistrer(currentEngagement.getCurrentMission());  
         }
         else{

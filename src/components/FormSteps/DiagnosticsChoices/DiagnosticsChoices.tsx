@@ -1,8 +1,6 @@
 import StepCard from '../StepCard/StepCard';
 import { IOnSelection } from '../../../types/IOnSelection';
 import { Button } from 'antd';
-import { DiagnosticsTypes } from '../../../types/DiagnosticsTypes';
-import { labelsMap } from '../../../types/Labels';
 import styles from './DiagnosticsChoices.module.less';
 import { useEffect, useState } from 'react';
 import { red, green } from '@ant-design/colors';

@@ -19,7 +19,7 @@ export interface Engagement {
 }
 
 export interface ConstructionDate {
-    id: string;
+    id?: string;
     nom: string;
 }
 
