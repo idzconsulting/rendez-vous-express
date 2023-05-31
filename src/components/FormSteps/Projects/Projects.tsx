@@ -1,5 +1,5 @@
 import Choices from '../Choices/Choices';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Transaction, Refs } from '../../../types/Engagement';
 import { IOnSelection } from '../../../types/IOnSelection';
 import Form from 'antd/es/form';
@@ -8,6 +8,7 @@ import StepCard from '../StepCard/StepCard';
 import { IEngagementType } from '../../../types/interfaces';
 import { currentEngagement } from '../../../stores';
 import { Input } from 'antd';
+import { InsererFetcher } from '../../../fetchers/role-fetchers/InsererFetcher';
 
 interface IProjectProps extends IOnSelection {
     refs?: [IEngagementType]
@@ -15,6 +16,7 @@ interface IProjectProps extends IOnSelection {
 
 const Projects = ({ onSelection, refs }: IProjectProps) => {
     const [form] = Form.useForm();
+    const [showChoices, setShowChoices] = useState<boolean>(false)
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();
@@ -22,9 +24,31 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
     }, []);
 
     const saveForm = (values: any) => {
-        currentEngagement.setInfos(values);
+        const { bien_code_postal, proprietaire_telephone, surface } = form.getFieldsValue()
+        const isCodePostalValid = bien_code_postal?.length > 4;
+        const isTelephoneValid = proprietaire_telephone?.length > 9;
+        const isSurfaceValid = surface?.length > 0;
+        const isFormValid = isCodePostalValid && isTelephoneValid && isSurfaceValid;
+        setShowChoices(isFormValid);
+        currentEngagement.setInfos(values); 
+    }
+    const checkValidNumber = async () => {
+        const {  proprietaire_telephone } = form.getFieldsValue()
+        const isTelephoneValid = proprietaire_telephone?.length > 9;
+        if (isTelephoneValid ) {
+            const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
+            if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
+        }
     }
 
+    const checkCodePostal = async () => {
+        const {  bien_code_postal } = form.getFieldsValue()
+        const isCodePostalValid = bien_code_postal?.length > 4;
+        if (isCodePostalValid ) {
+            const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
+            if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
+        }
+    }
 
     return (
         <div>
@@ -39,17 +63,17 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                     autoComplete="off"
                     onValuesChange={saveForm}
                     size='large'
-                    
+
                 >
                     <Form.Item
                         label="Code postal"
                         name="bien_code_postal"
                         className='label'
-                       
+
                         rules={[{ required: true, message: 'Veuillez entrez votre code postal' }]}
-                        
+
                     >
-                        <MaskedInput size='large' mask='00000' />
+                        <Input size='large' maxLength={5}  onChange={checkCodePostal} />
                     </Form.Item>
 
                     <Form.Item
@@ -57,7 +81,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                         name="proprietaire_telephone"
                         rules={[{ required: true, message: 'Veuillez entrez votre numéro de téléphone' }]}
                     >
-                        <MaskedInput size='large' mask='00 00 00 00 00' />
+                        <Input size='large' maxLength={10} onChange={checkValidNumber}/>
                     </Form.Item>
 
                     <Form.Item
@@ -69,7 +93,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                     </Form.Item>
                 </Form>
 
-               <Choices type={Refs.TRANSACTION} refs={refs} title='' onSelection={onSelection} />
+                {showChoices && <Choices type={Refs.TRANSACTION} refs={refs} title='' onSelection={onSelection} />}
             </StepCard>
         </div>
     );

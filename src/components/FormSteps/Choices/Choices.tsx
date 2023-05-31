@@ -17,7 +17,9 @@ interface IChoicesProps extends IOnSelection {
 
 const Choices = observer(({title, type, onSelection,refs = []}: IChoicesProps) => {
     const [selectedOption, setSelectedOption] = useState<any>();
+    
     if(type === Refs.ANNEE_CONSTRUCTION) refs[4] = {id:'',nom:'je ne sais pas'}
+
     useEffect(() => {
         const selectedOption: any = currentEngagement.getProperty(type);
         setSelectedOption(selectedOption);
