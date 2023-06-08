@@ -76,4 +76,11 @@ export interface IInfos {
     note?:string;
     chauffage_collectif?:boolean;
     prix?:string;
+    autre_sur_place?:boolean;
+    mail_sur_place?:string;
+    tel_sur_place?:string;
+    nom_sur_place?:string;
+    locataire?:string;
+    telLocataire?:string;
+    agent_facturer?:boolean;
 }
