@@ -21,6 +21,7 @@ import { currentEngagement } from '../../stores';
 import { EnregistrerFetcher } from '../../fetchers/role-fetchers/EnregistrerFetcher';
 import Biens from '../FormSteps/Biens/Biens';
 import Price from '../FormSteps/Price/Price';
+import Partner from '../FormSteps/Partner/Partner';
 
 const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -40,7 +41,7 @@ const App = observer(() => {
     const setNextStep = async () => {
 
         (currentStep + 1 < steps.length) && setStep(currentStep + 1, undefined);
-        if (currentStep === 8) {
+        if (currentStep === 9) {
             await EnregistrerFetcher.enregistrer(currentEngagement.getCurrentMission());  
         }
         else{
@@ -88,6 +89,10 @@ const App = observer(() => {
     {
         title: 'Rdv',
         content: <WeekCalendar onSelection={setNextStep} />
+    },
+    {
+        title: 'Partenaire',
+        content: <Partner onSelection={setNextStep} />
     }, {
         title: 'Merci',
         content: <Summary />

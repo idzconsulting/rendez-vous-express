@@ -83,4 +83,5 @@ export interface IInfos {
     locataire?:string;
     telLocataire?:string;
     agent_facturer?:boolean;
+    sur_place?:string | undefined;
 }

@@ -12,4 +12,15 @@ export class PartnersFetcher {
             throw e;
         }
     }
+    static async addPartner(partner: any) {
+        try {
+            const response = await UrlClientConstants.axiosBase.post(UrlClientConstants.contacts + 'ajout', partner);
+            return {
+                status: response.status,
+                data: response?.data
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
 }

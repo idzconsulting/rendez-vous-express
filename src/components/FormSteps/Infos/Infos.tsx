@@ -84,14 +84,16 @@ const Infos = ({ onSelection }: IInfosProps) => {
                 <Form.Item
                     label="Addresse email"
                     name="proprietaire_email"
+                  
                     rules={[{ type: 'email', message: 'Veuillez entrez votre addresse email' }]}
                 >
-                    <Input size='large' />
+                    <Input size='large'   className='csslabel'/>
                 </Form.Item>
 
                 <Form.Item
                     label="Notes"
                     name="note"
+                    className='csslabel'
                 >
                     <TextArea  size='large' />
                 </Form.Item>
