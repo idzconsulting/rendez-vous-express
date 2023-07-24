@@ -1,18 +1,21 @@
 import StepCard from '../StepCard/StepCard';
 import { IOnSelection } from '../../../types/IOnSelection';
 import { Button } from 'antd';
+import Form from 'antd/es/form';
 import styles from './DiagnosticsChoices.module.less';
 import { useEffect, useState } from 'react';
 import { red, green } from '@ant-design/colors';
 import { currentEngagement } from '../../../stores';
 import { Diagnostiques } from '../../../types/Engagement';
 import { DiagnoscticsFetcher } from '../../../fetchers/role-fetchers/DiagnosticsFetcher';
+import TextArea from 'antd/es/input/TextArea';
 
 interface IDiagnosticsProps extends IOnSelection {
     diagnostics: [any]
 }
 
 const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => {
+    const [form] = Form.useForm();
     const [selectedDiagnostics, setSelectedDiagnostics] = useState<Diagnostiques[]>([]);
 
     const getDiagsObligatoires = async () => {
@@ -25,16 +28,24 @@ const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => 
         })
     }
 
+    const saveForm = (values: any) => {
+        currentEngagement.setInfos(values);
+    }
+
     useEffect(() => {
-    
+
         const fetchData = async () => {
             const diagsObliagtoires = await getDiagsObligatoires();
             currentEngagement.setDiagnostics([...diagsObliagtoires] as Diagnostiques[]);
+
             const savedDiagnostics = currentEngagement.getDiagnostics();
+           
             setSelectedDiagnostics(savedDiagnostics || []);
-          };
-      
-          fetchData();
+        };
+
+        const infos = currentEngagement.getInfos();
+        form.setFieldsValue(infos);
+        fetchData();
     }, []);
 
     const toggleDiagnostic = (diagnostic: Diagnostiques) => {
@@ -47,6 +58,9 @@ const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => 
     }
 
     return <StepCard title='Diagnostics'>
+        <div className={styles.explain}>Voici les diagnostics obligatoires (en vert)
+            À décocher: les diagnostics obligatoires déjà en votre possession</div>
+        <br></br>
         <div className={styles.diagnosticsChoicesContainer}>
             <div className={styles.choices}>
                 {diagnostics?.map((diagnostic) =>
@@ -56,10 +70,26 @@ const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => 
                     </Button>)
                 }
             </div>
+            <Form
+                form={form}
+                name="basic"
+             
+                initialValues={{ remember: true }}
+                autoComplete="off"
+                onValuesChange={saveForm}
 
+            >
+                <Form.Item
+                    label="Commentaire"
+                    name="commentaire"
+                >
+                    <TextArea size='large' />
+                </Form.Item>
+            </Form>
             <Button disabled={!selectedDiagnostics.length} type='primary' style={{ width: 'fit-content' }} onClick={onSelection}>Valider</Button>
         </div>
-    </StepCard>;
+
+    </StepCard >;
 }
 
 export default DiagnosticsChoices;

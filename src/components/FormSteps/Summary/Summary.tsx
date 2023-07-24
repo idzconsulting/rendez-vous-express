@@ -1,13 +1,13 @@
 import StepCard from '../StepCard/StepCard';
-import {currentEngagement} from '../../../stores';
-import {Divider} from 'antd';
-import {useEffect, useState} from 'react';
+import { currentEngagement } from '../../../stores';
+import { Divider } from 'antd';
+import { useEffect, useState } from 'react';
 import styles from './Summary.module.less';
-import {Engagement} from '../../../types/Engagement';
+import { Engagement } from '../../../types/Engagement';
 import clsx from 'clsx';
-import {labelsMap} from '../../../types/Labels';
+import { labelsMap } from '../../../types/Labels';
 
-const Infos = ({key, value}: any) => {
+const Infos = ({ key, value }: any) => {
     return (
         <div>
             <span className={styles.title}>{key}</span>
@@ -26,77 +26,16 @@ const Summary = () => {
     const getLabel = (label?: string) => labelsMap.get(label ?? '');
 
     return (
-        <StepCard title='Merci'>
-            <h3><strong>Félicitations</strong> Votre rendez-vous le {engagement?.infos?.rdv_jour?.split('T')[0]} a {engagement?.infos?.rdv_jour?.split('T')[1]} est confirmé</h3>
-
-            <Divider/>
-
+        <StepCard title='Confirmation'>
+            {/* <h3><strong>Félicitations</strong> Votre rendez-vous le {engagement?.infos?.rdv_jour?.split('T')[0]} a {engagement?.infos?.rdv_jour?.split('T')[1]} est confirmé</h3> */}
             <div className={styles.resume}>
-                <div className={styles.row}>
-                    <span className={styles.title}>Project</span>
-                    <span>{engagement?.project?.nom}</span>
-                </div>
-
-                <div className={styles.row}>
-                    <span className={styles.title}>Bien</span>
-                    <span>{engagement?.bien?.nom}</span>
-                </div>
-
-                <div className={styles.row}>
-                    <span className={styles.title}>Année de construction</span>
-                    <span>{engagement?.buildingYear?.nom}</span>
-                </div>
-
-                <div className={styles.row}>
-                    <span className={styles.title}>Superficie du bien</span>
-                    <span>{engagement?.surface?.nom}</span>
-                </div>
-
-                <div className={styles.row}>
-                    <span className={styles.title}>Annexes</span>
-                    <span>{engagement?.annexes}</span>
-                </div>
-
-                <div className={styles.row}>
-                    <span className={styles.title}>Diagnostics</span>
-                    <div>{engagement?.diagnostics?.map((diag) =>
-                        <span key={diag?.id}>{diag?.name}, </span>)}</div>
-                </div>
-
-                <div className={styles.row}>
-                    <span className={styles.title}>Informations</span>
-
-                    <div className={clsx(styles.infos, styles.row)}>
-                        <div className={styles.row}>
-                            <span className={styles.title}>Nom et prénom</span>
-                            <span>{engagement?.infos?.proprietaire_nom}</span>
-                        </div>
-
-                        <div className={styles.row}>
-                            <span className={styles.title}>Adresse du bien</span>
-                            <span>{engagement?.infos?.bien_adresse}</span>
-                        </div>
-
-                        <div className={styles.row}>
-                            <span className={styles.title}>Email</span>
-                            <span>{engagement?.infos?.proprietaire_email}</span>
-                        </div>
-
-                        <div className={styles.row}>
-                            <span className={styles.title}>Téléphone</span>
-                            <span>{engagement?.infos?.proprietaire_telephone}</span>
-                        </div>
-
-                        <div className={styles.row}>
-                            <span className={styles.title}>Date de rendez-vous</span>
-                            <span>{engagement?.infos?.rdv_jour?.split('T')[0]}</span>
-                        </div>
-
-                        <div className={styles.row}>
-                            <span className={styles.title}>Heure de rendez-vous</span>
-                            <span>{engagement?.infos?.rdv_jour?.split('T')[1]}</span>
-                        </div>
-                    </div>
+                <div className={styles.title}>Félicitations !</div>
+                <div>Votre demande de rendez-vous a bien été prise en compte</div>
+                <div>Vous recevrez un email et un sms de confirmation</div>
+                <div>Votre conseiller I.D.Z Consulting reste à votre disposition :</div>
+                <div className={styles.contact}>
+                    <span>Par téléphone au 01-77-38-09-79</span>
+                    <span>Par WhatsApp au 07-55-53-23-33</span>
                 </div>
             </div>
         </StepCard>

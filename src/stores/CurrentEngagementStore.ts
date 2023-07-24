@@ -83,10 +83,10 @@ export class CurrentEngagementStore {
         return this.engagement.infos;
     }
 
+
     setInfos(infos: IInfos) {
         this.engagement.infos = { ...this.engagement.infos, ...infos };
         this.mission = { ...this.mission, ...infos };
-
     }
 
     setRDV(rdv_jour: string) {

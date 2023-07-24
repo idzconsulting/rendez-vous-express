@@ -37,7 +37,11 @@ const Price = ({ onSelection }: IPrice) => {
     }, []);
 
     return (
-        <div>
+        <div className={styles.scope}> 
+            <div className={styles.share}> 
+                <Share htmlToShare={htmlToShare}></Share>
+            </div>
+            <br></br>
             <StepCard title='Récapitulatif'>
                 <div ref={(ref) => ref && setHtmlToShare(ref.innerHTML)} >
                     <div className={styles.title}>Price: {price}€</div>
@@ -111,12 +115,9 @@ const Price = ({ onSelection }: IPrice) => {
                 </div>
                 <br />
 
-                <Button type='primary' style={{ width: 'fit-content' }} onClick={onSelection}>Fixer un rendez-vous</Button>
+                <Button type='primary' style={{ width: 'fit-content' }} onClick={onSelection}>Réservation rendez-vous</Button>
             </StepCard>
-            <br></br>
-            <div className={styles.share}> 
-                <Share htmlToShare={htmlToShare}></Share>
-            </div>
+           
         </div>
     );
 }

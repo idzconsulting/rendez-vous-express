@@ -74,6 +74,7 @@ export interface IInfos {
     proprietaire_telephone?:string;
     surface?:number;
     note?:string;
+    commentaire?:string;
     chauffage_collectif?:boolean;
     prix?:string;
     autre_sur_place?:boolean;
@@ -84,4 +85,6 @@ export interface IInfos {
     telLocataire?:string;
     agent_facturer?:boolean;
     sur_place?:string | undefined;
+    envoi_rapport_agent?:boolean;
+    envoi_rapport_notaire?:boolean;
 }

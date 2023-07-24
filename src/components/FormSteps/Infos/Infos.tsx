@@ -58,6 +58,8 @@ const Infos = ({ onSelection }: IInfosProps) => {
                 initialValues={{ remember: true }}
                 autoComplete="off"
                 onFinish={saveForm}
+                className={styles.form}
+                
             >
                 <Form.Item
                     label="Nom et prénom"
@@ -84,16 +86,14 @@ const Infos = ({ onSelection }: IInfosProps) => {
                 <Form.Item
                     label="Addresse email"
                     name="proprietaire_email"
-                  
                     rules={[{ type: 'email', message: 'Veuillez entrez votre addresse email' }]}
                 >
-                    <Input size='large'   className='csslabel'/>
+                    <Input size='large' />
                 </Form.Item>
 
                 <Form.Item
                     label="Notes"
                     name="note"
-                    className='csslabel'
                 >
                     <TextArea  size='large' />
                 </Form.Item>
@@ -106,12 +106,9 @@ const Infos = ({ onSelection }: IInfosProps) => {
                     <Input style={{textTransform: 'capitalize'}} />
                 </Form.Item> */}
 
-                <Form.Item wrapperCol={{ offset: 8 }} className={styles.formButtons}>
+                <Form.Item className={styles.formButtons}>
                     <Button type="primary" htmlType="submit">
                         Valider
-                    </Button>
-                    <Button type="primary" htmlType="reset" style={{ marginLeft: 10 }}>
-                        Réinitialiser
                     </Button>
                 </Form.Item>
             </Form>

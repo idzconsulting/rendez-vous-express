@@ -24,27 +24,26 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
     }, []);
 
     const saveForm = (values: any) => {
-        const { bien_code_postal, proprietaire_telephone, surface } = form.getFieldsValue()
+        const { bien_code_postal, proprietaire_telephone} = form.getFieldsValue()
         const isCodePostalValid = bien_code_postal?.length > 4;
         const isTelephoneValid = proprietaire_telephone?.length > 9;
-        const isSurfaceValid = surface?.length > 0;
-        const isFormValid = isCodePostalValid && isTelephoneValid && isSurfaceValid;
+        const isFormValid = isCodePostalValid && isTelephoneValid;
         setShowChoices(isFormValid);
-        currentEngagement.setInfos(values); 
+        currentEngagement.setInfos(values);
     }
     const checkValidNumber = async () => {
-        const {  proprietaire_telephone } = form.getFieldsValue()
+        const { proprietaire_telephone } = form.getFieldsValue()
         const isTelephoneValid = proprietaire_telephone?.length > 9;
-        if (isTelephoneValid ) {
+        if (isTelephoneValid) {
             const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
             if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
         }
     }
 
     const checkCodePostal = async () => {
-        const {  bien_code_postal } = form.getFieldsValue()
+        const { bien_code_postal } = form.getFieldsValue()
         const isCodePostalValid = bien_code_postal?.length > 4;
-        if (isCodePostalValid ) {
+        if (isCodePostalValid) {
             const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
             if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
         }
@@ -73,7 +72,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                         rules={[{ required: true, message: 'Veuillez entrez votre code postal' }]}
 
                     >
-                        <Input size='large' maxLength={5}  onChange={checkCodePostal} />
+                        <Input size='large' maxLength={5} onChange={checkCodePostal} />
                     </Form.Item>
 
                     <Form.Item
@@ -81,15 +80,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                         name="proprietaire_telephone"
                         rules={[{ required: true, message: 'Veuillez entrez votre numéro de téléphone' }]}
                     >
-                        <Input size='large' maxLength={10} onChange={checkValidNumber}/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Surface"
-                        name="surface"
-                        rules={[{ required: true, message: 'Veuillez entrez la surface du bien ' }]}
-                    >
-                        <Input size='large' />
+                        <Input size='large' maxLength={10} onChange={checkValidNumber} />
                     </Form.Item>
                 </Form>
 

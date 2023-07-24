@@ -16,11 +16,17 @@ enum SurPlace {
     Autre = 'Autre'
 }
 
+enum Partenaire {
+    Agent = 'Agent',
+    Notaire = 'Notaire'
+}
+
 const Partner = ({ onSelection }: IInfosProps) => {
     const [formAgentImmo] = Form.useForm();
     const [formLocataire] = Form.useForm();
     const [formAutreSurPlace] = Form.useForm();
     const [autreSurPlace, setAutreSurPlace] = useState<boolean>(false);
+    const [EnvoiRapportPartner, setEnvoiRapportPartner] = useState<boolean>(false);
     const [locataireSurPlace, setlocataireSurPlace] = useState<boolean>(false);
 
     useEffect(() => {
@@ -37,19 +43,24 @@ const Partner = ({ onSelection }: IInfosProps) => {
 
     const finishForm = async () => {
         const nom = formAgentImmo.getFieldValue('nom')
+        console.log({nom})
         const tel = formAgentImmo.getFieldValue('tel')
         const mail = formAgentImmo.getFieldValue('mail')
         const agence = formAgentImmo.getFieldValue('agence')
-        const agent = {
-            nom,
-            mail,
-            tel,
-            agence,
-            type_partenaire: 1
+        const type_partenaire = currentEngagement.getInfos()?.envoi_rapport_agent ? 1 : 2;
+
+        if(nom != undefined && mail != undefined){
+            const agent = {
+                nom,
+                mail,
+                tel,
+                agence,
+                type_partenaire
+            }
+    
+            await PartnersFetcher.addPartner(agent);
         }
-
-        await PartnersFetcher.addPartner(agent);
-
+      
         onSelection()
     }
 
@@ -86,47 +97,70 @@ const Partner = ({ onSelection }: IInfosProps) => {
         }
     }
 
+    const onOptionChangedRapports = (e: any) => {
+        const value: string = e.target.value;
+        if (value === Partenaire.Agent) {
+            setEnvoiRapportPartner(true)
+            currentEngagement.setInfos({ envoi_rapport_agent: true })
+        } 
+        if (value === Partenaire.Notaire) {
+            setEnvoiRapportPartner(true)
+            currentEngagement.setInfos({ envoi_rapport_notaire: true })
+        } 
+    }
+
     return (
-        <StepCard title='Mon agence immobiliere'>
-            <Form
-                form={formAgentImmo}
-                name="basic"
-                labelCol={{ span: 9 }}
-                wrapperCol={{ span: 15 }}
-                style={{ maxWidth: 700 }}
-                initialValues={{ remember: true }}
-                autoComplete="off"
-                onFieldsChange={saveForm}
-            >
-
-                <Form.Item
-                    label="Tel"
-                    name="tel"
+        <StepCard title="">
+            <StepCard title='Envoi des rapports'>
+                <div>Vous pouvez choisir d'envoyer directement les rapports de diagnostics à votre agent immobilier ou à votre notaire</div>
+                <br></br>
+                <Radio.Group buttonStyle='solid' onChange={onOptionChangedRapports}
+                    size={screenStore.getSize()}>
+                    <Radio.Button value={Partenaire.Agent}>Envoyer à mon agent immobilier</Radio.Button>
+                    <Radio.Button value={Partenaire.Notaire}>Envoyer à mon notaire</Radio.Button>
+                </Radio.Group>
+                <br></br><br></br>
+                { EnvoiRapportPartner && <Form
+                    form={formAgentImmo}
+                    name="basic"
+                    labelCol={{ span: 9 }}
+                    wrapperCol={{ span: 15 }}
+                    style={{ maxWidth: 700 }}
+                    initialValues={{ remember: true }}
+                    autoComplete="off"
+                    onFieldsChange={saveForm}
                 >
-                    <Input size='large' onChange={completeAgent} />
-                </Form.Item>
 
-                <Form.Item
-                    label="Nom"
-                    name="nom"
-                >
-                    <Input size='large' style={{ textTransform: 'capitalize' }} />
-                </Form.Item>
+                    <Form.Item
+                        label="Tel"
+                        name="tel"
+                    >
+                        <Input size='large' onChange={completeAgent} />
+                    </Form.Item>
 
-                <Form.Item
-                    label="Agence"
-                    name="agence"
-                >
-                    <Input size='large' style={{ textTransform: 'capitalize' }} />
-                </Form.Item>
+                    <Form.Item
+                        label="Nom"
+                        name="nom"
+                    >
+                        <Input size='large' style={{ textTransform: 'capitalize' }} />
+                    </Form.Item>
 
-                <Form.Item
-                    label="Email"
-                    name="mail"
-                >
-                    <Input size='large' />
-                </Form.Item>
-            </Form>
+                    <Form.Item
+                        label="Agence"
+                        name="agence"
+                    >
+                        <Input size='large' style={{ textTransform: 'capitalize' }} />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Email"
+                        name="mail"
+                    >
+                        <Input size='large' />
+                    </Form.Item>
+                </Form>}
+            </StepCard>
+            <br></br>
             <StepCard title='Qui sera sur place ? '>
                 <Radio.Group buttonStyle='solid' onChange={onOptionChangedSurPlace}
                     size={screenStore.getSize()}>
