@@ -1,101 +1,118 @@
+import React, { useEffect, useState } from 'react';
+import { RdvFetcher } from '../../../fetchers/role-fetchers/RdvFetcher';
 import { IOnSelection } from '../../../types/IOnSelection';
 import StepCard from '../StepCard/StepCard';
-import React, { useEffect, useState } from 'react';
-import styles from './WeekCalendar.module.less';
-import { Button } from 'antd';
-import { currentEngagement } from '../../../stores';
 import { screenStore } from '../../../stores';
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import allLocales from '@fullcalendar/core/locales-all'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from "@fullcalendar/interaction"
+import styles from './WeekCalendar.module.less';
+import { Form, Select } from 'antd';
 
-interface IWeekCalendarProps extends IOnSelection {
-}
+interface IWeekCalendarProps extends IOnSelection { }
 
-interface ILabeledDate {
-    date: Date;
-    label: string;
-}
+const formatDate = (unixTimestamp: number) => {
+    const date = new Date(unixTimestamp * 1000);
+    return date.toLocaleDateString('fr-FR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+};
 
-enum IHours {
-    '9-11' = '09h - 11h',
-    '11-13' = '11h - 13h',
-    '13-15' = '13h - 15h',
-    '15-17' = '15h - 17h'
-}
+const formatTime = (unixTimestamp: number) => {
+    const date = new Date(unixTimestamp * 1000);
+    return date.toLocaleTimeString('fr-FR', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+};
 
 const Calendar = ({ onSelection }: IWeekCalendarProps) => {
-    const [numWeek, setNumWeek] = useState(0);
-    const [date, setDate] = useState<Date>();
-    const [dates, setDates] = useState<ILabeledDate[]>();
-    const options: any = { weekday: 'long', month: 'numeric', day: 'numeric' };
+    const [allCESData, setAllCESData] = useState<number[][]>([]);
+    const [selectedDay, setSelectedDay] = useState<number>(-1);
+    const [timeSlots, setTimeSlots] = useState<number[]>([]);
+
+    const getDatesForMeeting = async () => {
+        const { data } = await RdvFetcher.getRdvAvailable();
+        return data;
+    };
 
     useEffect(() => {
-        const date = new Date();
-        setDate(date);
-        initDates()
+        const fetchData = async () => {
+            const { creneau } = await getDatesForMeeting();
+            setAllCESData(creneau);
+        };
+
+        fetchData();
     }, []);
 
-    const initDates = () => {
-        let date = new Date();
-        let dates: ILabeledDate[] = [];
+    const handleDaySelect = (value: any) => {
 
-        for (let i = 0; i < 7; i++) {
-            let currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), i * 24);
-            dates.push({
-                date: currentDate,
-                label: currentDate.toLocaleDateString('fr-FR', options)
-            });
+        const selectedDayIndex = Number(value);
+        setSelectedDay(selectedDayIndex);
+
+        // Update time slots based on the selected day
+        if (selectedDayIndex >= 0) {
+            const selectedDaySlots = allCESData[selectedDayIndex];
+            setTimeSlots(selectedDaySlots);
+        } else {
+            setTimeSlots([]);
         }
-
-        setDates(dates);
-    }
-
-    const onSelectHour = (date: any) => {
-        
-        if (date) {
-            currentEngagement.setRDV(date.dateStr.split('+')[0]);
-            onSelection();
-        }
-    }
+    };
 
     return (
         <div className={screenStore.getIsMobile() ? styles.calendarMobile : styles.calendar}>
-            <FullCalendar
-                plugins={[timeGridPlugin,interactionPlugin,dayGridPlugin]}
+            <h1>Reserver votre rendez-vous</h1>
+            <Form
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 14 }}
+                layout="horizontal"
+                style={{ maxWidth: 1000 }}
+            >
+                <Form.Item label="Quel jour desirez-vous?">
+                    <Select  onSelect={handleDaySelect}>
+                        {allCESData.map((dayData, index) => (
+                            <Select.Option value={index} key={index}>
+                                   {formatDate(dayData[0])}</Select.Option>
+                        ))}
 
-                headerToolbar={{
-                    right: "today next",
-                }}
-                allDaySlot={true}
-                height='100%'
-                slotDuration={'02:00'}
-                slotMinTime={'07:00'}
-                slotMaxTime={'19:00'}
-                slotMinWidth={200}
-                weekends={false}
-                locale={'fr'}
-                locales={allLocales}
-                editable={true}
-                dateClick={onSelectHour}
-                //selectable={true}
-                eventClick={onSelectHour}
-                //select={onSelectHour}
-                //selectLongPressDelay={500}
-                longPressDelay={0}
-            />
+                    </Select>
+                </Form.Item>
+                <Form.Item label="Quel heure desirez-vous?">
+                    <Select>
+                        {timeSlots.map((timestamp, index) => (
+                            <Select.Option value={timestamp} key={index} >
+                                {formatTime(timestamp)}</Select.Option>
+                        ))}
+
+                    </Select>
+                </Form.Item>
+            </Form>
+            {/* <select value={selectedDay} onChange={handleDaySelect}>
+        <option value={-1}>Sélectionner un jour</option>
+        {allCESData.map((dayData, index) => (
+          <option key={index} value={index}>
+            {formatDate(dayData[0])}
+          </option>
+        ))}
+      </select>
+
+      <h2>Horaires pour le jour sélectionné</h2>
+      <select>
+        {timeSlots.map((timestamp, index) => (
+          <option key={index} value={timestamp}>
+            {formatTime(timestamp)}
+          </option>
+        ))}
+      </select> */}
         </div>
     );
-}
+};
 
-export const WeekCalendar = ({ onSelection }: IWeekCalendarProps) => {
+const WeekCalendar = ({ onSelection }: IWeekCalendarProps) => {
     return (
-        <StepCard title='Rendez-vous'>
+        <StepCard title="Rendez-vous">
             <Calendar onSelection={onSelection} />
         </StepCard>
     );
-}
+};
 
 export default WeekCalendar;

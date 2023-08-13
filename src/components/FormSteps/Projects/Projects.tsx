@@ -34,19 +34,19 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
     const checkValidNumber = async () => {
         const { proprietaire_telephone } = form.getFieldsValue()
         const isTelephoneValid = proprietaire_telephone?.length > 9;
-        if (isTelephoneValid) {
-            const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
-            if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
-        }
+        // if (isTelephoneValid) {
+        //     const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
+        //     if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
+        // }
     }
 
     const checkCodePostal = async () => {
         const { bien_code_postal } = form.getFieldsValue()
         const isCodePostalValid = bien_code_postal?.length > 4;
-        if (isCodePostalValid) {
-            const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
-            if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
-        }
+        // if (isCodePostalValid) {
+        //     const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
+        //     if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
+        // }
     }
 
     return (

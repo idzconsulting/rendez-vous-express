@@ -8,6 +8,7 @@ import StepCard from '../StepCard/StepCard';
 import { IEngagementType } from '../../../types/interfaces';
 import { currentEngagement, screenStore } from '../../../stores';
 import { Input, Radio } from 'antd';
+import { DisponibiliteFetcher } from '../../../fetchers/role-fetchers/DisponibiliteFetcher';
 
 interface IProjectProps extends IOnSelection {
     refs?: [IEngagementType]
@@ -20,6 +21,7 @@ const Biens = ({ onSelection, refs }: IProjectProps) => {
     useEffect(() => {
         const bien = currentEngagement.getProperty(Refs.BIEN);
         if(bien?.nom === 'Appartement') setHasAppart(true)
+        const test = DisponibiliteFetcher.getTechInNearDistance(currentEngagement.getInfos()?.bien_code_postal)
     }, []);
 
     const onOptionChanged = (e: any) => {

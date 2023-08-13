@@ -22,6 +22,7 @@ import { EnregistrerFetcher } from '../../fetchers/role-fetchers/EnregistrerFetc
 import Biens from '../FormSteps/Biens/Biens';
 import Price from '../FormSteps/Price/Price';
 import Partner from '../FormSteps/Partner/Partner';
+import CodePromo from '../FormSteps/CodePromo/CodePromo';
 
 const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -41,13 +42,13 @@ const App = observer(() => {
     const setNextStep = async () => {
 
         (currentStep + 1 < steps.length) && setStep(currentStep + 1, undefined);
-        if (currentStep === 9) {
-            await EnregistrerFetcher.enregistrer(currentEngagement.getCurrentMission());  
-        }
-        else{
-            const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
-            if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
-        }   
+        // if (currentStep === 9) {
+        //     await EnregistrerFetcher.enregistrer(currentEngagement.getCurrentMission());  
+        // }
+        // else{
+        //     const response: { data: any; sstatus: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
+        //     if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
+        // }   
         
     }
 
@@ -61,7 +62,7 @@ const App = observer(() => {
 
     const steps = [{
         title: 'Projet',
-        content: <Projects refs={refs.type_transaction} onSelection={setNextStep} />,
+        content: <CodePromo refs={refs.type_transaction} onSelection={setNextStep} />,
     }, {
         title: 'Bien',
         content: <Biens  refs={refs.type_bien} onSelection={setNextStep} />,
