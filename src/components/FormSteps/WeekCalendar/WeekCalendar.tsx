@@ -88,7 +88,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                 slotDuration={{ minutes: 30 }}
                 slotLabelInterval={{ minutes: 30 }}
                 slotLabelContent={customSlotLabelContent}
-                slotMinTime={'07:00'}
+                slotMinTime={'08:30'}
                 slotMaxTime={'18:00'}
                 slotMinWidth={200}
                 weekends={false}
@@ -103,7 +103,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                 // eventClick={handleDateSelect}
                 select={handleDateSelect}
                 //selectLongPressDelay={500}
-                longPressDelay={120}
+                longPressDelay={200}
             />
         </div>
     );
