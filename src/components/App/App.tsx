@@ -15,7 +15,6 @@ import Infos from '../FormSteps/Infos/Infos';
 import Summary from '../FormSteps/Summary/Summary';
 import Projects from '../FormSteps/Projects/Projects';
 import { RefsFetcher } from '../../fetchers/role-fetchers/RefFetcher';
-import { log } from 'console';
 import { InsererFetcher } from '../../fetchers/role-fetchers/InsererFetcher';
 import { currentEngagement } from '../../stores';
 import { EnregistrerFetcher } from '../../fetchers/role-fetchers/EnregistrerFetcher';
@@ -42,18 +41,17 @@ const App = observer(() => {
     const setNextStep = async () => {
 
         (currentStep + 1 < steps.length) && setStep(currentStep + 1, undefined);
-        // if (currentStep === 9) {
-        //     await EnregistrerFetcher.enregistrer(currentEngagement.getCurrentMission());  
-        // }
-        // else{
-        //     const response: { data: any; sstatus: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
-        //     if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
-        // }   
-        
+        if (currentStep === 9) {
+            await EnregistrerFetcher.enregistrer(currentEngagement.getCurrentMission());  
+        }
+        else{
+            const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
+            if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
+        }   
+
     }
 
     const setPreviousStep = () => setStep(currentStep - 1, 0);
-
     const setStep = (step: number, timeout: number = TIME_BEFORE_SKIPPING_NEXT_PAGE) => {
         setTimeout(() => setCurrentStep(step), timeout);
     }
@@ -62,10 +60,10 @@ const App = observer(() => {
 
     const steps = [{
         title: 'Projet',
-        content: <CodePromo refs={refs.type_transaction} onSelection={setNextStep} />,
+        content: <Projects refs={refs.type_transaction} onSelection={setNextStep} />,
     }, {
         title: 'Bien',
-        content: <Biens  refs={refs.type_bien} onSelection={setNextStep} />,
+        content: <Biens refs={refs.type_bien} onSelection={setNextStep} />,
     }, {
         title: 'Année de construction',
         content: <Choices title='Année de construction' refs={refs.date_construction} type={Refs.ANNEE_CONSTRUCTION} onSelection={setNextStep} />,
@@ -112,8 +110,12 @@ const App = observer(() => {
             <Header />
             <Content>
                 <div className={styles.formContainer}>
-                    <div className={styles.navButton}>{<NavButtons hasPreviousButton={currentStep > 0}
-                        onClick={setPreviousStep} />}</div>
+                    <div className={styles.navContainer}>
+                        <div className={styles.navButton}>{<NavButtons label={'Précédent'} disabled={!(currentStep > 0)}
+                            onClick={setPreviousStep} />}</div>
+                        <div className={styles.navButton}>{<NavButtons prev={false} label={'Suivant'} disabled={!(currentStep > 0)}
+                            onClick={setNextStep} />}</div>
+                    </div>
 
                     {!isMobile && getStepsComponent()}
 

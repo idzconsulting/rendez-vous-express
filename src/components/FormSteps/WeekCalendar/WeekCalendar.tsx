@@ -1,118 +1,135 @@
-import React, { useEffect, useState } from 'react';
-import { RdvFetcher } from '../../../fetchers/role-fetchers/RdvFetcher';
 import { IOnSelection } from '../../../types/IOnSelection';
 import StepCard from '../StepCard/StepCard';
-import { screenStore } from '../../../stores';
+import React, { useEffect, useState } from 'react';
 import styles from './WeekCalendar.module.less';
-import { Form, Select } from 'antd';
+import { format } from 'date-fns';
+import { currentEngagement } from '../../../stores';
+import { screenStore } from '../../../stores';
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import allLocales from '@fullcalendar/core/locales-all'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from "@fullcalendar/interaction"
 
-interface IWeekCalendarProps extends IOnSelection { }
+interface IWeekCalendarProps extends IOnSelection {
+}
 
-const formatDate = (unixTimestamp: number) => {
-    const date = new Date(unixTimestamp * 1000);
-    return date.toLocaleDateString('fr-FR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
-};
+interface ILabeledDate {
+    date: Date;
+    label: string;
+}
 
-const formatTime = (unixTimestamp: number) => {
-    const date = new Date(unixTimestamp * 1000);
-    return date.toLocaleTimeString('fr-FR', {
-        hour: '2-digit',
-        minute: '2-digit',
-    });
-};
+enum IHours {
+    '9-11' = '09h - 11h',
+    '11-13' = '11h - 13h',
+    '13-15' = '13h - 15h',
+    '15-17' = '15h - 17h'
+}
 
 const Calendar = ({ onSelection }: IWeekCalendarProps) => {
-    const [allCESData, setAllCESData] = useState<number[][]>([]);
-    const [selectedDay, setSelectedDay] = useState<number>(-1);
-    const [timeSlots, setTimeSlots] = useState<number[]>([]);
-
-    const getDatesForMeeting = async () => {
-        const { data } = await RdvFetcher.getRdvAvailable();
-        return data;
-    };
+    const [numWeek, setNumWeek] = useState(0);
+    const [date, setDate] = useState<Date>();
+    const [dates, setDates] = useState<ILabeledDate[]>();
+    const [selectedStart, setSelectedStart] = useState(null);
+    const [selectedEnd, setSelectedEnd] = useState(null);
+    const options: any = { weekday: 'long', month: 'numeric', day: 'numeric' };
 
     useEffect(() => {
-        const fetchData = async () => {
-            const { creneau } = await getDatesForMeeting();
-            setAllCESData(creneau);
-        };
-
-        fetchData();
+        const date = new Date();
+        setDate(date);
+        initDates()
     }, []);
 
-    const handleDaySelect = (value: any) => {
+    const initDates = () => {
+        let date = new Date();
+        let dates: ILabeledDate[] = [];
 
-        const selectedDayIndex = Number(value);
-        setSelectedDay(selectedDayIndex);
-
-        // Update time slots based on the selected day
-        if (selectedDayIndex >= 0) {
-            const selectedDaySlots = allCESData[selectedDayIndex];
-            setTimeSlots(selectedDaySlots);
-        } else {
-            setTimeSlots([]);
+        for (let i = 0; i < 7; i++) {
+            let currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), i * 24);
+            dates.push({
+                date: currentDate,
+                label: currentDate.toLocaleDateString('fr-FR', options)
+            });
         }
+
+        setDates(dates);
+    }
+
+    const onSelectHour = (date: any) => {
+        console.log({ date })
+        if (date) {
+            currentEngagement.setRDV(date.dateStr.split('+')[0]);
+            onSelection();
+        }
+    }
+
+    const customSlotLabelContent = (arg: any) => {
+        const startHour = arg.date.getHours();
+        const startMinute = arg.date.getMinutes();
+        const endMinute = startMinute + 30 >= 60 ? '00' : '30';
+        const endHour = startMinute + 30 >= 60 ? startHour + 1 : startHour;
+
+        return `${startHour}:${startMinute === 0 ? '00' : '30'} - ${endHour}:${endMinute}`;
     };
+
+    const handleDateSelect = (selectInfo:any) => {
+        const date:any =  format(selectInfo.start, 'yyyy-MM-dd HH:mm:ss')
+        if (selectedStart === null) {
+          setSelectedStart(date);
+        } else {
+          setSelectedEnd(date);
+          console.log(date)
+          if (date) {
+              currentEngagement.setRDV(date);
+              onSelection();
+          }
+          // Do something with the selected range (selectedStart to selectInfo.start)
+          // Reset the selection
+          setSelectedStart(null);
+          setSelectedEnd(null);
+        }
+      };
 
     return (
         <div className={screenStore.getIsMobile() ? styles.calendarMobile : styles.calendar}>
-            <h1>Reserver votre rendez-vous</h1>
-            <Form
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 14 }}
-                layout="horizontal"
-                style={{ maxWidth: 1000 }}
-            >
-                <Form.Item label="Quel jour desirez-vous?">
-                    <Select  onSelect={handleDaySelect}>
-                        {allCESData.map((dayData, index) => (
-                            <Select.Option value={index} key={index}>
-                                   {formatDate(dayData[0])}</Select.Option>
-                        ))}
+            <FullCalendar
+                plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
+                headerToolbar={{
+                    right: "prev next",
+                }}
+                allDaySlot={true}
+                height='100%'
 
-                    </Select>
-                </Form.Item>
-                <Form.Item label="Quel heure desirez-vous?">
-                    <Select>
-                        {timeSlots.map((timestamp, index) => (
-                            <Select.Option value={timestamp} key={index} >
-                                {formatTime(timestamp)}</Select.Option>
-                        ))}
-
-                    </Select>
-                </Form.Item>
-            </Form>
-            {/* <select value={selectedDay} onChange={handleDaySelect}>
-        <option value={-1}>Sélectionner un jour</option>
-        {allCESData.map((dayData, index) => (
-          <option key={index} value={index}>
-            {formatDate(dayData[0])}
-          </option>
-        ))}
-      </select>
-
-      <h2>Horaires pour le jour sélectionné</h2>
-      <select>
-        {timeSlots.map((timestamp, index) => (
-          <option key={index} value={timestamp}>
-            {formatTime(timestamp)}
-          </option>
-        ))}
-      </select> */}
+                slotDuration={{ minutes: 30 }}
+                slotLabelInterval={{ minutes: 30 }}
+                slotLabelContent={customSlotLabelContent}
+                slotMinTime={'07:00'}
+                slotMaxTime={'18:00'}
+                slotMinWidth={200}
+                weekends={false}
+                locale={'fr'}
+                editable={true}
+                selectAllow={(selectInfo) => {
+                    // Assurez-vous que la sélection commence et se termine à des moments valides ici
+                    return true; // ou false en fonction de votre logique
+                  }}
+                // dateClick={handleDateSelect}
+                selectable={true}
+                // eventClick={handleDateSelect}
+                select={handleDateSelect}
+                //selectLongPressDelay={500}
+                longPressDelay={100}
+            />
         </div>
     );
-};
+}
 
-const WeekCalendar = ({ onSelection }: IWeekCalendarProps) => {
+export const WeekCalendar = ({ onSelection }: IWeekCalendarProps) => {
     return (
-        <StepCard title="Rendez-vous">
+        <StepCard title='Rendez-vous'>
             <Calendar onSelection={onSelection} />
         </StepCard>
     );
-};
+}
 
 export default WeekCalendar;

@@ -19,7 +19,8 @@ const CodePromo = ({ onSelection, refs }: IProjectProps) => {
         const fetchData = async () => {
             const {data}:any = await DisponibiliteFetcher.getTechInNearDistance('59000')
             console.log(data.prochains_rdv_proches)
-            setRdv(data.prochains_rdv_proches)
+            const rdvClose:any = Object.values(data.prochains_rdv_proches).filter(({distance}:any) => distance <= 30)
+            setRdv(rdvClose)
         };
         
         fetchData()

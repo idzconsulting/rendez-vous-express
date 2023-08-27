@@ -1,18 +1,21 @@
 import styles from './NavButtons.module.less';
-import {Button} from 'antd';
-import {LeftOutlined} from '@ant-design/icons';
+import { Button } from 'antd';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import React from 'react';
 
 interface INavButton {
-    hasPreviousButton?: boolean;
+    label: string;
+    disabled?: boolean;
     onClick: () => void;
+    prev?: boolean
 }
 
-const NavButtons = ({hasPreviousButton = true, onClick}: INavButton) => {
+const NavButtons = ({ prev = true, disabled = false, onClick, label }: INavButton) => {
     return <div className={styles.navigationButtons}>
-        <Button type='primary' size='large' className={styles.navButton} onClick={onClick} disabled={!hasPreviousButton}>
-            <LeftOutlined/>
-            <span>Précédent</span>
+        <Button type='primary' size='large' className={styles.navButton} onClick={onClick} disabled={disabled}>
+            {prev && <LeftOutlined />}
+            <span>{label}</span>
+            {!prev && <RightOutlined />}
         </Button>
     </div>;
 }
