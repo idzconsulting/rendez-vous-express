@@ -7,7 +7,6 @@ import { currentEngagement } from '../../../stores';
 import { screenStore } from '../../../stores';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import allLocales from '@fullcalendar/core/locales-all'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from "@fullcalendar/interaction"
 
@@ -27,11 +26,9 @@ enum IHours {
 }
 
 const Calendar = ({ onSelection }: IWeekCalendarProps) => {
-    const [numWeek, setNumWeek] = useState(0);
     const [date, setDate] = useState<Date>();
     const [dates, setDates] = useState<ILabeledDate[]>();
     const [selectedStart, setSelectedStart] = useState(null);
-    const [selectedEnd, setSelectedEnd] = useState(null);
     const options: any = { weekday: 'long', month: 'numeric', day: 'numeric' };
 
     useEffect(() => {
@@ -66,29 +63,17 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     const customSlotLabelContent = (arg: any) => {
         const startHour = arg.date.getHours();
         const startMinute = arg.date.getMinutes();
-        const endMinute = startMinute + 30 >= 60 ? '00' : '30';
-        const endHour = startMinute + 30 >= 60 ? startHour + 1 : startHour;
-
-        return `${startHour}:${startMinute === 0 ? '00' : '30'} - ${endHour}:${endMinute}`;
+        return `${startHour}:${startMinute === 0 ? '00' : '30'}`;
     };
 
-    const handleDateSelect = (selectInfo:any) => {
-        const date:any =  format(selectInfo.start, 'yyyy-MM-dd HH:mm:ss')
+    const handleDateSelect = (selectInfo: any) => {
+        const date: any = format(selectInfo.start, 'yyyy-MM-dd HH:mm:ss')
         if (selectedStart === null) {
-          setSelectedStart(date);
-        } else {
-          setSelectedEnd(date);
-          console.log(date)
-          if (date) {
-              currentEngagement.setRDV(date);
-              onSelection();
-          }
-          // Do something with the selected range (selectedStart to selectInfo.start)
-          // Reset the selection
-          setSelectedStart(null);
-          setSelectedEnd(null);
+            setSelectedStart(date);
+            currentEngagement.setRDV(date);
+            onSelection();
         }
-      };
+    };
 
     return (
         <div className={screenStore.getIsMobile() ? styles.calendarMobile : styles.calendar}>
@@ -112,13 +97,13 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                 selectAllow={(selectInfo) => {
                     // Assurez-vous que la sélection commence et se termine à des moments valides ici
                     return true; // ou false en fonction de votre logique
-                  }}
+                }}
                 // dateClick={handleDateSelect}
                 selectable={true}
                 // eventClick={handleDateSelect}
                 select={handleDateSelect}
                 //selectLongPressDelay={500}
-                longPressDelay={100}
+                longPressDelay={120}
             />
         </div>
     );
