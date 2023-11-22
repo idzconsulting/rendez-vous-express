@@ -10,14 +10,14 @@ export class RdvFetcher {
         }
     }
 
-    static async getRdvIdeal(cp:string,diags:any) {
+    static async getRdvIdeal(cp:string,diags:any,type_surface_id:string) {
         try {
             const response = await UrlClientConstants.axiosBase.post(UrlClientConstants.rdvIdeal,{
                 cp,
-                diags:[3,4,5],
+                diags,
                 jour_delai:'0',
                 id_agent:'0',
-                type_surface_id:'6'
+                type_surface_id
             });
             return response
         } catch (e) {

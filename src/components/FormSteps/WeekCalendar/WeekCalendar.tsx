@@ -33,8 +33,8 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     const [selectedStart, setSelectedStart] = useState(null);
     const options: any = { weekday: 'long', month: 'numeric', day: 'numeric' };
 
-    const getRdvIdeal = async (cp: any, diagnostics: any) => {
-        return RdvFetcher.getRdvIdeal(cp, diagnostics);
+    const getRdvIdeal = async (cp: any, diagnostics: any,type_surface_id:string) => {
+        return RdvFetcher.getRdvIdeal(cp, diagnostics,type_surface_id);
     }
 
     const getIdTechAndPrix = (info: string) => {
@@ -76,8 +76,9 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     useEffect(() => {
         const fetchData = async () => {
             const diagnostics = currentEngagement.getCurrentEngagement().diagnostics?.map(({ id }) => id);
-            const cp = currentEngagement.getInfos()?.bien_code_postal || '59000';
-            const response: any = await getRdvIdeal(cp, diagnostics);
+            const cp = currentEngagement.getInfos()?.bien_code_postal;
+            const type_surface_id = currentEngagement.getCurrentMission()?.type_surface_id;
+            const response: any = await getRdvIdeal(cp, diagnostics,type_surface_id);
     
             const events = filterUniqueEvents(response.data.missions || []);
     
@@ -123,7 +124,6 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     const handleDateSelect = (selectInfo: any) => {
      
         const {prix,id_technicien} = selectInfo.event._def.extendedProps
-        console.log({prix,id_technicien})
         const date: any = format(selectInfo.event._instance.range.start, 'yyyy-MM-dd HH:mm:ss')
         if (selectedStart === null) {
             setSelectedStart(date);
