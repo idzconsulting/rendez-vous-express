@@ -90,10 +90,8 @@ export class CurrentEngagementStore {
     }
 
     setRDV(rdv_jour: string) {
-        console.log({rdv_jour})
         this.engagement.infos = { ...this.engagement.infos, rdv_jour }
-        console.log('date',this.engagement.infos.rdv_jour)
         this.mission.rdv_jour = rdv_jour 
-
+        console.log('date',this.engagement.infos)
     }
 }

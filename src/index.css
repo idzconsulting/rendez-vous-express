@@ -22,3 +22,7 @@ code {
     height: 8em;
     cursor: pointer;
 }
+
+.fc .fc-timegrid-axis-cushion{
+    display: none !important;
+}

@@ -70,6 +70,7 @@ export interface IInfos {
     proprietaire_email?: string;
     agence?: string;
     rdv_jour?: string;
+    id_technicien?: string;
     bien_code_postal?:string;
     proprietaire_telephone?:string;
     surface?:number;

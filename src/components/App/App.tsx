@@ -24,7 +24,7 @@ import Partner from '../FormSteps/Partner/Partner';
 import CodePromo from '../FormSteps/CodePromo/CodePromo';
 
 const App = observer(() => {
-    const [currentStep, setCurrentStep] = useState(0);
+    const [currentStep, setCurrentStep] = useState(7);
     const isMobile = screenStore.getIsMobile();
     const TIME_BEFORE_SKIPPING_NEXT_PAGE: number = 300;
     const [refs, setRefs] = useState<any>({})
@@ -82,12 +82,12 @@ const App = observer(() => {
         content: <Infos onSelection={setNextStep} />
     },
     {
-        title: 'Price',
-        content: <Price onSelection={setNextStep} />
-    },
-    {
         title: 'Rdv',
         content: <WeekCalendar onSelection={setNextStep} />
+    },
+    {
+        title: 'Price',
+        content: <Price onSelection={setNextStep} />
     },
     {
         title: 'Partenaire',

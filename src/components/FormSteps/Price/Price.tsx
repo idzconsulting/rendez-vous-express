@@ -19,18 +19,18 @@ const Price = ({ onSelection }: IPrice) => {
     const [price, setPrice] = useState<any>()
     const [htmlToShare, setHtmlToShare] = useState('');
 
-    const getPrice = async () => {
-        const { data } = await DiagnoscticsFetcher.price(currentEngagement.getCurrentMission());
-        const { prix } = data
-        currentEngagement.setInfos({ prix });
-        return prix
-    }
+    // const getPrice = async () => {
+    //     const { data } = await DiagnoscticsFetcher.price(currentEngagement.getCurrentMission());
+    //     const { prix } = data
+    //     currentEngagement.setInfos({ prix });
+    //     return prix
+    // }
 
     useEffect(() => {
         const fetchData = async () => {
             setEngagement(currentEngagement.getCurrentEngagement());
-            const priceOfMission = await getPrice();
-            setPrice(priceOfMission)
+            // const priceOfMission = await getPrice();
+            // setPrice(priceOfMission)
         };
 
         fetchData();
@@ -44,7 +44,7 @@ const Price = ({ onSelection }: IPrice) => {
             <br></br>
             <StepCard title='Récapitulatif'>
                 <div ref={(ref) => ref && setHtmlToShare(ref.innerHTML)} >
-                    <div className={styles.title}>Price: {price}€</div>
+                    <div className={styles.title}>Price: {engagement?.infos?.prix}€</div>
                     
                     <Divider />
 
@@ -115,7 +115,7 @@ const Price = ({ onSelection }: IPrice) => {
                 </div>
                 <br />
 
-                <Button type='primary' style={{ width: 'fit-content' }} onClick={onSelection}>Réservation rendez-vous</Button>
+                <Button type='primary' style={{ width: 'fit-content' }} onClick={onSelection}>Valider</Button>
             </StepCard>
            
         </div>
