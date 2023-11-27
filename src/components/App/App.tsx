@@ -9,6 +9,7 @@ import { Steps } from 'antd';
 import Annexes from '../FormSteps/Annexes/Annexes';
 import Diagnostics from '../FormSteps/DiagnosticsChoices/DiagnosticsChoices';
 import { screenStore } from '../../stores';
+import { insererStore } from '../../stores';
 import { observer } from 'mobx-react';
 import WeekCalendar from '../FormSteps/WeekCalendar/WeekCalendar';
 import Infos from '../FormSteps/Infos/Infos';
@@ -48,6 +49,7 @@ const App = observer(() => {
             const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
             if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
         }   
+        insererStore.setNext(false);
 
     }
 
@@ -113,7 +115,7 @@ const App = observer(() => {
                     <div className={styles.navContainer}>
                         <div className={styles.navButton}>{<NavButtons label={'Précédent'} disabled={!(currentStep > 0)}
                             onClick={setPreviousStep} />}</div>
-                        <div className={styles.navButton}>{<NavButtons prev={false} label={'Suivant'} disabled={!(currentStep > 0)}
+                        <div className={styles.navButton}>{<NavButtons prev={false} label={'Suivant'} disabled={!insererStore.getNext()}
                             onClick={setNextStep} />}</div>
                     </div>
 

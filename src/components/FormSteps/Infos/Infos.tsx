@@ -3,7 +3,7 @@ import { IOnSelection } from '../../../types/IOnSelection';
 import Form from 'antd/es/form';
 import { AutoComplete, Button, Input } from 'antd';
 import { useEffect, useState } from 'react';
-import { currentEngagement } from '../../../stores';
+import { currentEngagement, insererStore } from '../../../stores';
 import styles from './Infos.module.less';
 import { AddressesFetcher, AddressesResponses } from '../../../fetchers/role-fetchers/AddressesFetcher';
 import TextArea from 'antd/es/input/TextArea';
@@ -29,7 +29,7 @@ const Infos = ({ onSelection }: IInfosProps) => {
         setOptions([]);
         if (response.status === 200) {
             const options: { value: string, code: number }[] = [];
-            response.data.adresses.forEach((adresse) => {
+            response.data.adresses?.forEach((adresse) => {
                 options.push({ value: adresse.adresse, code: adresse.code_postal })
             });
 
@@ -39,6 +39,7 @@ const Infos = ({ onSelection }: IInfosProps) => {
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();
+        if(infos?.proprietaire_nom && infos?.bien_adresse) insererStore.setNext(true);
         form.setFieldsValue(infos);
     }, []);
 

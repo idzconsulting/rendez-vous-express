@@ -5,7 +5,7 @@ import Form from 'antd/es/form';
 import styles from './DiagnosticsChoices.module.less';
 import { useEffect, useState } from 'react';
 import { red, green } from '@ant-design/colors';
-import { currentEngagement } from '../../../stores';
+import { currentEngagement, insererStore } from '../../../stores';
 import { Diagnostiques } from '../../../types/Engagement';
 import { DiagnoscticsFetcher } from '../../../fetchers/role-fetchers/DiagnosticsFetcher';
 import TextArea from 'antd/es/input/TextArea';
@@ -39,6 +39,7 @@ const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => 
             currentEngagement.setDiagnostics([...diagsObliagtoires] as Diagnostiques[]);
 
             const savedDiagnostics = currentEngagement.getDiagnostics();
+            if(savedDiagnostics) insererStore.setNext(true);
            
             setSelectedDiagnostics(savedDiagnostics || []);
         };

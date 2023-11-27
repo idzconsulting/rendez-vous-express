@@ -3,7 +3,7 @@ import StepCard from '../StepCard/StepCard';
 import React, { useEffect, useState } from 'react';
 import styles from './WeekCalendar.module.less';
 import { addMinutes, format } from 'date-fns';
-import { currentEngagement } from '../../../stores';
+import { currentEngagement, insererStore } from '../../../stores';
 import { screenStore } from '../../../stores';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -38,21 +38,28 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     }
 
     const getIdTechAndPrix = (info: string) => {
-
-        const segments = info.split('|');
+        const segments = info?.split('|');
 
         const id_technicien = segments[0];
-        const prix = segments[segments.length - 1];
+        const prix = segments[segments?.length - 1];
 
         return { id_technicien, prix };
     }
 
+    function minimumPrice(prixArray:number[]) {
+        if (prixArray.length === 0) {
+            return null;
+        }
+        return Math.min(...prixArray);
+    }
+
+
     const filterUniqueEvents = (missions: any[]) => {
         const uniqueEvents: { [key: string]: any } = {};
+        let prixMinimum = Number.POSITIVE_INFINITY;
     
         missions.forEach((item: any) => {
             const { id_technicien, prix } = getIdTechAndPrix(item.technicien_distance);
-    
             const creneau = item.creneau;
             const existingEvent = uniqueEvents[creneau];
     
@@ -66,12 +73,25 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                         prix
                     },
                     technicien_distance: item.technicien_distance,
+                    backgroundColor: 'orange',
                 };
+    
+                prixMinimum = Math.min(prixMinimum, parseFloat(prix));
             }
         });
     
+        Object.values(uniqueEvents).forEach((event: any) => {
+            if (parseFloat(event.extendedProps.prix) === prixMinimum) {
+                event.backgroundColor = 'green';
+            }
+        });
+    
+        console.log("Le prix minimum parmi les événements est :", prixMinimum);
+    
         return Object.values(uniqueEvents);
     };
+    
+    
     
     useEffect(() => {
         const fetchData = async () => {
@@ -84,7 +104,8 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     
             setEvents(events);
         };
-    
+        
+        if(currentEngagement.getCurrentEngagement()?.infos?.rdv_jour) insererStore.setNext(true);
         fetchData();
         const date = new Date();
         setDate(date);
@@ -107,14 +128,6 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
         setDates(dates);
     }
 
-    const onSelectHour = (date: any) => {
-        console.log({ date })
-        if (date) {
-            currentEngagement.setRDV(date.dateStr.split('+')[0]);
-            onSelection();
-        }
-    }
-
     const customSlotLabelContent = (arg: any) => {
         const startHour = arg.date.getHours();
         const startMinute = arg.date.getMinutes();
@@ -125,7 +138,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
      
         const {prix,id_technicien} = selectInfo.event._def.extendedProps
         const date: any = format(selectInfo.event._instance.range.start, 'yyyy-MM-dd HH:mm:ss')
-        if (selectedStart === null) {
+        if (prix) {
             setSelectedStart(date);
             currentEngagement.setRDV(date);
             currentEngagement.setInfos({prix,id_technicien})
@@ -152,11 +165,10 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                 locale={'fr'}
                 editable={true}
                 selectAllow={(selectInfo) => {
-                    // Assurez-vous que la sélection commence et se termine à des moments valides ici
-                    return true; // ou false en fonction de votre logique
+                    return true; 
                 }}
                 // dateClick={handleDateSelect}
-                selectable={true}
+                // selectable={true}
                 eventClick={handleDateSelect}
                 // select={handleDateSelect}
                 //selectLongPressDelay={500}

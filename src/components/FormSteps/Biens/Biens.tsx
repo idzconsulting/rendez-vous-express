@@ -6,7 +6,7 @@ import Form from 'antd/es/form';
 import { MaskedInput } from 'antd-mask-input';
 import StepCard from '../StepCard/StepCard';
 import { IEngagementType } from '../../../types/interfaces';
-import { currentEngagement, screenStore } from '../../../stores';
+import { currentEngagement, insererStore, screenStore } from '../../../stores';
 import { Input, Radio } from 'antd';
 import { DisponibiliteFetcher } from '../../../fetchers/role-fetchers/DisponibiliteFetcher';
 
@@ -20,8 +20,8 @@ const Biens = ({ onSelection, refs }: IProjectProps) => {
     const [isChauffageCollectif, setIsChauffageCollectif] = useState<boolean | undefined>();
     useEffect(() => {
         const bien = currentEngagement.getProperty(Refs.BIEN);
+        if(bien) insererStore.setNext(true);
         if(bien?.nom === 'Appartement') setHasAppart(true)
-        const test = DisponibiliteFetcher.getTechInNearDistance(currentEngagement.getInfos()?.bien_code_postal)
     }, []);
 
     const onOptionChanged = (e: any) => {

@@ -3,7 +3,7 @@ import { IOnSelection } from '../../../types/IOnSelection';
 import Form from 'antd/es/form';
 import { Button, Input, Radio } from 'antd';
 import { useEffect, useState } from 'react';
-import { currentEngagement, screenStore } from '../../../stores';
+import { currentEngagement, insererStore, screenStore } from '../../../stores';
 import { PartnersFetcher } from '../../../fetchers/role-fetchers/PartnersFetcher';
 
 interface IInfosProps extends IOnSelection {
@@ -34,6 +34,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
         formAgentImmo.setFieldsValue(infos);
         formLocataire.setFieldsValue(infos);
         formAutreSurPlace.setFieldsValue(infos)
+        insererStore.setNext(true);
     }, []);
 
 
@@ -43,7 +44,6 @@ const Partner = ({ onSelection }: IInfosProps) => {
 
     const finishForm = async () => {
         const nom = formAgentImmo.getFieldValue('nom')
-        console.log({nom})
         const tel = formAgentImmo.getFieldValue('tel')
         const mail = formAgentImmo.getFieldValue('mail')
         const agence = formAgentImmo.getFieldValue('agence')

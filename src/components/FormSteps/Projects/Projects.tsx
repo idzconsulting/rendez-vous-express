@@ -6,7 +6,7 @@ import Form from 'antd/es/form';
 import { MaskedInput } from 'antd-mask-input';
 import StepCard from '../StepCard/StepCard';
 import { IEngagementType } from '../../../types/interfaces';
-import { currentEngagement } from '../../../stores';
+import { currentEngagement, insererStore } from '../../../stores';
 import { Input } from 'antd';
 import { InsererFetcher } from '../../../fetchers/role-fetchers/InsererFetcher';
 
@@ -20,7 +20,9 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();
+        if(infos) insererStore.setNext(true);
         form.setFieldsValue(infos);
+
     }, []);
 
     const saveForm = (values: any) => {

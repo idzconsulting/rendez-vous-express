@@ -4,7 +4,7 @@ import {Button} from 'antd';
 import {labelsMap} from '../../../types/Labels';
 import styles from './Choices.module.less';
 import {useEffect, useLayoutEffect, useState} from 'react';
-import {currentEngagement, screenStore} from '../../../stores';
+import {currentEngagement, insererStore, screenStore} from '../../../stores';
 import StepCard from '../StepCard/StepCard';
 import {IOnSelection} from '../../../types/IOnSelection';
 import {observer} from 'mobx-react';
@@ -22,6 +22,7 @@ const Choices = observer(({title, type, onSelection,refs = []}: IChoicesProps) =
 
     useEffect(() => {
         const selectedOption: any = currentEngagement.getProperty(type);
+        if(selectedOption) insererStore.setNext(true);
         setSelectedOption(selectedOption);
     }, [title, type,refs]);
 

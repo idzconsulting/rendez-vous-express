@@ -1,5 +1,5 @@
 import StepCard from '../StepCard/StepCard';
-import { currentEngagement } from '../../../stores';
+import { currentEngagement, insererStore } from '../../../stores';
 import { Button, Divider } from 'antd';
 import { useEffect, useState } from 'react';
 import styles from './Price.module.less';
@@ -28,6 +28,7 @@ const Price = ({ onSelection }: IPrice) => {
 
     useEffect(() => {
         const fetchData = async () => {
+            if(currentEngagement.getInfos()?.prix) insererStore.setNext(true);
             setEngagement(currentEngagement.getCurrentEngagement());
             // const priceOfMission = await getPrice();
             // setPrice(priceOfMission)
