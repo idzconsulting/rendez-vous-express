@@ -1,6 +1,6 @@
 import { IOnSelection } from '../../../types/IOnSelection';
 import StepCard from '../StepCard/StepCard';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './WeekCalendar.module.less';
 import { addMinutes, format } from 'date-fns';
 import { currentEngagement, insererStore } from '../../../stores';
@@ -19,12 +19,6 @@ interface ILabeledDate {
     label: string;
 }
 
-enum IHours {
-    '9-11' = '09h - 11h',
-    '11-13' = '11h - 13h',
-    '13-15' = '13h - 15h',
-    '15-17' = '15h - 17h'
-}
 
 const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     const [date, setDate] = useState<Date>();
@@ -33,8 +27,32 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     const [selectedStart, setSelectedStart] = useState(null);
     const options: any = { weekday: 'long', month: 'numeric', day: 'numeric' };
 
-    const getRdvIdeal = async (cp: any, diagnostics: any,type_surface_id:string) => {
-        return RdvFetcher.getRdvIdeal(cp, diagnostics,type_surface_id);
+
+    const getRdvIdeal = async (cp: string, diagnostics: string[], type_surface_id: string) => {
+        const localStorageKey = "rdv_ideal";
+
+        const cachedData = localStorage.getItem(localStorageKey);
+        if (cachedData) {
+            const parsedData = JSON.parse(cachedData);
+            if (
+                parsedData.cp === cp &&
+                JSON.stringify(parsedData.diagnostics) === JSON.stringify(diagnostics) &&
+                parsedData.type_surface_id === type_surface_id
+            ) {
+                return parsedData.data ;
+            }
+        }
+
+        const response: any = await RdvFetcher.getRdvIdeal(cp, diagnostics, type_surface_id);
+        const newData = {
+            cp,
+            diagnostics,
+            type_surface_id,
+            data: response.data
+        };
+        localStorage.setItem(localStorageKey, JSON.stringify(newData));
+        console.log(newData.data)
+        return newData.data;
     }
 
     const getIdTechAndPrix = (info: string) => {
@@ -46,23 +64,15 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
         return { id_technicien, prix };
     }
 
-    function minimumPrice(prixArray:number[]) {
-        if (prixArray.length === 0) {
-            return null;
-        }
-        return Math.min(...prixArray);
-    }
-
-
     const filterUniqueEvents = (missions: any[]) => {
         const uniqueEvents: { [key: string]: any } = {};
         let prixMinimum = Number.POSITIVE_INFINITY;
-    
+
         missions.forEach((item: any) => {
             const { id_technicien, prix } = getIdTechAndPrix(item.technicien_distance);
             const creneau = item.creneau;
             const existingEvent = uniqueEvents[creneau];
-    
+
             if (!existingEvent || parseFloat(prix) < parseFloat(getIdTechAndPrix(existingEvent.technicien_distance).prix)) {
                 uniqueEvents[creneau] = {
                     title: prix + '€',
@@ -73,45 +83,43 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                         prix
                     },
                     technicien_distance: item.technicien_distance,
-                    backgroundColor: 'orange',
+                    backgroundColor: 'blue'
                 };
-    
+
                 prixMinimum = Math.min(prixMinimum, parseFloat(prix));
             }
         });
-    
+
         Object.values(uniqueEvents).forEach((event: any) => {
             if (parseFloat(event.extendedProps.prix) === prixMinimum) {
-                event.backgroundColor = 'green';
+                event.backgroundColor = 'orange';
             }
         });
-    
-        console.log("Le prix minimum parmi les événements est :", prixMinimum);
-    
+
         return Object.values(uniqueEvents);
     };
-    
-    
-    
+
+
+
     useEffect(() => {
         const fetchData = async () => {
-            const diagnostics = currentEngagement.getCurrentEngagement().diagnostics?.map(({ id }) => id);
-            const cp = currentEngagement.getInfos()?.bien_code_postal;
-            const type_surface_id = currentEngagement.getCurrentMission()?.type_surface_id;
-            const response: any = await getRdvIdeal(cp, diagnostics,type_surface_id);
-    
-            const events = filterUniqueEvents(response.data.missions || []);
-    
+            const diagnostics = currentEngagement.getCurrentEngagement().diagnostics?.map(({ id }) => id) || [];
+            const cp = currentEngagement.getInfos()?.bien_code_postal || '';
+            const type_surface_id = currentEngagement.getCurrentMission()?.type_surface_id || '';
+            const response: any = await getRdvIdeal(cp, diagnostics, type_surface_id);
+
+            const events = filterUniqueEvents(response.missions || []);
+
             setEvents(events);
         };
-        
-        if(currentEngagement.getCurrentEngagement()?.infos?.rdv_jour) insererStore.setNext(true);
+
+        if (currentEngagement.getCurrentEngagement()?.infos?.rdv_jour) insererStore.setNext(true);
         fetchData();
         const date = new Date();
         setDate(date);
         initDates();
     }, []);
-    
+
 
     const initDates = () => {
         let date = new Date();
@@ -135,13 +143,13 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     };
 
     const handleDateSelect = (selectInfo: any) => {
-     
-        const {prix,id_technicien} = selectInfo.event._def.extendedProps
+
+        const { prix, id_technicien } = selectInfo.event._def.extendedProps
         const date: any = format(selectInfo.event._instance.range.start, 'yyyy-MM-dd HH:mm:ss')
         if (prix) {
             setSelectedStart(date);
             currentEngagement.setRDV(date);
-            currentEngagement.setInfos({prix,id_technicien})
+            currentEngagement.setInfos({ prix, id_technicien })
             onSelection();
         }
     };
@@ -165,7 +173,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                 locale={'fr'}
                 editable={true}
                 selectAllow={(selectInfo) => {
-                    return true; 
+                    return true;
                 }}
                 // dateClick={handleDateSelect}
                 // selectable={true}
@@ -185,7 +193,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                             top: '45px',
                             fontSize: 'large'
                         }}>{event.title}</div>
-            </>
+                    </>
                 )}
             />
         </div>
