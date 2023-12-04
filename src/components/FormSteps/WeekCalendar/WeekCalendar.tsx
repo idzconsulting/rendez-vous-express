@@ -51,7 +51,6 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
             data: response.data
         };
         localStorage.setItem(localStorageKey, JSON.stringify(newData));
-        console.log(newData.data)
         return newData.data;
     }
 

@@ -42,13 +42,13 @@ const App = observer(() => {
     const setNextStep = async () => {
 
         (currentStep + 1 < steps.length) && setStep(currentStep + 1, undefined);
-        // if (currentStep === 9) {
-        //     await EnregistrerFetcher.enregistrer(currentEngagement.getCurrentMission());  
-        // }
-        // else{
-        //     const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
-        //     if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
-        // }   
+        if (currentStep === 9) {
+            await EnregistrerFetcher.enregistrer(currentEngagement.getCurrentMission());  
+        }
+        else{
+            const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
+            if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
+        }   
         insererStore.setNext(false);
 
     }
