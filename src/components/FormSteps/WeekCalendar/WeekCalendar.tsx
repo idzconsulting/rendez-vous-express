@@ -65,13 +65,14 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
 
     const filterUniqueEvents = (missions: any[]) => {
         const uniqueEvents: { [key: string]: any } = {};
-        let prixMinimum = Number.POSITIVE_INFINITY;
-
+        let overallMinPrice = Number.POSITIVE_INFINITY;
+        let eventWithMinPrice: any = null;
+    
         missions.forEach((item: any) => {
             const { id_technicien, prix } = getIdTechAndPrix(item.technicien_distance);
             const creneau = item.creneau;
             const existingEvent = uniqueEvents[creneau];
-
+    
             if (!existingEvent || parseFloat(prix) < parseFloat(getIdTechAndPrix(existingEvent.technicien_distance).prix)) {
                 uniqueEvents[creneau] = {
                     title: prix + '€',
@@ -84,19 +85,24 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                     technicien_distance: item.technicien_distance,
                     backgroundColor: 'blue'
                 };
+    
+                if (parseFloat(prix) < overallMinPrice) {
+                    overallMinPrice = parseFloat(prix);
+                    eventWithMinPrice = uniqueEvents[creneau];
+                } else if (parseFloat(prix) === overallMinPrice) {
 
-                prixMinimum = Math.min(prixMinimum, parseFloat(prix));
+                    uniqueEvents[creneau].backgroundColor = 'blue';
+                }
             }
         });
-
-        Object.values(uniqueEvents).forEach((event: any) => {
-            if (parseFloat(event.extendedProps.prix) === prixMinimum) {
-                event.backgroundColor = 'orange';
-            }
-        });
-
+    
+        if (eventWithMinPrice) {
+            eventWithMinPrice.backgroundColor = 'orange';
+        }
+    
         return Object.values(uniqueEvents);
     };
+    
 
 
 
