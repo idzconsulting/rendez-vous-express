@@ -35,12 +35,17 @@ const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => 
     useEffect(() => {
 
         const fetchData = async () => {
-            const diagsObliagtoires = await getDiagsObligatoires();
-            currentEngagement.setDiagnostics([...diagsObliagtoires] as Diagnostiques[]);
 
-            const savedDiagnostics = currentEngagement.getDiagnostics();
-            if(savedDiagnostics) insererStore.setNext(true);
-           
+
+            let savedDiagnostics = currentEngagement.getDiagnostics();
+            if (savedDiagnostics) {
+                insererStore.setNext(true);
+            } else {
+                const diagsObliagtoires = await getDiagsObligatoires();
+                currentEngagement.setDiagnostics([...diagsObliagtoires] as Diagnostiques[]);
+                savedDiagnostics = currentEngagement.getDiagnostics()
+            }
+
             setSelectedDiagnostics(savedDiagnostics || []);
         };
 
@@ -74,7 +79,7 @@ const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => 
             <Form
                 form={form}
                 name="basic"
-             
+
                 initialValues={{ remember: true }}
                 autoComplete="off"
                 onValuesChange={saveForm}

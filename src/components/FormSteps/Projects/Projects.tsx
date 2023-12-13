@@ -20,7 +20,10 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();
-        if(infos) insererStore.setNext(true);
+        if(infos) {
+            insererStore.setNext(true);
+            setShowChoices(true)
+        }
         form.setFieldsValue(infos);
 
     }, []);

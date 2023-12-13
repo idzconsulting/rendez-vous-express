@@ -22,7 +22,6 @@ import { EnregistrerFetcher } from '../../fetchers/role-fetchers/EnregistrerFetc
 import Biens from '../FormSteps/Biens/Biens';
 import Price from '../FormSteps/Price/Price';
 import Partner from '../FormSteps/Partner/Partner';
-import CodePromo from '../FormSteps/CodePromo/CodePromo';
 
 const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);

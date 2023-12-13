@@ -21,9 +21,9 @@ interface ILabeledDate {
 
 
 const Calendar = ({ onSelection }: IWeekCalendarProps) => {
-    const [date, setDate] = useState<Date>();
     const [event, setEvents] = useState<any>([]);
     const [dates, setDates] = useState<ILabeledDate[]>();
+    const [initDate, setInitDate] = useState<Date>();
     const [selectedStart, setSelectedStart] = useState(null);
     const options: any = { weekday: 'long', month: 'numeric', day: 'numeric' };
 
@@ -83,27 +83,28 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                         prix
                     },
                     technicien_distance: item.technicien_distance,
-                    backgroundColor: 'blue'
+                    textColor: 'blue',
+                    backgroundColor:'transparent'
                 };
     
                 if (parseFloat(prix) < overallMinPrice) {
                     overallMinPrice = parseFloat(prix);
                     eventWithMinPrice = uniqueEvents[creneau];
                 } else if (parseFloat(prix) === overallMinPrice) {
-
-                    uniqueEvents[creneau].backgroundColor = 'blue';
+                    uniqueEvents[creneau].backgroundColor = 'transparent';
+                    uniqueEvents[creneau].textColor = 'blue';
                 }
             }
         });
     
         if (eventWithMinPrice) {
-            eventWithMinPrice.backgroundColor = 'orange';
+            eventWithMinPrice.textColor = 'orange';
+            eventWithMinPrice.backgroundColor = 'transparent';
         }
     
         return Object.values(uniqueEvents);
     };
     
-
 
 
     useEffect(() => {
@@ -114,32 +115,18 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
             const response: any = await getRdvIdeal(cp, diagnostics, type_surface_id);
 
             const events = filterUniqueEvents(response.missions || []);
-
+            console.log({events},events[0].start)
+            setInitDate(new Date(events[0].start))
             setEvents(events);
         };
 
         if (currentEngagement.getCurrentEngagement()?.infos?.rdv_jour) insererStore.setNext(true);
         fetchData();
-        const date = new Date();
-        setDate(date);
-        initDates();
+      
+      
     }, []);
 
 
-    const initDates = () => {
-        let date = new Date();
-        let dates: ILabeledDate[] = [];
-
-        for (let i = 0; i < 7; i++) {
-            let currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), i * 24);
-            dates.push({
-                date: currentDate,
-                label: currentDate.toLocaleDateString('fr-FR', options)
-            });
-        }
-
-        setDates(dates);
-    }
 
     const customSlotLabelContent = (arg: any) => {
         const startHour = arg.date.getHours();
@@ -161,7 +148,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
 
     return (
         <div className={screenStore.getIsMobile() ? styles.calendarMobile : styles.calendar}>
-            <FullCalendar
+           {initDate && <FullCalendar
                 plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
                 headerToolbar={{
                     right: "prev next",
@@ -176,6 +163,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                 slotMinWidth={200}
                 weekends={false}
                 locale={'fr'}
+                initialDate={initDate}
                 editable={true}
                 selectAllow={(selectInfo) => {
                     return true;
@@ -200,7 +188,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                         }}>{event.title}</div>
                     </>
                 )}
-            />
+            />}
         </div>
     );
 }

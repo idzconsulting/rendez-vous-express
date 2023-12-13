@@ -33,7 +33,6 @@ const Biens = ({ onSelection, refs }: IProjectProps) => {
 
     const checkSelectionBien = () => {
         const selectedOption: any = currentEngagement.getProperty(Refs.BIEN);
-        console.log('jo',selectedOption.nom)
         if(selectedOption.nom === 'Appartement') setHasAppart(true)
         else onSelection()
     }
@@ -51,7 +50,7 @@ const Biens = ({ onSelection, refs }: IProjectProps) => {
                 {hasAppart
                     ? <StepCard title='Votre chauffage est collectif ?'>
                         <Radio.Group buttonStyle='solid' onChange={onOptionChanged}
-                            size={screenStore.getSize()}>
+                            size={screenStore.getSize()} value={currentEngagement.getInfos()?.chauffage_collectif}>
                             <Radio.Button value={false}>Non</Radio.Button>
                             <Radio.Button value={true}>Oui</Radio.Button>
                         </Radio.Group>

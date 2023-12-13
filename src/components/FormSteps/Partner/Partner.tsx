@@ -5,6 +5,7 @@ import { Button, Input, Radio } from 'antd';
 import { useEffect, useState } from 'react';
 import { currentEngagement, insererStore, screenStore } from '../../../stores';
 import { PartnersFetcher } from '../../../fetchers/role-fetchers/PartnersFetcher';
+import { observer } from 'mobx-react';
 
 interface IInfosProps extends IOnSelection {
 }
@@ -35,6 +36,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
         formLocataire.setFieldsValue(infos);
         formAutreSurPlace.setFieldsValue(infos)
         insererStore.setNext(true);
+        if(infos?.envoi_rapport_agent ||  infos?.envoi_rapport_notaire)  setEnvoiRapportPartner(true)
     }, []);
 
 
@@ -49,7 +51,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
         const agence = formAgentImmo.getFieldValue('agence')
         const type_partenaire = currentEngagement.getInfos()?.envoi_rapport_agent ? 1 : 2;
 
-        if(nom != undefined && mail != undefined){
+        if (nom != undefined && mail != undefined) {
             const agent = {
                 nom,
                 mail,
@@ -57,10 +59,10 @@ const Partner = ({ onSelection }: IInfosProps) => {
                 agence,
                 type_partenaire
             }
-    
+
             await PartnersFetcher.addPartner(agent);
         }
-      
+
         onSelection()
     }
 
@@ -81,14 +83,13 @@ const Partner = ({ onSelection }: IInfosProps) => {
 
     const onOptionChangedSurPlace = (e: any) => {
         const value: string = e.target.value;
+        currentEngagement.setInfos({ sur_place: value })
         if (value === SurPlace.Autre) {
             setAutreSurPlace(true)
-            currentEngagement.setInfos({ autre_sur_place: true })
-            currentEngagement.setInfos({ sur_place: '' })
+            currentEngagement.setInfos({ autre_sur_place: true, sur_place: '' })
         } else {
             setAutreSurPlace(false)
-            currentEngagement.setInfos({ autre_sur_place: false })
-            currentEngagement.setInfos({ sur_place: value })
+            currentEngagement.setInfos({ autre_sur_place: false,sur_place: value })
         }
         if (value === SurPlace.Locataire) {
             setlocataireSurPlace(true)
@@ -101,12 +102,12 @@ const Partner = ({ onSelection }: IInfosProps) => {
         const value: string = e.target.value;
         if (value === Partenaire.Agent) {
             setEnvoiRapportPartner(true)
-            currentEngagement.setInfos({ envoi_rapport_agent: true })
-        } 
+            currentEngagement.setInfos({ envoi_rapport_agent: true,envoi_rapport_notaire: false })
+        }
         if (value === Partenaire.Notaire) {
             setEnvoiRapportPartner(true)
-            currentEngagement.setInfos({ envoi_rapport_notaire: true })
-        } 
+            currentEngagement.setInfos({ envoi_rapport_notaire: true,envoi_rapport_agent:false })
+        }
     }
 
     return (
@@ -115,12 +116,12 @@ const Partner = ({ onSelection }: IInfosProps) => {
                 <div>Vous pouvez choisir d'envoyer directement les rapports de diagnostics à votre agent immobilier ou à votre notaire</div>
                 <br></br>
                 <Radio.Group buttonStyle='solid' onChange={onOptionChangedRapports}
-                    size={screenStore.getSize()}>
+                    size={screenStore.getSize()} value={currentEngagement.getInfos()?.envoi_rapport_agent ? Partenaire.Agent : currentEngagement.getInfos()?.envoi_rapport_notaire ? Partenaire.Notaire : undefined} >
                     <Radio.Button value={Partenaire.Agent}>Envoyer à mon agent immobilier</Radio.Button>
                     <Radio.Button value={Partenaire.Notaire}>Envoyer à mon notaire</Radio.Button>
                 </Radio.Group>
                 <br></br><br></br>
-                { EnvoiRapportPartner && <Form
+                {EnvoiRapportPartner && <Form
                     form={formAgentImmo}
                     name="basic"
                     labelCol={{ span: 9 }}
@@ -163,7 +164,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
             <br></br>
             <StepCard title='Qui sera sur place ? '>
                 <Radio.Group buttonStyle='solid' onChange={onOptionChangedSurPlace}
-                    size={screenStore.getSize()}>
+                    size={screenStore.getSize()} value={currentEngagement.getInfos()?.sur_place}>
                     <Radio.Button value={SurPlace.Proprietaire}>Moi meme</Radio.Button>
                     <Radio.Button value={SurPlace.Locataire}>Locataire</Radio.Button>
                     <Radio.Button value={SurPlace.Agent}>Mon agent</Radio.Button>
@@ -232,7 +233,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
             <br></br>
             <StepCard title='Qui Facturer ? '>
                 <Radio.Group buttonStyle='solid' onChange={onOptionChangedFacturer}
-                    size={screenStore.getSize()}>
+                    size={screenStore.getSize()} value={currentEngagement.getInfos()?.agent_facturer}>
                     <Radio.Button value={false}>Moi meme</Radio.Button>
                     <Radio.Button value={true}>L'agence</Radio.Button>
                 </Radio.Group>
@@ -250,4 +251,4 @@ const Partner = ({ onSelection }: IInfosProps) => {
     )
 }
 
-export default Partner;
+export default observer(Partner);
