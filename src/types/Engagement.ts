@@ -88,4 +88,5 @@ export interface IInfos {
     sur_place?:string | undefined;
     envoi_rapport_agent?:boolean;
     envoi_rapport_notaire?:boolean;
+    tel?:string;
 }

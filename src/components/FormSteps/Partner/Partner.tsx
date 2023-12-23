@@ -1,11 +1,14 @@
 import StepCard from '../StepCard/StepCard';
 import { IOnSelection } from '../../../types/IOnSelection';
 import Form from 'antd/es/form';
-import { Button, Input, Radio } from 'antd';
+import { Button, Divider, Input, Radio } from 'antd';
 import { useEffect, useState } from 'react';
 import { currentEngagement, insererStore, screenStore } from '../../../stores';
 import { PartnersFetcher } from '../../../fetchers/role-fetchers/PartnersFetcher';
 import { observer } from 'mobx-react';
+import styles from './Partner.module.less';
+import { Engagement } from '../../../types/Engagement';
+import clsx from 'clsx';
 
 interface IInfosProps extends IOnSelection {
 }
@@ -29,16 +32,34 @@ const Partner = ({ onSelection }: IInfosProps) => {
     const [autreSurPlace, setAutreSurPlace] = useState<boolean>(false);
     const [EnvoiRapportPartner, setEnvoiRapportPartner] = useState<boolean>(false);
     const [locataireSurPlace, setlocataireSurPlace] = useState<boolean>(false);
+    const [engagement, setEngagement] = useState<Engagement>();
+    const [agentExist, setAgentExist] = useState<boolean>(false);
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();
+        getPartner(infos?.tel || "");
         formAgentImmo.setFieldsValue(infos);
         formLocataire.setFieldsValue(infos);
-        formAutreSurPlace.setFieldsValue(infos)
+        formAutreSurPlace.setFieldsValue(infos);
+        setEngagement(currentEngagement.getCurrentEngagement());
         insererStore.setNext(true);
-        if(infos?.envoi_rapport_agent ||  infos?.envoi_rapport_notaire)  setEnvoiRapportPartner(true)
+        if ((infos?.envoi_rapport_agent || infos?.envoi_rapport_notaire) || infos?.tel) {
+            setEnvoiRapportPartner(true);
+            if (infos?.tel) currentEngagement.setInfos({ envoi_rapport_agent: true })
+        }
     }, []);
 
+    const getPartner = async (value: string) => {
+        const { data } = await PartnersFetcher.getPartner({ telephone: value, type_partenaire: 1 });
+        const { nom, mail, tel } = data[0]
+
+        if (tel == value) {
+            setAgentExist(true)
+            formAgentImmo.setFieldValue('nom', nom)
+            formAgentImmo.setFieldValue('mail', mail)
+        }
+
+    }
 
     const saveForm = (values: any) => {
         currentEngagement.setInfos({ [values[0].name[0]]: values[0].value });
@@ -50,8 +71,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
         const mail = formAgentImmo.getFieldValue('mail')
         const agence = formAgentImmo.getFieldValue('agence')
         const type_partenaire = currentEngagement.getInfos()?.envoi_rapport_agent ? 1 : 2;
-
-        if (nom != undefined && mail != undefined) {
+        if (!agentExist) {
             const agent = {
                 nom,
                 mail,
@@ -69,10 +89,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
     const completeAgent = async (e: any) => {
         const value = e.target.value;
         if (value.length > 9) {
-            const { data } = await PartnersFetcher.getPartner({ telephone: value, type_partenaire: 1 });
-            const { nom, mail } = data[0]
-            formAgentImmo.setFieldValue('nom', nom)
-            formAgentImmo.setFieldValue('mail', mail)
+            getPartner(value)
         }
     }
 
@@ -89,7 +106,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
             currentEngagement.setInfos({ autre_sur_place: true, sur_place: '' })
         } else {
             setAutreSurPlace(false)
-            currentEngagement.setInfos({ autre_sur_place: false,sur_place: value })
+            currentEngagement.setInfos({ autre_sur_place: false, sur_place: value })
         }
         if (value === SurPlace.Locataire) {
             setlocataireSurPlace(true)
@@ -102,11 +119,11 @@ const Partner = ({ onSelection }: IInfosProps) => {
         const value: string = e.target.value;
         if (value === Partenaire.Agent) {
             setEnvoiRapportPartner(true)
-            currentEngagement.setInfos({ envoi_rapport_agent: true,envoi_rapport_notaire: false })
+            currentEngagement.setInfos({ envoi_rapport_agent: true, envoi_rapport_notaire: false })
         }
         if (value === Partenaire.Notaire) {
             setEnvoiRapportPartner(true)
-            currentEngagement.setInfos({ envoi_rapport_notaire: true,envoi_rapport_agent:false })
+            currentEngagement.setInfos({ envoi_rapport_notaire: true, envoi_rapport_agent: false })
         }
     }
 
@@ -124,9 +141,9 @@ const Partner = ({ onSelection }: IInfosProps) => {
                 {EnvoiRapportPartner && <Form
                     form={formAgentImmo}
                     name="basic"
-                    labelCol={{ span: 9 }}
-                    wrapperCol={{ span: 15 }}
-                    style={{ maxWidth: 700 }}
+                    labelCol={{ span: 3 }}
+                    wrapperCol={{ span: 12 }}
+                    style={{ maxWidth: 700, textAlignLast: "start" }}
                     initialValues={{ remember: true }}
                     autoComplete="off"
                     onFieldsChange={saveForm}
@@ -165,7 +182,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
             <StepCard title='Qui sera sur place ? '>
                 <Radio.Group buttonStyle='solid' onChange={onOptionChangedSurPlace}
                     size={screenStore.getSize()} value={currentEngagement.getInfos()?.sur_place}>
-                    <Radio.Button value={SurPlace.Proprietaire}>Moi meme</Radio.Button>
+                    <Radio.Button value={SurPlace.Proprietaire}>Propriétaire</Radio.Button>
                     <Radio.Button value={SurPlace.Locataire}>Locataire</Radio.Button>
                     <Radio.Button value={SurPlace.Agent}>Mon agent</Radio.Button>
                     <Radio.Button value={SurPlace.Autre}>Autre</Radio.Button>
@@ -175,9 +192,9 @@ const Partner = ({ onSelection }: IInfosProps) => {
                     <Form
                         form={formLocataire}
                         name="basic"
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 16 }}
-                        style={{ maxWidth: 700 }}
+                        labelCol={{ span: 3 }}
+                        wrapperCol={{ span: 12 }}
+                        style={{ maxWidth: 700, textAlignLast: "start" }}
                         initialValues={{ remember: true }}
                         autoComplete="off"
                         onFieldsChange={saveForm}
@@ -200,9 +217,9 @@ const Partner = ({ onSelection }: IInfosProps) => {
                     <Form
                         form={formAutreSurPlace}
                         name="basic"
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 16 }}
-                        style={{ maxWidth: 700 }}
+                        labelCol={{ span: 2 }}
+                        wrapperCol={{ span: 12 }}
+                        style={{ maxWidth: 700, textAlignLast: "start" }}
                         initialValues={{ remember: true }}
                         autoComplete="off"
                         onFieldsChange={saveForm}
@@ -234,10 +251,11 @@ const Partner = ({ onSelection }: IInfosProps) => {
             <StepCard title='Qui Facturer ? '>
                 <Radio.Group buttonStyle='solid' onChange={onOptionChangedFacturer}
                     size={screenStore.getSize()} value={currentEngagement.getInfos()?.agent_facturer}>
-                    <Radio.Button value={false}>Moi meme</Radio.Button>
+                    <Radio.Button value={false}>Propriétaire</Radio.Button>
                     <Radio.Button value={true}>L'agence</Radio.Button>
                 </Radio.Group>
             </StepCard>
+
             <br></br>
             <Form.Item >
                 <Button type="primary" size='large' onClick={finishForm}>
@@ -247,8 +265,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
                     Passer
                 </Button>
             </Form.Item>
-        </StepCard>
-    )
+        </StepCard>)
 }
 
 export default observer(Partner);

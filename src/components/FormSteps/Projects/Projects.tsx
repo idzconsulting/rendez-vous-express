@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Transaction, Refs } from '../../../types/Engagement';
 import { IOnSelection } from '../../../types/IOnSelection';
 import Form from 'antd/es/form';
-import { MaskedInput } from 'antd-mask-input';
+import styles from './Projects.module.less'
 import StepCard from '../StepCard/StepCard';
 import { IEngagementType } from '../../../types/interfaces';
 import { currentEngagement, insererStore } from '../../../stores';
@@ -20,7 +20,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();
-        if(infos) {
+        if (infos) {
             insererStore.setNext(true);
             setShowChoices(true)
         }
@@ -29,7 +29,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
     }, []);
 
     const saveForm = (values: any) => {
-        const { bien_code_postal, proprietaire_telephone} = form.getFieldsValue()
+        const { bien_code_postal, proprietaire_telephone } = form.getFieldsValue()
         const isCodePostalValid = bien_code_postal?.length > 4;
         const isTelephoneValid = proprietaire_telephone?.length > 9;
         const isFormValid = isCodePostalValid && isTelephoneValid;
@@ -81,9 +81,16 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Numéro de téléphone"
+                        label="Tél propriétaire"
                         name="proprietaire_telephone"
                         rules={[{ required: true, message: 'Veuillez entrez votre numéro de téléphone' }]}
+                    >
+                        <Input size='large' maxLength={10} onChange={checkValidNumber} />
+                    </Form.Item>
+                    <Form.Item
+                        label="Tél agent immobilier"
+                        name="tel"
+                        rules={[{ required: false, message: 'Veuillez entrez votre numéro de téléphone' }]}
                     >
                         <Input size='large' maxLength={10} onChange={checkValidNumber} />
                     </Form.Item>
