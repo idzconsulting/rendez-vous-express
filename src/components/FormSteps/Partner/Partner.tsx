@@ -89,7 +89,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
     const completeAgent = async (e: any) => {
         const value = e.target.value;
         if (value.length > 9) {
-            getPartner(value)
+            await getPartner(value)
         }
     }
 
