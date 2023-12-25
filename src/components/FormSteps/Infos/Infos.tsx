@@ -107,11 +107,11 @@ const Infos = ({ onSelection }: IInfosProps) => {
                     <Input style={{textTransform: 'capitalize'}} />
                 </Form.Item> */}
 
-                <Form.Item className={styles.formButtons}>
-                    <Button type="primary" htmlType="submit">
+                
+                    <Button type="primary" className="button" htmlType="submit">
                         Valider
                     </Button>
-                </Form.Item>
+                
             </Form>
         </StepCard>
     )

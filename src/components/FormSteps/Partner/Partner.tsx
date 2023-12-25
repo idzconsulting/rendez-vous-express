@@ -257,14 +257,14 @@ const Partner = ({ onSelection }: IInfosProps) => {
             </StepCard>
 
             <br></br>
-            <Form.Item >
-                <Button type="primary" size='large' onClick={finishForm}>
-                    Valider
-                </Button>
-                <Button type="primary" size='large' onClick={finishForm} >
-                    Passer
-                </Button>
-            </Form.Item>
+            <div className={styles.formButtons}>
+            <Button type="primary" className='button' onClick={finishForm}>
+                Valider
+            </Button>
+            <Button type="primary" className='button' onClick={finishForm} >
+                Passer
+            </Button>
+            </div>
         </StepCard>)
 }
 

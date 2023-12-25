@@ -92,7 +92,7 @@ const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => 
                     <TextArea size='large' />
                 </Form.Item>
             </Form>
-            <Button disabled={!selectedDiagnostics.length} type='primary' style={{ width: 'fit-content' }} onClick={onSelection}>Valider</Button>
+            <Button disabled={!selectedDiagnostics.length} type='primary' className='button' onClick={onSelection}>Valider</Button>
         </div>
 
     </StepCard >;

@@ -116,7 +116,7 @@ const Price = ({ onSelection }: IPrice) => {
                 </div>
                 <br />
 
-                <Button type='primary' style={{ width: 'fit-content' }} onClick={onSelection}>Valider</Button>
+                <Button type='primary' className='button' onClick={onSelection}>Valider</Button>
             </StepCard>
            
         </div>
