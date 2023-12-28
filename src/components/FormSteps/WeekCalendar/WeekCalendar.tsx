@@ -10,6 +10,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from "@fullcalendar/interaction"
 import { RdvFetcher } from '../../../fetchers/role-fetchers/RdvFetcher';
+import LoadingSpinner from '../../Microcomponents/LoadingSpinner/LoadingSpinner';
 
 interface IWeekCalendarProps extends IOnSelection {
 }
@@ -26,6 +27,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     const [initDate, setInitDate] = useState<Date>();
     const [selectedStart, setSelectedStart] = useState(null);
     const options: any = { weekday: 'long', month: 'numeric', day: 'numeric' };
+    const [isLoading, setIsLoading] = useState(true);
 
 
     const getRdvIdeal = async (cp: string, diagnostics: string[], type_surface_id: string) => {
@@ -115,9 +117,9 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
             const response: any = await getRdvIdeal(cp, diagnostics, type_surface_id);
 
             const events = filterUniqueEvents(response.missions || []);
-            console.log({events},events[0].start)
             setInitDate(new Date(events[0].start))
             setEvents(events);
+            setIsLoading(false);
         };
 
         if (currentEngagement.getCurrentEngagement()?.infos?.rdv_jour) insererStore.setNext(true);
@@ -148,7 +150,9 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
 
     return (
         <div className={screenStore.getIsMobile() ? styles.calendarMobile : styles.calendar}>
-           {initDate && <FullCalendar
+           {isLoading ? <LoadingSpinner/> :
+           initDate &&
+             <FullCalendar
                 plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
                 headerToolbar={{
                     right: "prev next",

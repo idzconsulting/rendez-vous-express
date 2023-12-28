@@ -1,0 +1,20 @@
+.loading {
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* 100% de la hauteur de la fenêtre */
+    width: 100vw; /* 100% de la largeur de la fenêtre */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    overflow-x: hidden;
+    display: none; /* Caché par défaut */
+    backdrop-filter: blur(3px); /* Ajout d'un flou pour l'opacité */
+    background-color: rgba(0, 0, 0, 0.6); /* Opacité de 60% */
+}
+
+.center{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
