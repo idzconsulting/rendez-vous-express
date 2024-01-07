@@ -41,7 +41,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                 JSON.stringify(parsedData.diagnostics) === JSON.stringify(diagnostics) &&
                 parsedData.type_surface_id === type_surface_id
             ) {
-                return parsedData.data ;
+                return parsedData.data;
             }
         }
 
@@ -69,12 +69,12 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
         const uniqueEvents: { [key: string]: any } = {};
         let overallMinPrice = Number.POSITIVE_INFINITY;
         let eventWithMinPrice: any = null;
-    
+
         missions.forEach((item: any) => {
             const { id_technicien, prix } = getIdTechAndPrix(item.technicien_distance);
             const creneau = item.creneau;
             const existingEvent = uniqueEvents[creneau];
-    
+
             if (!existingEvent || parseFloat(prix) < parseFloat(getIdTechAndPrix(existingEvent.technicien_distance).prix)) {
                 uniqueEvents[creneau] = {
                     title: prix + '€',
@@ -86,9 +86,9 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                     },
                     technicien_distance: item.technicien_distance,
                     textColor: 'blue',
-                    backgroundColor:'transparent'
+                    backgroundColor: 'transparent'
                 };
-    
+
                 if (parseFloat(prix) < overallMinPrice) {
                     overallMinPrice = parseFloat(prix);
                     eventWithMinPrice = uniqueEvents[creneau];
@@ -98,15 +98,15 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
                 }
             }
         });
-    
+
         if (eventWithMinPrice) {
             eventWithMinPrice.textColor = 'orange';
             eventWithMinPrice.backgroundColor = 'transparent';
         }
-    
+
         return Object.values(uniqueEvents);
     };
-    
+
 
 
     useEffect(() => {
@@ -117,15 +117,15 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
             const response: any = await getRdvIdeal(cp, diagnostics, type_surface_id);
 
             const events = filterUniqueEvents(response.missions || []);
-            setInitDate(new Date(events[0].start))
+            setInitDate(events[0]?.start ? new Date(events[0].start) : new Date())
             setEvents(events);
             setIsLoading(false);
         };
 
         if (currentEngagement.getCurrentEngagement()?.infos?.rdv_jour) insererStore.setNext(true);
         fetchData();
-      
-      
+
+
     }, []);
 
 
@@ -136,7 +136,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
         return `${startHour}:${startMinute === 0 ? '00' : '30'}`;
     };
 
-    const handleDateSelect = (selectInfo: any) => {
+    const handleDateSelectEvent = (selectInfo: any) => {
 
         const { prix, id_technicien } = selectInfo.event._def.extendedProps
         const date: any = format(selectInfo.event._instance.range.start, 'yyyy-MM-dd HH:mm:ss')
@@ -148,51 +148,56 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
         }
     };
 
+    const handleDateSelect = (selectInfo: any) => {
+        const date: any = format(selectInfo?.date, 'yyyy-MM-dd HH:mm:ss');
+        setSelectedStart(date);
+        currentEngagement.setRDV(date);
+        onSelection();
+
+    };
+
     return (
         <div className={screenStore.getIsMobile() ? styles.calendarMobile : styles.calendar}>
-           {isLoading ? <LoadingSpinner/> :
-           initDate &&
-             <FullCalendar
-                plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
-                headerToolbar={{
-                    right: "prev next",
-                }}
-                allDaySlot={true}
-                height='100%'
-                slotLabelContent={customSlotLabelContent}
-                slotDuration={{ minute: 30 }}
-                slotLabelInterval={{ minute: 30 }}
-                slotMinTime={'08:00'} // Heure de début de la journée
-                slotMaxTime={'18:30'}
-                slotMinWidth={200}
-                weekends={false}
-                locale={'fr'}
-                initialDate={initDate}
-                editable={true}
-                selectAllow={(selectInfo) => {
-                    return true;
-                }}
-                // dateClick={handleDateSelect}
-                // selectable={true}
-                eventClick={handleDateSelect}
-                // select={handleDateSelect}
-                //selectLongPressDelay={500}
-                longPressDelay={200}
-                events={event}
-                eventContent={({ event }) => (
-                    <>
-                        <div style={{
-                            textAlign: 'center',
-                            fontWeight: 'bold',
-                            position: 'absolute',
-                            left: '5px',
-                            right: '5px',
-                            top: '45px',
-                            fontSize: 'large'
-                        }}>{event.title}</div>
-                    </>
-                )}
-            />}
+            {isLoading ? <LoadingSpinner /> :
+                initDate &&
+                <FullCalendar
+                    plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
+                    headerToolbar={{
+                        right: "prev next",
+                    }}
+                    allDaySlot={true}
+                    height='100%'
+                    slotLabelContent={customSlotLabelContent}
+                    slotDuration={{ minute: 30 }}
+                    slotLabelInterval={{ minute: 30 }}
+                    slotMinTime={'08:00'} // Heure de début de la journée
+                    slotMaxTime={'18:30'}
+                    slotMinWidth={200}
+                    weekends={false}
+                    locale={'fr'}
+                    initialDate={initDate}
+                    editable={true}
+                    selectAllow={(selectInfo) => {
+                        return true;
+                    }}
+                    eventClick={handleDateSelectEvent}
+                    dateClick={handleDateSelect}
+                    longPressDelay={200}
+                    events={event}
+                    eventContent={({ event }) => (
+                        <>
+                            <div style={{
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                                position: 'absolute',
+                                left: '5px',
+                                right: '5px',
+                                top: '45px',
+                                fontSize: 'large'
+                            }}>{event.title}</div>
+                        </>
+                    )}
+                />}
         </div>
     );
 }

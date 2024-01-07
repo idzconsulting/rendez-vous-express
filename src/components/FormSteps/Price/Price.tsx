@@ -6,9 +6,9 @@ import styles from './Price.module.less';
 import { Engagement } from '../../../types/Engagement';
 import clsx from 'clsx';
 import { IOnSelection } from '../../../types/IOnSelection';
-import { DiagnoscticsFetcher } from '../../../fetchers/role-fetchers/DiagnosticsFetcher';
-import WhatsApp from '../../Whatsapp/Share';
+
 import Share from '../../Whatsapp/Share';
+import { format } from 'date-fns';
 
 
 interface IPrice extends IOnSelection {
@@ -45,7 +45,7 @@ const Price = ({ onSelection }: IPrice) => {
             <br></br>
             <StepCard title='Récapitulatif'>
                 <div ref={(ref) => ref && setHtmlToShare(ref.innerHTML)} >
-                    <div className={styles.title}>Price: {engagement?.infos?.prix}€</div>
+                    <div className={styles.title}>Price: {engagement?.infos?.prix ? engagement?.infos?.prix + '€' : ''}</div>
                     
                     <Divider />
 
@@ -85,6 +85,11 @@ const Price = ({ onSelection }: IPrice) => {
                                     </div>
                                 ))}
                             </div>
+                        </div>
+
+                        <div className={styles.row}>
+                            <div className={styles.title}>Rendez-vous</div>
+                            <div>{engagement?.infos?.rdv_jour ? format(new Date(engagement?.infos?.rdv_jour), 'dd/MM/yyyy HH:mm') : ''}</div>
                         </div>
 
                         <div className={styles.row}>

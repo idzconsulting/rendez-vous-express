@@ -71,7 +71,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
         const mail = formAgentImmo.getFieldValue('mail')
         const agence = formAgentImmo.getFieldValue('agence')
         const type_partenaire = currentEngagement.getInfos()?.envoi_rapport_agent ? 1 : 2;
-        if (!agentExist) {
+        if (!agentExist && nom != undefined && mail != undefined) {
             const agent = {
                 nom,
                 mail,
@@ -261,7 +261,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
             <Button type="primary" className='button' onClick={finishForm}>
                 Valider
             </Button>
-            <Button type="primary" className='button' onClick={finishForm} >
+            <Button type="primary" className='button' onClick={onSelection} >
                 Passer
             </Button>
             </div>
