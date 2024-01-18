@@ -51,13 +51,16 @@ const Partner = ({ onSelection }: IInfosProps) => {
 
     const getPartner = async (value: string) => {
         const { data } = await PartnersFetcher.getPartner({ telephone: value, type_partenaire: 1 });
-        const { nom, mail, tel } = data[0]
+        if (data.length > 0) {
+            const { nom,prenom, mail, tel } = data[0]
 
-        if (tel == value) {
-            setAgentExist(true)
-            formAgentImmo.setFieldValue('nom', nom)
-            formAgentImmo.setFieldValue('mail', mail)
+            if (tel) {
+                setAgentExist(true)
+                formAgentImmo.setFieldValue('nom', nom + '' + prenom)
+                formAgentImmo.setFieldValue('mail', mail)
+            }
         }
+
 
     }
 
@@ -258,12 +261,12 @@ const Partner = ({ onSelection }: IInfosProps) => {
 
             <br></br>
             <div className={styles.formButtons}>
-            <Button type="primary" className='button' onClick={finishForm}>
-                Valider
-            </Button>
-            <Button type="primary" className='button' onClick={onSelection} >
-                Passer
-            </Button>
+                <Button type="primary" className='button' onClick={finishForm}>
+                    Valider
+                </Button>
+                <Button type="primary" className='button' onClick={onSelection} >
+                    Passer
+                </Button>
             </div>
         </StepCard>)
 }
