@@ -89,4 +89,6 @@ export interface IInfos {
     envoi_rapport_agent?:boolean;
     envoi_rapport_notaire?:boolean;
     tel?:string;
+    id_agent?: number;
+    nom_agent?:string;
 }

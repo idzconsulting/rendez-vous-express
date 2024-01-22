@@ -87,13 +87,13 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                     >
                         <Input size='large' maxLength={10} onChange={checkValidNumber} />
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                         label="Tél agent immobilier"
                         name="tel"
                         rules={[{ required: false, message: 'Veuillez entrez votre numéro de téléphone' }]}
                     >
                         <Input size='large' maxLength={10} onChange={checkValidNumber} />
-                    </Form.Item>
+                    </Form.Item> */}
                 </Form>
 
                 {showChoices && <Choices type={Refs.TRANSACTION} refs={refs} title='' onSelection={onSelection} />}

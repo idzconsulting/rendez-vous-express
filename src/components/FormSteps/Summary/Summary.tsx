@@ -107,6 +107,13 @@ const Summary = () => {
                                 <div className={styles.title}>Téléphone</div>
                                 <div>{engagement?.infos?.proprietaire_telephone}</div>
                             </div>
+
+                            {engagement?.infos?.nom_agent &&
+                                <div className={styles.row}>
+                                    <div className={styles.title}>Agent immobilier</div>
+                                    <div>{engagement?.infos?.nom_agent}</div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

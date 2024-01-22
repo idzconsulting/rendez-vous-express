@@ -8,7 +8,6 @@ import { PartnersFetcher } from '../../../fetchers/role-fetchers/PartnersFetcher
 import { observer } from 'mobx-react';
 import styles from './Partner.module.less';
 import { Engagement } from '../../../types/Engagement';
-import clsx from 'clsx';
 
 interface IInfosProps extends IOnSelection {
 }
@@ -34,10 +33,11 @@ const Partner = ({ onSelection }: IInfosProps) => {
     const [locataireSurPlace, setlocataireSurPlace] = useState<boolean>(false);
     const [engagement, setEngagement] = useState<Engagement>();
     const [agentExist, setAgentExist] = useState<boolean>(false);
+    const [idAgent, setIdAgent] = useState<number>()
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();
-        getPartner(infos?.tel || "");
+        getPartner(infos?.proprietaire_telephone || "");
         formAgentImmo.setFieldsValue(infos);
         formLocataire.setFieldsValue(infos);
         formAutreSurPlace.setFieldsValue(infos);
@@ -52,12 +52,16 @@ const Partner = ({ onSelection }: IInfosProps) => {
     const getPartner = async (value: string) => {
         const { data } = await PartnersFetcher.getPartner({ telephone: value, type_partenaire: 1 });
         if (data.length > 0) {
-            const { nom,prenom, mail, tel } = data[0]
+            const { nom, prenom, mail, id, cp, ste, tel } = data[0]
 
-            if (tel) {
+            if (id) {
                 setAgentExist(true)
-                formAgentImmo.setFieldValue('nom', nom + '' + prenom)
+                formAgentImmo.setFieldValue('nom', nom + ' ' + prenom)
                 formAgentImmo.setFieldValue('mail', mail)
+                formAgentImmo.setFieldValue('tel', tel)
+                formAgentImmo.setFieldValue('cp', cp)
+                formAgentImmo.setFieldValue('agence', ste)
+                setIdAgent(id)
             }
         }
 
@@ -73,6 +77,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
         const tel = formAgentImmo.getFieldValue('tel')
         const mail = formAgentImmo.getFieldValue('mail')
         const agence = formAgentImmo.getFieldValue('agence')
+        const cp = formAgentImmo.getFieldValue('cp')
         const type_partenaire = currentEngagement.getInfos()?.envoi_rapport_agent ? 1 : 2;
         if (!agentExist && nom != undefined && mail != undefined) {
             const agent = {
@@ -80,12 +85,18 @@ const Partner = ({ onSelection }: IInfosProps) => {
                 mail,
                 tel,
                 agence,
+                cp,
                 type_partenaire
             }
 
-            await PartnersFetcher.addPartner(agent);
+            const { data } = await PartnersFetcher.addPartner(agent);
+            console.log({ data })
+            currentEngagement.setInfos({ id_agent: data.id, nom_agent: nom })
         }
 
+        if (idAgent && nom != undefined && mail != undefined) {
+            currentEngagement.setInfos({ id_agent: idAgent, nom_agent: nom })
+        }
         onSelection()
     }
 
@@ -162,6 +173,13 @@ const Partner = ({ onSelection }: IInfosProps) => {
                     <Form.Item
                         label="Nom"
                         name="nom"
+                    >
+                        <Input size='large' style={{ textTransform: 'capitalize' }} />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="CP:"
+                        name="cp"
                     >
                         <Input size='large' style={{ textTransform: 'capitalize' }} />
                     </Form.Item>
@@ -262,10 +280,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
             <br></br>
             <div className={styles.formButtons}>
                 <Button type="primary" className='button' onClick={finishForm}>
-                    Valider
-                </Button>
-                <Button type="primary" className='button' onClick={onSelection} >
-                    Passer
+                    Continuer
                 </Button>
             </div>
         </StepCard>)
