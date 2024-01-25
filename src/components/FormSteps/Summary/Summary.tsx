@@ -6,6 +6,7 @@ import styles from './Summary.module.less';
 import { Engagement } from '../../../types/Engagement';
 import clsx from 'clsx';
 import { labelsMap } from '../../../types/Labels';
+import { SurPlace } from '../Partner/Partner';
 
 const Infos = ({ key, value }: any) => {
     return (
@@ -112,6 +113,43 @@ const Summary = () => {
                                 <div className={styles.row}>
                                     <div className={styles.title}>Agent immobilier</div>
                                     <div>{engagement?.infos?.nom_agent}</div>
+                                </div>
+                            }
+                            
+                            {engagement?.infos?.sur_place && !engagement?.infos?.autre_sur_place &&
+                                <div className={styles.row}>
+                                    <div className={styles.title}>Qui sera sur place</div>
+                                    <div>{engagement?.infos?.sur_place}</div>
+                                </div>
+                            }
+                            {engagement?.infos?.nom_sur_place && engagement?.infos?.autre_sur_place &&
+                                <div className={styles.row}>
+                                    <div className={styles.title}>Nom de la personne sur place</div>
+                                    <div>{engagement?.infos?.nom_sur_place}</div>
+                                </div>
+                            }
+                            {engagement?.infos?.tel_sur_place && engagement?.infos?.autre_sur_place &&
+                                <div className={styles.row}>
+                                    <div className={styles.title}>Tel de la personne sur place</div>
+                                    <div>{engagement?.infos?.tel_sur_place}</div>
+                                </div>
+                            }
+                            {engagement?.infos?.mail_sur_place && engagement?.infos?.autre_sur_place &&
+                                <div className={styles.row}>
+                                    <div className={styles.title}>Email de la personne sur place</div>
+                                    <div>{engagement?.infos?.mail_sur_place}</div>
+                                </div>
+                            }
+                            {engagement?.infos?.locataire && engagement?.infos?.sur_place === SurPlace.Locataire &&
+                                <div className={styles.row}>
+                                    <div className={styles.title}>Locataire</div>
+                                    <div>{engagement?.infos?.locataire}</div>
+                                </div>
+                            }
+                            {engagement?.infos?.telLocataire && engagement?.infos?.sur_place === SurPlace.Locataire &&
+                                <div className={styles.row}>
+                                    <div className={styles.title}> Tel Locataire</div>
+                                    <div>{engagement?.infos?.telLocataire}</div>
                                 </div>
                             }
                         </div>

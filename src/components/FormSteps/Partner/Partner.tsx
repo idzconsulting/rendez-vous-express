@@ -12,7 +12,7 @@ import { Engagement } from '../../../types/Engagement';
 interface IInfosProps extends IOnSelection {
 }
 
-enum SurPlace {
+export enum SurPlace {
     Locataire = 'Locataire',
     Agent = 'Agent',
     Proprietaire = 'Proprietaire',
@@ -46,6 +46,12 @@ const Partner = ({ onSelection }: IInfosProps) => {
         if ((infos?.envoi_rapport_agent || infos?.envoi_rapport_notaire) || infos?.tel) {
             setEnvoiRapportPartner(true);
             if (infos?.tel) currentEngagement.setInfos({ envoi_rapport_agent: true })
+        }
+        if (infos?.autre_sur_place) {
+            setAutreSurPlace(true);
+        }
+        if (infos?.sur_place == SurPlace.Locataire) {
+            setlocataireSurPlace(true);
         }
     }, []);
 
@@ -117,7 +123,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
         currentEngagement.setInfos({ sur_place: value })
         if (value === SurPlace.Autre) {
             setAutreSurPlace(true)
-            currentEngagement.setInfos({ autre_sur_place: true, sur_place: '' })
+            currentEngagement.setInfos({ autre_sur_place: true, sur_place: value })
         } else {
             setAutreSurPlace(false)
             currentEngagement.setInfos({ autre_sur_place: false, sur_place: value })
