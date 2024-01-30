@@ -8,7 +8,7 @@ import { PartnersFetcher } from '../../../fetchers/role-fetchers/PartnersFetcher
 import { observer } from 'mobx-react';
 import styles from './Partner.module.less';
 import { Engagement } from '../../../types/Engagement';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 interface IInfosProps extends IOnSelection {
 }
@@ -35,10 +35,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
     const [engagement, setEngagement] = useState<Engagement>();
     const [agentExist, setAgentExist] = useState<boolean>(false);
     const [idAgent, setIdAgent] = useState<number>()
-    const location = useLocation();
-
-    const queryParams = new URLSearchParams(location.search);
-    const id_agent = queryParams.get('id');
+    const { id_agent } = useParams();
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();
@@ -47,7 +44,7 @@ const Partner = ({ onSelection }: IInfosProps) => {
         setEngagement(currentEngagement.getCurrentEngagement());
         insererStore.setNext(true);
         if(id_agent){
-            getPartner(infos?.proprietaire_telephone || "");
+            
             formAgentImmo.setFieldsValue(infos);
             if ((infos?.envoi_rapport_agent || infos?.envoi_rapport_notaire) || infos?.tel) {
                 setEnvoiRapportPartner(true);
