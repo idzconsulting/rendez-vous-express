@@ -139,7 +139,10 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     const handleDateSelectEvent = (selectInfo: any) => {
 
         const { prix, id_technicien } = selectInfo.event._def.extendedProps
-        const date: any = format(selectInfo.event._instance.range.start, 'yyyy-MM-dd HH:mm:ss')
+        const startDate = selectInfo.event._instance.range.start;
+
+        const date: any = new Date(startDate.getTime()).toISOString().slice(0, 19).replace('T', ' ');
+
         if (prix) {
             setSelectedStart(date);
             currentEngagement.setRDV(date);

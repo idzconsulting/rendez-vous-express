@@ -7,6 +7,7 @@ import { Engagement } from '../../../types/Engagement';
 import clsx from 'clsx';
 import { labelsMap } from '../../../types/Labels';
 import { SurPlace } from '../Partner/Partner';
+import { format } from 'date-fns';
 
 const Infos = ({ key, value }: any) => {
     return (
@@ -84,7 +85,12 @@ const Summary = () => {
                             ))}
                         </div>
                     </div>
-
+                    
+                    {engagement?.infos?.rdv_jour && <div className={styles.row}>
+                            <div className={styles.title}>Rendez-vous</div>
+                            <div>{engagement?.infos?.rdv_jour ? format(new Date(engagement?.infos?.rdv_jour), 'dd/MM/yyyy HH:mm') : ''}</div>
+                        </div>}
+                        
                     <div className={styles.row}>
                         <div className={styles.title}>Coordonnées</div>
 

@@ -87,10 +87,10 @@ const Price = ({ onSelection }: IPrice) => {
                             </div>
                         </div>
 
-                        <div className={styles.row}>
+                        {engagement?.infos?.rdv_jour && <div className={styles.row}>
                             <div className={styles.title}>Rendez-vous</div>
                             <div>{engagement?.infos?.rdv_jour ? format(new Date(engagement?.infos?.rdv_jour), 'dd/MM/yyyy HH:mm') : ''}</div>
-                        </div>
+                        </div>}
 
                         <div className={styles.row}>
                             <div className={styles.title}>Coordonnées</div>
