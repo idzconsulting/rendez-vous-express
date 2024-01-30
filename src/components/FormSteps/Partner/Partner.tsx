@@ -8,7 +8,7 @@ import { PartnersFetcher } from '../../../fetchers/role-fetchers/PartnersFetcher
 import { observer } from 'mobx-react';
 import styles from './Partner.module.less';
 import { Engagement } from '../../../types/Engagement';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 interface IInfosProps extends IOnSelection {
 }
@@ -35,7 +35,10 @@ const Partner = ({ onSelection }: IInfosProps) => {
     const [engagement, setEngagement] = useState<Engagement>();
     const [agentExist, setAgentExist] = useState<boolean>(false);
     const [idAgent, setIdAgent] = useState<number>()
-    const { id_agent } = useParams();
+    const location = useLocation();
+
+    const queryParams = new URLSearchParams(location.search);
+    const id_agent = queryParams.get('id');
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();

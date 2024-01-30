@@ -6,7 +6,6 @@ const AppRouter = () => {
     return <Router>
         <Routes>
             <Route key='/' path='/' element={<App />} />
-            <Route key='/:id_agent' path='/:id_agent' element={<App />} />
             <Route key='*' path='*' element={<NotExistPage />} />
         </Routes>
     </Router>

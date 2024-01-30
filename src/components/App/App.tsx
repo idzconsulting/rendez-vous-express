@@ -22,18 +22,21 @@ import { EnregistrerFetcher } from '../../fetchers/role-fetchers/EnregistrerFetc
 import Biens from '../FormSteps/Biens/Biens';
 import Price from '../FormSteps/Price/Price';
 import Partner from '../FormSteps/Partner/Partner';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const App = observer(() => {
     const [currentStep, setCurrentStep] = useState(0);
     const isMobile = screenStore.getIsMobile();
     const TIME_BEFORE_SKIPPING_NEXT_PAGE: number = 300;
     const [refs, setRefs] = useState<any>({})
-    const { id_agent } = useParams();
+    const location = useLocation();
+
+    const queryParams = new URLSearchParams(location.search);
+    const id_agent = queryParams.get('id');
 
     useEffect(() => {
 
-        id_agent && currentEngagement.setInfos({ id_agent:parseInt(id_agent) })
+        id_agent && currentEngagement.setInfos({ id_agent: parseInt(id_agent) })
         const getRefs = async () => {
             const allRefs = await RefsFetcher.getRefs();
             setRefs(allRefs.data)
@@ -46,12 +49,12 @@ const App = observer(() => {
 
         (currentStep + 1 < steps.length) && setStep(currentStep + 1, undefined);
         if (currentStep === 9) {
-            await EnregistrerFetcher.enregistrer(currentEngagement.getCurrentMission());  
+            await EnregistrerFetcher.enregistrer(currentEngagement.getCurrentMission());
         }
-        else{
+        else {
             const response: { data: any; status: number } = await InsererFetcher.inserer(currentEngagement.getCurrentMission());
             if (response.data.insert_mission) currentEngagement.setMissionId(response.data.insert_mission)
-        }   
+        }
         insererStore.setNext(false);
 
     }
