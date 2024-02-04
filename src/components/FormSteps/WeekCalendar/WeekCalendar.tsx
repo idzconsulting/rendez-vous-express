@@ -28,6 +28,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
     const [selectedStart, setSelectedStart] = useState(null);
     const options: any = { weekday: 'long', month: 'numeric', day: 'numeric' };
     const [isLoading, setIsLoading] = useState(true);
+    const [displayPrice] = useState(currentEngagement?.getCurrentEngagement()?.project?.id != 3)
 
 
     const getRdvIdeal = async (cp: string, diagnostics: string[], type_surface_id: string) => {
@@ -77,7 +78,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
 
             if (!existingEvent || parseFloat(prix) < parseFloat(getIdTechAndPrix(existingEvent.technicien_distance).prix)) {
                 uniqueEvents[creneau] = {
-                    title: prix + '€',
+                    title: displayPrice ? prix + '€' : 'Rdv idéal',
                     start: creneau,
                     end: addMinutes(new Date(creneau), +30),
                     extendedProps: {
@@ -114,9 +115,13 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
             const diagnostics = currentEngagement.getCurrentEngagement().diagnostics?.map(({ id }) => id) || [];
             const cp = currentEngagement.getInfos()?.bien_code_postal || '';
             const type_surface_id = currentEngagement.getCurrentMission()?.type_surface_id || '';
-            const response: any = await getRdvIdeal(cp, diagnostics, type_surface_id);
-
-            const events = filterUniqueEvents(response.missions || []);
+            let events = []
+            try {
+                const { missions }: any = await getRdvIdeal(cp, diagnostics, type_surface_id);
+                events = filterUniqueEvents(missions);
+            } catch (error) {
+                console.error('An error occurred:', error);
+            }
             setInitDate(events[0]?.start ? new Date(events[0].start) : new Date())
             setEvents(events);
             setIsLoading(false);

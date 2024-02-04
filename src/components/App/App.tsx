@@ -91,7 +91,7 @@ const App = observer(() => {
         content: <WeekCalendar onSelection={setNextStep} />
     },
     {
-        title: 'Prix',
+        title: 'Recap',
         content: <Price onSelection={setNextStep} />
     },
     {

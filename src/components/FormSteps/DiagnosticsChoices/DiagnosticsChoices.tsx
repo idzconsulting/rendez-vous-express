@@ -15,8 +15,11 @@ interface IDiagnosticsProps extends IOnSelection {
 }
 
 const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => {
+    
     const [form] = Form.useForm();
     const [selectedDiagnostics, setSelectedDiagnostics] = useState<Diagnostiques[]>([]);
+
+    if(currentEngagement?.getCurrentEngagement()?.project?.id == 3) onSelection()
 
     const getDiagsObligatoires = async () => {
         const { data: diags } = await DiagnoscticsFetcher.obligatoires(currentEngagement.getCurrentMission());

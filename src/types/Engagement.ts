@@ -51,7 +51,7 @@ export type Surface = {
 }
 
 export type Transaction = {
-    id: string;
+    id: number;
     nom: string;
     label: string;
 }

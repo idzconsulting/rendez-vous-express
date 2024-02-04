@@ -81,7 +81,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Tél propriétaire"
+                        label="No Téléphone"
                         name="proprietaire_telephone"
                         rules={[{ required: true, message: 'Veuillez entrez votre numéro de téléphone' }]}
                     >

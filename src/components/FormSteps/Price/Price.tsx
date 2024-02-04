@@ -38,15 +38,15 @@ const Price = ({ onSelection }: IPrice) => {
     }, []);
 
     return (
-        <div className={styles.scope}> 
-            <div className={styles.share}> 
+        <div className={styles.scope}>
+            <div className={styles.share}>
                 <Share htmlToShare={htmlToShare}></Share>
             </div>
             <br></br>
             <StepCard title='Récapitulatif'>
                 <div ref={(ref) => ref && setHtmlToShare(ref.innerHTML)} >
-                    <div className={styles.title}>Price: {engagement?.infos?.prix ? engagement?.infos?.prix + '€' : ''}</div>
-                    
+                    {engagement?.infos?.prix && engagement?.project?.id != 3 && <div className={styles.title}>Price: {engagement?.infos?.prix ? engagement?.infos?.prix + '€' : ''}</div>
+                    }
                     <Divider />
 
                     <div className={styles.resume}>
@@ -123,7 +123,7 @@ const Price = ({ onSelection }: IPrice) => {
 
                 <Button type='primary' className='button' onClick={onSelection}>Valider</Button>
             </StepCard>
-           
+
         </div>
     );
 }

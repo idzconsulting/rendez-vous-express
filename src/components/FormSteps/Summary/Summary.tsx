@@ -48,7 +48,12 @@ const Summary = () => {
                 <Divider />
                 <Typography.Title level={getTitleLevel()} className={styles.title}>Récapitulatif</Typography.Title>
                 <div className={styles.resume}>
-                    <div className={styles.title}>Price: {engagement?.infos?.prix}€</div>
+                    {engagement?.infos?.prix &&
+                        engagement?.project?.id != 3 &&
+                        <div
+                            className={styles.title}>Price: {engagement?.infos?.prix}€
+                        </div>
+                    }
                     <div className={styles.row}>
                         <div className={styles.title}>Projet</div>
                         <div>{engagement?.project?.nom}</div>
@@ -85,12 +90,12 @@ const Summary = () => {
                             ))}
                         </div>
                     </div>
-                    
+
                     {engagement?.infos?.rdv_jour && <div className={styles.row}>
-                            <div className={styles.title}>Rendez-vous</div>
-                            <div>{engagement?.infos?.rdv_jour ? format(new Date(engagement?.infos?.rdv_jour), 'dd/MM/yyyy HH:mm') : ''}</div>
-                        </div>}
-                        
+                        <div className={styles.title}>Rendez-vous</div>
+                        <div>{engagement?.infos?.rdv_jour ? format(new Date(engagement?.infos?.rdv_jour), 'dd/MM/yyyy HH:mm') : ''}</div>
+                    </div>}
+
                     <div className={styles.row}>
                         <div className={styles.title}>Coordonnées</div>
 
@@ -121,7 +126,7 @@ const Summary = () => {
                                     <div>{engagement?.infos?.nom_agent}</div>
                                 </div>
                             }
-                            
+
                             {engagement?.infos?.sur_place && !engagement?.infos?.autre_sur_place &&
                                 <div className={styles.row}>
                                     <div className={styles.title}>Qui sera sur place</div>
