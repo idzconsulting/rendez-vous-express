@@ -122,11 +122,9 @@ const App = observer(() => {
                             onClick={setNextStep} />}</div>
                     </div>
 
-                    {!isMobile && getStepsComponent()}
-
                     {steps[currentStep].content}
 
-                    {isMobile && getStepsComponent()}
+                    {getStepsComponent()}
                 </div>
             </Content>
             {/*<Footer/>*/}
