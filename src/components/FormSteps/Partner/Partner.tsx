@@ -43,33 +43,26 @@ const Partner = ({ onSelection }: IInfosProps) => {
         formAutreSurPlace.setFieldsValue(infos);
         setEngagement(currentEngagement.getCurrentEngagement());
         insererStore.setNext(true);
-        if(id_agent){
-            
-            formAgentImmo.setFieldsValue(infos);
-            if ((infos?.envoi_rapport_agent || infos?.envoi_rapport_notaire) || infos?.tel) {
-                setEnvoiRapportPartner(true);
-                if (infos?.tel) currentEngagement.setInfos({ envoi_rapport_agent: true })
-            }
-        }
-        if (infos?.autre_sur_place) {
-            setAutreSurPlace(true);
-        }
-        if (infos?.sur_place == SurPlace.Locataire) {
-            setlocataireSurPlace(true);
-        }
+        if(!id_agent) getPartner(infos?.proprietaire_telephone || "");          
+        if (infos?.autre_sur_place) setAutreSurPlace(true);
+        if (infos?.sur_place == SurPlace.Locataire) setlocataireSurPlace(true);
+        if ((infos?.envoi_rapport_agent || infos?.envoi_rapport_notaire)) setEnvoiRapportPartner(true);
+        
     }, []);
 
-    const getPartner = async (value: string) => {
-        const { data } = await PartnersFetcher.getPartner({ telephone: value, type_partenaire: 1 });
+    const getPartner = async (tel: string) => {
+        const { data } = await PartnersFetcher.getPartner({ telephone: tel, type_partenaire: 1 });
         if (data.length > 0) {
-            const { nom, prenom, mail, id, cp, ste, tel } = data[0]
+            const { nom, prenom, mail, id, cp, ste } = data[0]
 
             if (id) {
+                setEnvoiRapportPartner(true);
+                currentEngagement.setInfos({ envoi_rapport_agent: true })
                 setAgentExist(true)
                 formAgentImmo.setFieldValue('nom', nom + ' ' + prenom)
                 formAgentImmo.setFieldValue('mail', mail)
-                formAgentImmo.setFieldValue('tel', tel)
                 formAgentImmo.setFieldValue('cp', cp)
+                formAgentImmo.setFieldValue('tel', tel)
                 formAgentImmo.setFieldValue('agence', ste)
                 setIdAgent(id)
             }
