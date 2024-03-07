@@ -9,7 +9,7 @@ export interface Address {
     code_postal: number;
 }
 
-export class AddressesFetcher {
+export class SearchsFetcher {
     static async searchAddress(address: string) {
         try {
             const response = await UrlClientConstants.axiosBase.post(UrlClientConstants.adresseRechercheURL,
@@ -17,6 +17,17 @@ export class AddressesFetcher {
             return {
                 status: response.status,
                 data: response?.data as AddressesResponses
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+    static async getClient(telephone: string) {
+        try {
+            const response = await UrlClientConstants.axiosBase.post(UrlClientConstants.clientRechercheURL,{telephone});
+            return {
+                status: response.status,
+                data: response?.data 
             }
         } catch (e) {
             throw e;

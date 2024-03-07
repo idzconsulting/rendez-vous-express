@@ -5,7 +5,7 @@ import { AutoComplete, Button, Input } from 'antd';
 import { useEffect, useState } from 'react';
 import { currentEngagement, insererStore } from '../../../stores';
 import styles from './Infos.module.less';
-import { AddressesFetcher, AddressesResponses } from '../../../fetchers/role-fetchers/AddressesFetcher';
+import { SearchsFetcher, AddressesResponses } from '../../../fetchers/role-fetchers/SearchsFetcher';
 import TextArea from 'antd/es/input/TextArea';
 
 interface IInfosProps extends IOnSelection {
@@ -23,8 +23,22 @@ const Infos = ({ onSelection }: IInfosProps) => {
         console.log(data);
     };
 
+    const getClient = async (telephone: string) => {
+        const { data } = await SearchsFetcher.getClient(telephone);
+        if (data.length > 0) {
+            const { proprietaire, mail, adresse } = data[0]
+
+            if (proprietaire) {
+                form.setFieldValue('proprietaire_nom', proprietaire)
+                form.setFieldValue('proprietaire_email', mail)
+                form.setFieldValue('bien_adresse', adresse)
+            }
+        }
+
+    }
+
     const getOptions = async (text: string) => {
-        const response: { data: AddressesResponses; status: number } = await AddressesFetcher.searchAddress(text);
+        const response: { data: AddressesResponses; status: number } = await SearchsFetcher.searchAddress(text);
 
         setOptions([]);
         if (response.status === 200) {
@@ -39,7 +53,8 @@ const Infos = ({ onSelection }: IInfosProps) => {
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();
-        if(infos?.proprietaire_nom && infos?.bien_adresse) insererStore.setNext(true);
+        getClient(infos?.proprietaire_telephone || "");
+        if (infos?.proprietaire_nom && infos?.bien_adresse) insererStore.setNext(true);
         form.setFieldsValue(infos);
     }, []);
 
@@ -60,14 +75,14 @@ const Infos = ({ onSelection }: IInfosProps) => {
                 autoComplete="off"
                 onFinish={saveForm}
                 className={styles.form}
-                
+
             >
                 <Form.Item
                     label="Nom et prénom"
                     name="proprietaire_nom"
                     rules={[{ required: true, message: 'Veuillez entrez votre nom et prénom' }]}
                 >
-                    <Input   size='large' style={{ textTransform: 'capitalize' }} />
+                    <Input size='large' style={{ textTransform: 'capitalize' }} />
                 </Form.Item>
 
                 <Form.Item
@@ -96,22 +111,14 @@ const Infos = ({ onSelection }: IInfosProps) => {
                     label="Notes"
                     name="note"
                 >
-                    <TextArea  size='large' />
+                    <TextArea size='large' />
                 </Form.Item>
 
 
-                {/* <Form.Item
-                    label="Mon agence"
-                    name="agence"
-                >
-                    <Input style={{textTransform: 'capitalize'}} />
-                </Form.Item> */}
+                <Button type="primary" className="button" htmlType="submit">
+                    Valider
+                </Button>
 
-                
-                    <Button type="primary" className="button" htmlType="submit">
-                        Valider
-                    </Button>
-                
             </Form>
         </StepCard>
     )

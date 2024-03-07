@@ -127,7 +127,7 @@ const Calendar = ({ onSelection }: IWeekCalendarProps) => {
             setIsLoading(false);
         };
 
-        if (currentEngagement.getCurrentEngagement()?.infos?.rdv_jour) insererStore.setNext(true);
+        insererStore.setNext(true);
         fetchData();
 
 

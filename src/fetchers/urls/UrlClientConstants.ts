@@ -9,6 +9,7 @@ export class UrlClientConstants {
     static readonly rdvUrl = 'rendez-vous/disponibles';
     static readonly rdvIdeal = 'rendez-vous/rdv-ideal';
     static readonly adresseRechercheURL = 'adresse/recherche';
+    static readonly clientRechercheURL = 'client/recherche';
     static readonly diagnostics = 'diagnostics/'
     static readonly partners = 'partenaires/'
     static readonly contacts ='contacts/'
