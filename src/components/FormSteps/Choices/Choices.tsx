@@ -12,10 +12,11 @@ import {observer} from 'mobx-react';
 interface IChoicesProps extends IOnSelection {
     title: string;
     type: Refs;
+    disabled?: boolean;
     refs?:any[] 
 }
 
-const Choices = observer(({title, type, onSelection,refs = []}: IChoicesProps) => {
+const Choices = observer(({title, type,disabled = false, onSelection,refs = []}: IChoicesProps) => {
     const [selectedOption, setSelectedOption] = useState<any>();
     
     if(type === Refs.ANNEE_CONSTRUCTION) refs[4] = {id:'',nom:'je ne sais pas'}
@@ -40,6 +41,7 @@ const Choices = observer(({title, type, onSelection,refs = []}: IChoicesProps) =
                     {refs?.map((ref) =>
                         <Button key={ref.id} type={selectedOption?.id === ref.id ? 'primary' : 'default'}
                                 size={screenStore.getSize()}
+                                disabled={disabled}
                                 className='button-select'
                                 onClick={() => onButtonClick(ref)}>{ref.nom}</Button>)}
                 </div>

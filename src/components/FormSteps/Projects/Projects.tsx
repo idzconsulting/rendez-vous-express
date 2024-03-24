@@ -1,14 +1,12 @@
 import Choices from '../Choices/Choices';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Transaction, Refs } from '../../../types/Engagement';
 import { IOnSelection } from '../../../types/IOnSelection';
 import Form from 'antd/es/form';
-import styles from './Projects.module.less'
 import StepCard from '../StepCard/StepCard';
 import { IEngagementType } from '../../../types/interfaces';
 import { currentEngagement, insererStore } from '../../../stores';
 import { Input } from 'antd';
-import { InsererFetcher } from '../../../fetchers/role-fetchers/InsererFetcher';
 
 interface IProjectProps extends IOnSelection {
     refs?: [IEngagementType]
@@ -96,7 +94,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
                     </Form.Item> */}
                 </Form>
 
-                {showChoices && <Choices type={Refs.TRANSACTION} refs={refs} title='' onSelection={onSelection} />}
+                <Choices type={Refs.TRANSACTION} disabled={!showChoices} refs={refs} title='' onSelection={onSelection} />
             </StepCard>
         </div>
     );

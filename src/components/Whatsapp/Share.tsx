@@ -46,9 +46,12 @@ const Share = ({ htmlToShare }: IShareProps) => {
     };
 
     return (
-        <div>
+        <div className={styles.share}>
+            <span className={styles.share_text}>Je partage: </span>
+            <div>
             <Link onClick={() => handleShareClick(share.WHATSAPP)} to={''}><img className={styles.whatsapp} src={whatsappShare} alt="whatsapp" /> </Link>
             <Link onClick={() => handleShareClick(share.SMS)} to={''}><img className={styles.whatsapp} src={smsShare} alt="sms" /> </Link>
+            </div>
         </div>
     );
 }

@@ -15,11 +15,11 @@ interface IDiagnosticsProps extends IOnSelection {
 }
 
 const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => {
-    
+
     const [form] = Form.useForm();
     const [selectedDiagnostics, setSelectedDiagnostics] = useState<Diagnostiques[]>([]);
 
-    if(currentEngagement?.getCurrentEngagement()?.project?.id == 3) onSelection()
+    if (currentEngagement?.getCurrentEngagement()?.project?.id == 3) onSelection()
 
     const getDiagsObligatoires = async () => {
         const { data: diags } = await DiagnoscticsFetcher.obligatoires(currentEngagement.getCurrentMission());
@@ -36,19 +36,12 @@ const DiagnosticsChoices = ({ onSelection, diagnostics }: IDiagnosticsProps) => 
     }
 
     useEffect(() => {
-
+        insererStore.setNext(true);
         const fetchData = async () => {
-
-
             let savedDiagnostics = currentEngagement.getDiagnostics();
-            if (savedDiagnostics) {
-                insererStore.setNext(true);
-            } else {
-                const diagsObliagtoires = await getDiagsObligatoires();
-                currentEngagement.setDiagnostics([...diagsObliagtoires] as Diagnostiques[]);
-                savedDiagnostics = currentEngagement.getDiagnostics()
-            }
-
+            const diagsObliagtoires = await getDiagsObligatoires();
+            currentEngagement.setDiagnostics([...diagsObliagtoires] as Diagnostiques[]);
+            savedDiagnostics = currentEngagement.getDiagnostics()
             setSelectedDiagnostics(savedDiagnostics || []);
         };
 
