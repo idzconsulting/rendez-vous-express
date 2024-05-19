@@ -18,7 +18,7 @@ const Projects = ({ onSelection, refs }: IProjectProps) => {
 
     useEffect(() => {
         const infos = currentEngagement.getInfos();
-        if (infos) {
+        if (infos?.tel) {
             insererStore.setNext(true);
             setShowChoices(true)
         }

@@ -63,9 +63,6 @@ const App = observer(() => {
     const onChangeStep = (step: number) => (step < currentStep) && setStep(step, 0);
 
     const steps = [{
-        title: 'Projet',
-        content: <Projects refs={refs.type_transaction} onSelection={setNextStep} />,
-    }, {
         title: 'Bien',
         content: <Biens refs={refs.type_bien} onSelection={setNextStep} />,
     }, {
@@ -75,7 +72,12 @@ const App = observer(() => {
     }, {
         title: 'Superficie',
         content: <Choices title='Superficie du bien' refs={refs.type_surface} type={Refs.SURFACE} onSelection={setNextStep} />,
-    }, {
+    },
+    {
+        title: 'Projet',
+        content: <Projects refs={refs.type_transaction} onSelection={setNextStep} />,
+    },
+    {
         title: 'Annexes',
         content: <Annexes onSelection={setNextStep} />
     }, {
