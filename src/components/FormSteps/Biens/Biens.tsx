@@ -45,9 +45,7 @@ const Biens = ({ onSelection, refs }: IProjectProps) => {
     return (
         <div>
             <StepCard title='Votre bien'>
-                <Choices type={Refs.BIEN} refs={refs} title='' onSelection={checkSelectionBien} />
-                <br/>
-                {hasAppart
+            {hasAppart
                     ? <StepCard title='Votre chauffage est collectif ?'>
                         <Radio.Group buttonStyle='solid' onChange={onOptionChanged}
                             size={screenStore.getSize()} value={currentEngagement.getInfos()?.chauffage_collectif}>
@@ -57,6 +55,9 @@ const Biens = ({ onSelection, refs }: IProjectProps) => {
                     </StepCard>
                     : <></>
                 }
+                <br></br>
+                <Choices type={Refs.BIEN} refs={refs} title='' onSelection={checkSelectionBien} />
+                
             </StepCard>
         </div>
     );
